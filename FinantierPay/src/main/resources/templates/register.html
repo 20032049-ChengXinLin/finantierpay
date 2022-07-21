@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Register</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<main>
+		<div class="container py-3">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-12 col-xl-10">
+					<div class="card shadow-2-strong card-registration"
+						style="border-radius: 15px;">
+						<div class="card-header text-center">
+							<h3>Sign Up Account</h3>
+						</div>
+						<div class="card-body p-4 p-md-5">
+							<form class="needs-validation" th:action="@{/process_register}"
+								method="post" th:object="${account}" novalidate>
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="firstName" class="form-label">First name:<span
+											class="text-danger fw-bold">*</span>
+										</label> <input id="firstName" type="text" class="form-control"
+											th:field="*{first_name}" required minlength=3 maxlength=20 />
+										<div class="invalid-feedback">Please enter first name.</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('first_name')}"
+											th:errors="*{first_name}"></p>
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="lastName" class="form-label">Last name:<span
+											class="text-danger fw-bold">*</span>
+										</label> <input id="lastName" type="text" class="form-control"
+											th:field="*{last_name}" required minlength=1 maxlength=20 />
+										<div class="invalid-feedback">Please enter last name.</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('last_name')}"
+											th:errors="*{last_name}"></p>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="country" class="form-label">Country:<span
+											class="text-danger fw-bold">*</span>
+										</label> <select class="form-control" id="country"
+											th:field="*{country}" oninput="checkCountry(this);" required>
+											<option value="">Choose One</option>
+											<option th:each="country : ${countryList}"
+												th:value="${country.countryId}"
+												th:text="${country.countryName}"></option>
+										</select>
+										<div class="invalid-feedback">Please select one country.</div>
+										<p class="text-danger" th:if="${#fields.hasErrors('country')}"
+											th:errors="*{country}"></p>
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="mobileNo" class="form-label">Mobile
+											Number:<span class="text-danger fw-bold">*</span>
+										</label> <input id="mobileNo" oninput="checkMobile(this);" type="text"
+											class="form-control" th:field="*{phone}" required />
+										<div class="invalid-feedback">Please enter a mobile
+											number.</div>
+										<p class="text-danger" th:if="${#fields.hasErrors('phone')}"
+											th:errors="*{phone}"></p>
+										<p class="text-danger" th:if="${phone}" th:text="${phone}"></p>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<label for="email" class="form-label">Email Address:<span
+											class="text-danger fw-bold">*</span>
+										</label> <input id="email" type="email" class="form-control"
+											th:field="*{email}" name="account_email"
+											oninput="checkEmail(this);" required />
+										<div class="invalid-feedback">Please enter a valid
+											email.</div>
+										<div class="invalid-feedback" id="checkEmail"></div>
+										<p class="text-danger" th:if="${#fields.hasErrors('email')}"
+											th:errors="*{email}"></p>
+										<p class="text-danger" th:if="${email}" th:text="${email}"></p>
+									</div>
+									<div class="col-md-4 mb-4">
+										<label for="dob" class="form-label">Date of Birth:<span
+											class="text-danger fw-bold">*#</span>
+										</label> <input id="dob" type="date" class="form-control"
+											th:field="*{date_of_birth}" required min="1920-01-01"
+											th:max="${minAge}" />
+										<div class="invalid-feedback">Please enter date of
+											birth.</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('date_of_birth')}"
+											th:errors="*{date_of_birth}"></p>
+									</div>
+
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<label for="address" class="form-label">Residential
+											Address:<span class="text-danger fw-bold">*</span>
+										</label> <input id="address" type="text" class="form-control"
+											th:field="*{address}" required minlength=10 maxlength=250 />
+										<div class="invalid-feedback">Please enter an address.</div>
+										<p class="text-danger" th:if="${#fields.hasErrors('address')}"
+											th:errors="*{address}"></p>
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="postalCode" class="form-label">Postal
+											Code:<span class="text-danger fw-bold">*</span>
+										</label> <input id="postalCode" oninput="checkPostal(this);"
+											type="text" class="form-control" th:field="*{postal_code}"
+											required />
+										<div class="invalid-feedback">Please enter a postal
+											code.</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('postal_code')}"
+											th:errors="*{postal_code}"></p>
+										<p class="text-danger" th:if="${postal}" th:text="${postal}"></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="userName" class="form-label">Username:<span
+											class="text-danger fw-bold">*</span>
+										</label> <input id="userName" type="text" class="form-control"
+											th:field="*{username}" name="account_username" required
+											oninput="checkUsername(this);" minlength=3 maxlength=15 />
+										<div class="invalid-feedback">Please enter username.</div>
+										<div class="invalid-feedback" id="checkUnique"></div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('username')}"
+											th:errors="*{username}"></p>
+										<p class="text-danger" th:if="${username}"
+											th:text="${username}"></p>
+									</div>
+									<div class="col-md-4 mb-4">
+										<label for="account_role" class="form-label col-md-6">Account
+											Type:<span class="text-danger fw-bold">*^</span>
+										</label>
+										<div class="col">
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input"
+													id="account_role" value="ROLE_USER"
+													oninput="checkMerchant(this);" name="account_role"
+													th:field="*{role}" required /> <label
+													class="form-check-label">USER</label>
+											</div>
+											<div class="form-check form-check-inline">
+												<input type="radio" class="form-check-input"
+													id="account_role" value="ROLE_MERCHANT"
+													oninput="checkMerchant(this);" name="account_role"
+													th:field="*{role}" required /> <label
+													class="form-check-label">MERCHANT</label>
+											</div>
+											<!-- Make the input type="radio" hidden so that error message can appear below the radio button -->
+											<input type="radio" id="account_role" value="ROLE_MERCHANT"
+												name="account_role" th:field="*{role}"
+												style="display: none;" required />
+											<div class="invalid-feedback">Please enter a valid
+												Account Type</div>
+											<p class="text-danger" th:if="${#fields.hasErrors('role')}"
+												th:errors="*{role}"></p>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="account_password" class="form-label">Password:
+											<span class="text-danger fw-bold">*</span>
+										</label> <input id="account_password" name="account_password"
+											type="password" class="form-control" minlength=8 maxlength=20
+											required
+											pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" />
+										<div class="invalid-feedback">Please enter password.
+											Minimum eight characters, at least one uppercase letter, one
+											lowercase letter, one number and one special character</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('password')}"
+											th:errors="*{password}"></p>
+										<p class="text-danger" th:if="${pattern}" th:text="${pattern}"></p>
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="confirm_password" class="form-label">Confirm
+											Password:<span class="text-danger fw-bold">*</span>
+										</label> <input id="confirm_password" type="password"
+											class="form-control" name="confirm_password"
+											th:field="*{password}" oninput="checkPasswordMatch(this);"
+											minlength=8 maxlength=20 required
+											pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" />
+										<span id="message2" style="color: red"> </span>
+										<div class="invalid-feedback">Password do not match</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('password')}"
+											th:errors="*{password}"></p>
+										<p class="text-danger" th:if="${pattern}" th:text="${pattern}"></p>
+										<p class="text-danger" th:if="${matchpassword}"
+											th:text="${matchpassword}"></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 mb-4" id="StoreName"
+										style="display: none;">
+										<label for="store_name" class="form-label">Store Name:
+											<span class="text-danger fw-bold">*</span>
+										</label> <input id="store_name" name="store_name" type="text"
+											class="form-control" th:value="${NA}" th:field="*{storeName}"
+											minlength=8 maxlength=20 required />
+										<div class="invalid-feedback">Please enter Store Name</div>
+										<p class="text-danger"
+											th:if="${#fields.hasErrors('storeName')}"
+											th:errors="*{storeName}"></p>
+										<p class="text-danger" th:if="${pattern}" th:text="${pattern}"></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-8">
+										<div class="text-danger">
+											*All fields are mandatory <br> ^ Choose Merchant if you
+											are from ECommerce Websites. If not choose user. <br>#
+											Birth Year cannot be below than 12 years old.
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="input-group form-group justify-content-md-end">
+											<button type="submit" class="btn btn-primary"
+												style="width: 200px;">Register</button>
+										</div>
+										<!-- when the submit button is clicked, it goes to /member/save in the form action 
+					and post the data the form -->
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="card-footer text-center">
+							Have an account? <a th:href="@{/login}"
+								style="color: blue; text-decoration: underline;">Login</a> <br>
+							Forgot password? Click <a th:href="@{/forgot_password}"
+								style="color: blue; text-decoration: underline;">here</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Form Validation -->
+		<script type="text/javascript" th:inline="javascript">
+			var country = "";
+			function checkCountry(fieldCountry) {
+				country = fieldCountry.value;
+			}
+			function checkMobile(fieldMobile) {
+				if (country == 1) {
+					const re = /^$|^[689]\d{7}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				} else if (country == 2) {
+					const re = /^(\+?6?01)[02-46-9][-][0-9]{7}$|^(\+?6?01)[1][-][0-9]{8}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				} else if (country == 3) {
+					const re = /^(08)(\d{3,4}-?){2}\d{2,3}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				}
+			}
+			function checkPostal(fieldPostal) {
+				if (country == 1) {
+					const re = /^$|^\d{6}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				} else if (country == 2) {
+					const re = /^$|^\d{5}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				} else if (country == 3) {
+					const re = /^$|^\d{5}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				}
+			}
+
+			function checkPasswordMatch(fieldConfirmPassword) {
+				var password = document.getElementById("account_password").value;
+				if (fieldConfirmPassword.value != password) {
+					fieldConfirmPassword
+							.setCustomValidity("Passwords do not match!");
+				} else {
+					fieldConfirmPassword.setCustomValidity("");
+				}
+			}
+			const listAccount = /*[[${listAccount}]]*/[];
+			function checkUsername(fieldUsername) {
+
+				var failed = false;
+
+				for (var i = 0; i < listAccount.length; i++) {
+					if (listAccount[i].username == fieldUsername.value) {
+						failed = true;
+						break;
+					} else {
+						failed = false;
+					}
+				}
+				if (failed == true) {
+					fieldUsername.setCustomValidity("Username must be unique!");
+					document.getElementById("checkUnique").innerHTML = "Username has been taken. Please choose another one!";
+				} else {
+					fieldUsername.setCustomValidity("");
+				}
+			}
+			function checkMerchant(fieldMerchant) {
+				var accountType = fieldMerchant.value;
+				if (accountType == "ROLE_MERCHANT") {
+					document.getElementById("StoreName").style.display = "block";
+					document.getElementById("store_name").value = "";
+				} else if (accountType == "ROLE_USER") {
+					document.getElementById("store_name").value = "NA";
+					document.getElementById("StoreName").style.display = "none";
+				}
+			}
+			function checkEmail(fieldEmail) {
+
+				var failed = false;
+
+				for (var i = 0; i < listAccount.length; i++) {
+					if (listAccount[i].email == fieldEmail.value) {
+						failed = true;
+						break;
+					} else {
+						failed = false;
+					}
+				}
+				if (failed == true) {
+					fieldEmail.setCustomValidity("Email must be unique!");
+					document.getElementById("checkEmail").innerHTML = "Email has been taken. Please choose another one!";
+				} else {
+					fieldEmail.setCustomValidity("");
+				}
+			}
+			'use strict'
+			var form = document.querySelector('.needs-validation')
+			form.addEventListener('submit', function(event) {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+				form.classList.add('was-validated')
+			})
+		</script>
+		<!-- End Form Validation -->
+
+	</main>
+	<div>
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

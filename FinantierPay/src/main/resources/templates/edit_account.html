@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Update Account</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+	src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<main>
+		<div class="container py-3">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-12 col-xl-10">
+					<div class="card shadow-2-strong card-registration"
+						style="border-radius: 15px;">
+						<div class="card-header text-center">
+							<h3>Update Account</h3>
+						</div>
+						<div class="card-body p-4 p-md-5">
+							<form class="needs-validation"
+								th:action="@{/account/edit/{id}(id=${account.accountId})}"
+								method="post" th:object="${account}" novalidate>
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="firstName" class="form-label">First name:
+										</label> <input id="firstName" type="text" class="form-control"
+											th:field="*{first_name}" readonly />
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="lastName" class="form-label">Last name: </label> <input
+											id="lastName" type="text" class="form-control"
+											th:field="*{last_name}" readonly />
+									</div>
+								</div>
+
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="country" class="form-label">Country: </label> <input
+											id="country" type="text" class="form-control"
+											th:field="*{country.countryName}" readonly />
+									</div>
+									<div class="col-md-4 mb-4">
+										<label for="mobileNo" class="form-label">Mobile
+											Number:<span class="text-danger fw-bold">*</span>
+										</label> <input id="mobileNo" type="text" name="phone"
+											th:field="*{phone}" class="form-control"
+											oninput="checkMobile(this);" required />
+										<div class="invalid-feedback">Please enter a mobile
+											number.</div>
+										<p class="text-danger" th:if="${phone}" th:text="${phone}"></p>
+									</div>
+
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<label for="email" class="form-label">Email Address: </label>
+										<input id="email" type="email" class="form-control"
+											th:field="*{email}" name="account_email" readonly />
+									</div>
+									<div class="col-md-4 mb-4">
+										<label for="dob" class="form-label">Date of Birth: </label> <input
+											id="dob" type="date" class="form-control"
+											th:field="*{date_of_birth}" readonly />
+									</div>
+
+
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<label for="address" class="form-label">Residential
+											Address:<span class="text-danger fw-bold">*</span>
+										</label> <input id="address" type="text" class="form-control"
+											name="address" th:field="*{address}" required minlength=10
+											maxlength=250 />
+										<div class="invalid-feedback">Please enter an address.</div>
+										<div class="text-danger" th:if="${address}"
+											th:text="${address}"></div>
+									</div>
+									<div class="col-md-4 mb-4">
+										<label for="postalCode" class="form-label">Postal
+											Code:<span class="text-danger fw-bold">*</span>
+										</label> <input id="postalCode" th:field="*{postal_code}" type="text"
+											class="form-control" name="postal_code"
+											oninput="checkPostal(this);" required />
+										<div class="invalid-feedback">Please enter a postal
+											code.</div>
+										<div class="text-danger" th:if="${postal}" th:text="${postal}"></div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="userName" class="form-label">Username: </label> <input
+											id="userName" type="text" class="form-control"
+											th:field="*{username}" name="account_username" readonly />
+									</div>
+
+									<div class="col-md-4 mb-4">
+										<label for="userName" class="form-label">Account Type<span
+											class="text-danger fw-bold"></span>
+										</label> <input id="userName" type="text" class="form-control"
+											th:if="${account.role=='ROLE_USER'}" value="USER"
+											name="account_username" readonly /> <input id="userName"
+											type="text" class="form-control"
+											th:if="${account.role=='ROLE_MERCHANT'}" value="MERCHANT"
+											name="account_username" readonly />
+									</div>
+								</div>
+								<div class="row" sec:authorize="hasRole('MERCHANT')">
+									<div class="col-md-4 mb-4">
+										<label for="userName" class="form-label">Store Name<span
+											class="text-danger fw-bold"></span>
+										</label> <input id="storeName" type="text" class="form-control"
+											th:value="${account.storeName}" name="storeName" readonly />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-8">
+										<div class="text-danger">*All fields are mandatory</div>
+									</div>
+									<div class="col-md-4">
+										<div class="input-group form-group justify-content-md-end">
+											<button type="submit" class="btn btn-primary"
+												style="width: 200px;"
+												onclick="if (!confirm('Are you sure you want to update your account?')) { return false }">Update</button>
+										</div>
+										<!-- when the submit button is clicked, it goes to /member/save in the form action 
+					and post the data the form -->
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Form Validation -->
+		<script type="text/javascript" th:inline="javascript">
+			var country = /*[[${country}]]*/'';
+
+			function checkMobile(fieldMobile) {
+				if (country == 1) {
+					const re = /^$|^[689]\d{7}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				} else if (country == 2) {
+					const re = /^(\+?6?01)[02-46-9][-][0-9]{7}$|^(\+?6?01)[1][-][0-9]{8}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				} else if (country == 3) {
+					const re = /^(08)(\d{3,4}-?){2}\d{2,3}$/;
+					const ok = re.exec(fieldMobile.value);
+					if (!ok) {
+						fieldMobile
+								.setCustomValidity("Mobile Number Wrong Format!");
+					} else {
+						fieldMobile.setCustomValidity("");
+					}
+				}
+			}
+			function checkPostal(fieldPostal) {
+				if (country == 1) {
+					const re = /^$|^\d{6}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				} else if (country == 2) {
+					const re = /^$|^\d{5}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				} else if (country == 3) {
+					const re = /^$|^\d{5}$/;
+					const ok = re.exec(fieldPostal.value);
+					if (!ok) {
+						fieldPostal
+								.setCustomValidity("Postal Code Wrong Format!");
+					} else {
+						fieldPostal.setCustomValidity("");
+					}
+				}
+			}
+
+			'use strict'
+			var form = document.querySelector('.needs-validation')
+			form.addEventListener('submit', function(event) {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+				form.classList.add('was-validated')
+			})
+		</script>
+		<!-- End Form Validation -->
+
+	</main>
+	<div>
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

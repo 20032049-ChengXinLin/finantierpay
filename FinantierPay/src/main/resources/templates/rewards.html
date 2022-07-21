@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Rewards</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+<style>
+.column {
+	text-align: center;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px
+		rgba(0, 0, 0, 0.23);
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<section class="container mb-2">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 900px;">
+				<div class="card-header">
+					<h4 class="text-center">View Rewards</h4>
+				</div>
+				<div class="card-body">
+					<div th:each="storeName : ${storeNameList}">
+						<div class="row gx-4">
+							<h5>
+								<span th:text="${storeName}"></span> Voucher
+							</h5>
+							<div class="col-6 col-sm-6 col-md-3 mb-3"
+								th:each="rewards : ${rewardslist}"
+								th:if="${rewards.storeName == storeName}">
+								<div class="column rounded">
+									<img class="rounded border"
+										th:src="@{/uploads/rewards/{id}/{imageName}(id=${rewards.rewardsId},imageName=${rewards.image})}"
+										width=100%, height=150>
+									<p>
+										<span style="color: orange;" th:text="${rewards.storeName}"></span><br>
+										<span style="color: blue;"><b
+											th:if="${rewards.value >= 1}"
+											th:text="${#numbers.formatCurrency(rewards.value)}"></b><b
+											th:if="${rewards.value < 1}"
+											th:text="${#numbers.formatPercent(rewards.value, 1, 0)}"></b>
+											Voucher</span><br> <span style="color: darkgreen;"> <b
+											th:text="${rewards.points}"></b> POINTS
+										</span>
+									</p>
+									<p class="text-danger">
+										Expiry Date:<br> <b><span th:text="${expirydate}"></span></b>
+									</p>
+									<a
+										th:href="@{/rewards/redeem/{id}(id=${rewards.rewardsId})}"
+										class="btn btn-outline-danger btn-sm mb-2"
+										th:if="${rewards.points <= account.balance_points}">Redeem</a>
+									<a th:href="@{/}"
+										class="btn btn-outline-danger btn-sm mb-2 disabled"
+										th:if="${rewards.points > account.balance_points}">Redeem</a>
+								</div>
+							</div>
+						</div>
+						<hr th:if="${storeNameStat.index < storeNameList.size()-1}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div th:replace="fragments/FinantierPay_footer"></div>
+</body>
+</html>

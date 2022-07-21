@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Deleted Transaction Records</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container">
+		<h3 class="text-center">
+			View Deleted <span th:if="${wallet.account.role == 'ROLE_MERCHANT'}">Merchant</span>
+			<span th:if="${wallet.account.role == 'ROLE_USER'}">User</span>
+			Transaction History <span style="color: blue;">(Wallet ID:<span
+				th:text="${walletId}"></span>)
+			</span>
+		</h3>
+		<hr>
+		<div class="row mb-3">
+			<div class="col-md-9">
+				<form th:action="@{/wallet/{id}/transactionrecords(id=${walletId})}">
+					<div class="row">
+						<div class="col-md-7">
+							<input th:if="${keyword!=null}" type="hidden"
+								class="form-control" placeholder="Search" name="keyword"
+								id="keyword" th:value="${keyword}" />
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text" id="btnGroupAddon">FROM:</div>
+								</div>
+								<div class="col-md-4">
+									<input id="startMonth" type="month" name="startMonthYear"
+										class="form-control" th:min="${startMonthYear}"
+										th:value="${startMonthYear}"
+										oninput="checkStartMonth(this); this.form.submit()"
+										th:max="${endMonthYear}" />
+
+								</div>
+								<div class="input-group-prepend">
+									<div class="input-group-text" id="btnGroupAddon">TO:</div>
+								</div>
+								<div class="col-md-4">
+									<input id="endMonth" type="month" name="endMonthYear"
+										class="form-control" th:min="${startMonthYear}"
+										th:value="${endMonthYear}" th:max="${endMonthYear}"
+										oninput="this.form.submit();" />
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-5">
+							<div class="row">
+								<div class="col-md-6">
+									<select class="form-control" name="activity"
+										onchange="this.form.submit()" required>
+										<option th:if="${activity != 'null'}" th:value="${activity}"
+											th:text="${activity}"></option>
+										<option th:if="${activity == 'null'}" value="">Search
+											Activity</option>
+										<option th:if="${activity != 'null'}" value="">Search
+											Activity</option>
+										<option value="Sent" th:if="${activity != 'Sent'}">Sent</option>
+										<option value="Received" th:if="${activity != 'Received'}">Received</option>
+										<option value="Deposit" th:if="${activity != 'Deposit'}">Deposit</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" name="status"
+										onchange="this.form.submit()" required>
+										<option th:if="${status != 'null'}" th:value="${status}"
+											th:text="${status}"></option>
+										<option th:if="${status == 'null'}" value="">Search
+											Status</option>
+										<option th:if="${status != 'null'}" value="">Search
+											Status</option>
+										<option th:value="Success" th:if="${status != 'Success'}">Success</option>
+										<option th:value="Unsuccess" th:if="${status != 'Unsuccess'}">Unsuccess</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="col-md-3">
+				<form th:action="@{/wallet/{id}/transactionrecords(id=${walletId})}">
+					<div class="input-group d-flex justify-content-end">
+						<div class="form-outline">
+							<input type="text" class="form-control" placeholder="Search"
+								name="keyword" id="keyword" th:value="${keyword}"
+								onchange="this.form.submit()" required />
+							<!-- hidden -->
+							<input th:if="${startMonthYear != ''}" type="hidden"
+								class="form-control" name="startMonthYear" id="startMonthYear"
+								th:value="${startMonthYear}" /> <input
+								th:if="${endMonthYear != ''}" type="hidden" class="form-control"
+								name="endMonthYear" id="endMonthYear" th:value="${endMonthYear}" />
+
+							<input th:if="${status != ''}" type="hidden" class="form-control"
+								name="status" id="status" th:value="${status}" /> <input
+								th:if="${activity != ''}" type="hidden" class="form-control"
+								name="activity" id="activity" th:value="${activity}" /> <input
+								th:if="${archive != ''}" type="hidden" class="form-control"
+								name="archive" id="archive" th:value="${archive}" />
+						</div>
+						<button type="button"
+							class="btn btn-primary">
+							<i class="fas fa-search"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="text-end mb-2">
+			<a type="button" class="btn btn-danger"
+				th:href="@{/wallet/{id}/transactionrecords(id=${walletId})}">
+				Clear All </a>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			function checkStartMonth(fieldStartMonth) {
+				document.getElementById("endMonth").min = fieldStartMonth.value;
+			}
+		</script>
+
+		<table class="table bordered table-hover bg-white">
+			<thead class="table-info">
+				<tr>
+					<th>Date/Time</th>
+					<th>Transaction ID</th>
+					<th>Wallet ID</th>
+					<th>Amount</th>
+					<th th:if="${wallet.account.role == 'ROLE_USER'}">Voucher
+						Amount</th>
+					<th>Activity</th>
+					<th th:if="${wallet.account.role == 'ROLE_USER'}">Points
+						Earned</th>
+					<th th:if="${wallet.account.role == 'ROLE_USER'}">Points
+						Expiry Date</th>
+					<th>Status</th>
+					<th>Archive</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<th:block th:each="transaction : ${transactionlist}">
+				<tr>
+					<td
+						th:text="${#temporals.format(transaction.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
+					<td th:text="${transaction.transactionId}"></td>
+					<td th:text="${transaction.wallet.walletId}"></td>
+					<td class="text-success fw-bold"
+						th:if="${transaction.activity=='Received' OR transaction.activity=='Deposit'}"
+						th:text="${'+' + #numbers.formatCurrency(transaction.amount)}"></td>
+					<td class="text-danger fw-bold"
+						th:if="${transaction.activity=='Sent'  OR transaction.activity=='Withdraw'}"
+						th:text="${'-' + #numbers.formatCurrency(transaction.amount) }"></td>
+					<td class="text-center"
+						th:if="${transaction.voucher_value == 0 And wallet.account.role == 'ROLE_USER'}">-</td>
+					<td class="text-center" th:if="${transaction.voucher_value != 0}"
+						th:text="${transaction.voucher_value}"></td>
+					<td th:text="${transaction.activity}"></td>
+					<td class="text-center" th:if="${transaction.points_earned != 0}"
+						th:text="${#numbers.formatDecimal(transaction.points_earned,1,2)}"></td>
+					<td class="text-center"
+						th:if="${transaction.points_earned == 0 And wallet.account.role == 'ROLE_USER'}">-</td>
+					<td class="text-center"
+						th:if="${transaction.pointsExpiryDate == null And wallet.account.role == 'ROLE_USER'}">-</td>
+					<td th:if="${transaction.pointsExpiryDate != null}"
+						class="text-center"
+						th:text="${#temporals.format(transaction.pointsExpiryDate, 'dd-MM-yyyy')}"></td>
+					<td th:if="${transaction.status == 'Success'}"
+						class="text-success fw-bold" th:text="${transaction.status}"></td>
+					<td th:if="${transaction.status == 'Unsuccess'}"
+						class="text-danger fw-bold" th:text="${transaction.status}"></td>
+					<td th:text="${transaction.archive}"></td>
+					<td th:text="${transaction.description}"></td>
+				</tr>
+		</table>
+		<h5 class="text-center mb-3" th:if="${transactionlist.size() == 0}">No
+			Transaction Records Found</h5>
+
+		<form th:action="@{/wallet/{id}/transactionrecords(id=${walletId})}">
+			<input th:if="${keyword!=null}" type="hidden" class="form-control"
+				placeholder="Search" name="keyword" id="keyword"
+				th:value="${keyword}" /> <input th:if="${selectMonth !=null}"
+				type="hidden" class="form-control" name="month" id="month"
+				th:value="${selectMonth}" />
+			<div class="card mb-3">
+				<div class="card-footer">
+					<div class="row">
+						<div class="mt-2 col-md-6" style="padding-top: 5px;">
+							<h5>
+								Total Transactions Per Page: <select name="page"
+									onchange="this.form.submit()"><option
+										th:text="${page}" th:value="${page}"></option>
+									<option th:value="${10}" th:if="${page != 10}">10</option>
+									<option th:value="${50}" th:if="${page != 50}">50</option>
+									<option th:value="${100}" th:if="${page != 100}">100</option></select> <span
+									th:text="${pageNum + ' of ' + totalPage + ' Transaction Records'}"></span>
+							</h5>
+						</div>
+						<div class="mt-2 col-md-6">
+							<nav aria-label="Page navigation example">
+								<ul class="pagination justify-content-end">
+									<!-- First Page -->
+									<li th:if="${pageNum == 1}" class="page-item disabled"><button
+											name="pageNum" class="page-link" type="submit"
+											th:value="${1}">
+											<i class="fa-solid fa-angles-left"></i>
+										</button></li>
+									<li th:if="${pageNum != 1}" class="page-item"><button
+											name="pageNum" class="page-link" type="submit"
+											th:value="${1}">
+											<i class="fa-solid fa-angles-left"></i>
+										</button></li>
+
+									<!-- Previous -->
+									<li th:if="${pageNum == 1}" class="page-item disabled"><button
+											name="pageNum" class="page-link" type="submit"
+											th:value="${pageNum-1}">
+											<i class="fa-solid fa-angle-left"></i>
+										</button></li>
+									<li th:if="${pageNum != 1}" class="page-item"><button
+											name="pageNum" class="page-link" type="submit"
+											th:value="${pageNum-1}">
+											<i class="fa-solid fa-angle-left"></i>
+										</button></li>
+
+									<!-- Page Button -->
+									<li th:if="${totalPage != 0}"
+										th:each="i:${#numbers.sequence(1, totalPage)}"
+										th:class="${pageNum == i} ? 'page-item active' : 'page-item'"><a
+										th:if="${i==5 AND pageNum < 5 AND totalPage !=5}"
+										name="pageNum" class="page-link">...</a><input
+										th:if="${i < 5 AND pageNum < 5}" name="pageNum"
+										class="page-link" th:value="${i}" type="submit"><a
+										th:if="${i==1 AND pageNum >= 5 AND totalPage !=5}"
+										name="pageNum" class="page-link">...</a><a
+										th:if="${pageNum >= 5 AND (pageNum+1) == i AND i < totalPage}"
+										name="pageNum" class="page-link">...</a><input
+										th:if="${pageNum >= 5 AND (pageNum-4) < i AND i <= pageNum AND i < totalPage AND pageNum != totalPage}"
+										name="pageNum" class="page-link" th:value="${i}" type="submit"><input
+										th:if="${pageNum >= 5 AND (pageNum-5) < i AND i <= pageNum AND i < totalPage AND pageNum == totalPage}"
+										name="pageNum" class="page-link" th:value="${i}" type="submit"><input
+										th:if="${i >= 5 AND i == totalPage}" name="pageNum"
+										class="page-link" th:value="${i}" type="submit"><span
+										class="sr-only">(current)</span></li>
+
+									<li th:if="${totalPage == 0}"
+										th:class="${pageNum == 1} ? 'page-item active' : 'page-item'"><input
+										name="pageNum" class="page-link" th:value="${1}" type="submit"></li>
+
+									<!-- Next Page -->
+									<li th:if="${pageNum == totalPage OR totalPage == 0}"
+										class="page-item disabled"><button name="pageNum"
+											class="page-link" type="submit" th:value="${pageNum+1}">
+											<i class="fa-solid fa-angle-right"></i>
+										</button></li>
+									<li th:if="${pageNum != totalPage AND totalPage != 0}"
+										class="page-item"><button name="pageNum"
+											class="page-link" type="submit" th:value="${pageNum+1}">
+											<i class="fa-solid fa-angle-right"></i>
+										</button></li>
+
+									<!-- Last Page -->
+									<li th:if="${pageNum == totalPage OR totalPage == 0}"
+										class="page-item disabled"><button name="pageNum"
+											class="page-link" type="submit" th:value="${totalPage}">
+											<i class="fa-solid fa-angles-right"></i>
+										</button></li>
+									<li th:if="${pageNum != totalPage AND totalPage != 0}"
+										class="page-item"><button name="pageNum"
+											class="page-link" type="submit" th:value="${totalPage}">
+											<i class="fa-solid fa-angles-right"></i>
+										</button></li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<br>
+	<div th:replace="fragments/FinantierPay_footer"></div>
+</body>
+</html>

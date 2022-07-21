@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Wallet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-2">
+		<h3 class="text-center" sec:authorize="hasRole('USER')">View
+			Wallets</h3>
+		<h3 class="text-center" sec:authorize="hasRole('MERCHANT')">View
+			Wallet</h3>
+		<hr>
+		<div class="alert alert-success" th:if="${deleteSuccess}"
+			th:text="${deleteSuccess}"></div>
+		<table class="table bordered table-striped table-hover bg-white">
+			<thead class="table-info">
+				<tr>
+					<th>Wallet ID</th>
+					<th>Total Amount</th>
+					<th sec:authorize="hasRole('USER')">Action</th>
+					<th sec:authorize="hasRole('MERCHANT')">Daily Transaction
+						Payment Limit</th>
+					<th sec:authorize="hasRole('MERCHANT')">Withdraw Wallet Money</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="wallet : ${listWallets}">
+					<td th:text="${wallet.walletId}"></td>
+					<td th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></td>
+					<td sec:authorize="hasRole('USER')"><a class="btn btn-info"
+						th:href="@{/wallet/{id}(id=${wallet.walletId})}">View Wallet</a> <a
+						class="btn btn-info" th:if="${wallet.totalAmount == 0}"
+						th:href="@{/wallet/{id}/delete(id=${wallet.walletId})}"
+						onclick="if (!confirm('Are you sure you want to delete?')) { return false }">Delete
+							Wallet</a></td>
+					<td sec:authorize="hasRole('MERCHANT')"><a
+						class="btn btn-info"
+						th:href="@{/wallet/{id}/walletLimit(id=${wallet.walletId})}">View
+							Payment Limit</a></td>
+					<td sec:authorize="hasRole('MERCHANT')"><a
+						class="btn btn-info"
+						th:href="@{/wallet/{id}/withdraw(id=${wallet.walletId})}">Withdraw Money</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<a th:href="@{/wallet/create}" class="btn btn-primary"
+			sec:authorize="hasRole('USER')">Create Wallet</a>
+	</div>
+	<div class="fixed-bottom" th:if="${listWallets.size() <= 2}">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+	<div th:if="${listWallets.size() >= 3}">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Update Account</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+	src="https://unpkg.com/bcryptjs@2.4.3/dist/bcrypt.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+
+<style>
+label {
+	font-size: 20px;
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<main>
+		<div class="container py-3">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-12 col-xl-7">
+					<div class="card shadow-2-strong card-registration"
+						style="border-radius: 15px;">
+						<div class="card-header text-center">
+							<h3>Update Help</h3>
+						</div>
+						<div class="card-body p-4 p-md-5">
+							<form class="needs-validation"
+								th:action="@{/help/edit/{id}(id=${serviceRequest.serviceRequestId})}"
+								method="post" th:object="${serviceRequest}" novalidate>
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="serviceRequestId" class="form-label">Help
+											Message ID:<span class="text-danger fw-bold">*</span>
+										</label> <input id="serviceRequestId" style="width: 550px;"
+											type="text" class="form-control"
+											th:field="*{serviceRequestId}" readonly />
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="title" class="form-label">Title:<span
+											class="text-danger fw-bold">*</span>
+										</label> <input id="title" style="width: 550px;" type="text"
+											class="form-control" th:field="*{title}" readonly />
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="message" class="form-label">Message:<span
+											class="text-danger fw-bold">*</span>
+										</label>
+										<textarea id="message" type="text" style="width: 550px;"
+											class="form-control" th:field="*{description}" readonly></textarea>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4 mb-4">
+										<label for="status" class="form-label">Status:<span
+											class="text-danger fw-bold">*</span>
+										</label><select
+											id="status" name="status" style="width: 550px;"
+											class="form-control" th:field="*{status}"><option
+												value="In progress">In progess</option>
+											<option value="Solved">Solved</select>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-4">
+										<div class="input-group form-group justify-content-md-end">
+											<button type="submit" class="btn btn-primary"
+												style="width: 200px;">Update</button>
+										</div>
+										<!-- when the submit button is clicked, it goes to /member/save in the form action 
+					and post the data the form -->
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Form Validation -->
+		<script type="text/javascript" th:inline="javascript">
+			'use strict'
+			var form = document.querySelector('.needs-validation')
+			form.addEventListener('submit', function(event) {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+				form.classList.add('was-validated')
+			})
+		</script>
+		<!-- End Form Validation -->
+
+	</main>
+	<div>
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Delete Account Successful</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+
+	<main>
+		<section class="container mb-5 mt-5">
+			<div class="row">
+				<div class="d-flex justify-content-center">
+					<div style="text-align: center;" class="mt-3">
+						<i class="fa fa-check fa-5x" style="color: green"></i>
+						<h2>You have requested to delete your account.</h2>
+						<br>
+						<p>The deletion of account will be completed within the next
+							30 days. During this period, you may choose to reactivate your
+							account!</p>
+					</div>
+				</div>
+
+			</div>
+		</section>
+	</main>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

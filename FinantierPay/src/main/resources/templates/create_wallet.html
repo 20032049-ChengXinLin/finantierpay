@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Register</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="fragments/FinantierPay_header"></div>
+		<main>
+		<section class="container mb-5 mt-5">
+		<div class="row">
+			<div class="d-flex justify-content-center">
+				<div class="col-md-4 col-md-offset-4 mt-3 mb-3">
+					<div class="card">
+						<div class="card-header text-center">
+							<h5>
+								<b>Set Up Wallet Pin</b>
+							</h5>
+						</div>
+						<div class="card-body">
+		<form class="needs-validation" th:action="@{/wallet/save}" method="post" th:object="${wallet}" novalidate>
+			
+			
+			<div class="pin-code mt-5">
+	  			<input id="digit1" type="number" maxlength="1" autofocus>
+    			<input id="digit2" type="number" maxlength="1">
+	  			<input id="digit3" type="number" maxlength="1">
+    			<input id="digit4" type="number" maxlength="1">
+    			<input id="digit5" type="number" maxlength="1">
+    			<input id="digit6" type="number" maxlength="1">
+ 			</div>
+ 			
+ 
+ 			<div class="col-mb-3 mt-5">
+ 	
+				<div class="input-group form-group justify-content-md-end">
+					<button type="submit" class="btn btn-primary" style="width: 200px;"><b>Next</b></button>
+				</div>
+			</div>
+			</form>
+			</div>
+ 		</div>
+ 		</div>
+ 		</div>
+ 		
+ 		</div>
+ 		</section>
+ 		</main>
+ 		</div>
+ 		
+ 		
+ <script type="text/javascript">
+//var pinContainer = document.getElementsByClassName("pin-code")[0];
+ var pinContainer = document.querySelector(".pin-code");
+ console.log('There is ' + pinContainer.length + ' Pin Container on the page.');
+
+ pinContainer.addEventListener('keyup', function (event) {
+     var target = event.srcElement;
+     
+     var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+     var myLength = target.value.length;
+
+     if (myLength >= maxLength) {
+         var next = target;
+         while (next = next.nextElementSibling) {
+             if (next == null) break;
+             if (next.tagName.toLowerCase() == "input") {
+                 next.focus();
+                 break;
+             }
+         }
+     }
+
+     if (myLength === 0) {
+         var next = target;
+         while (next = next.previousElementSibling) {
+             if (next == null) break;
+             if (next.tagName.toLowerCase() == "input") {
+                 next.focus();
+                 break;
+             }
+         }
+     }
+ }, false);
+
+ pinContainer.addEventListener('keydown', function (event) {
+     var target = event.srcElement;
+     target.value = "";
+     var pin = document.getelementbyid("digit1") + document.getelementbyid("digit2") + document.getelementbyid("digit3")
+     			+ document.getelementbyid("digit4") + document.getelementbyid("digit5") + document.getelementbyid("digit6")
+ }, false);
+ 
+ </script>
+			
+			
+			
+<!-- Form Validation -->
+			<script>
+				'use strict'
+				
+				var form = document.querySelector('.needs-validation')
+				
+				form.addEventListener('submit', function(event) {
+					if (!form.checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+					
+					form.classList.add('was-validated')
+				})
+				
+			</script> 
+<!-- End Form Validation -->
+
+		
+
+	<div>
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

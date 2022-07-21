@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymelead.org/extras/spring-security">
+<head>
+<title>FinantierPay - Home Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/font-awesome/5.12.0/js/all.min.js"></script>
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="/jquery/jquery.min.js"></script>
+<script
+	src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('.toast').toast('show');
+	});
+</script>
+<style th:replace="fragments/FinantierPay_style"></style>
+<style>
+video {
+	margin: 0 auto;
+	width: 250px;
+	display: block;
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+
+	<div aria-live="polite" aria-atomic="true" class="position-relative"
+		th:if="${unread != 0}">
+		<div class="toast-container position-absolute top-0 end-0 p-3" style="z-index:1;">
+			<div class="toast bg-info" data-bs-autohide="false" role="alert"
+				aria-live="assertive" aria-atomic="true"
+				th:each="notifications: ${notificationsList}">
+				<div class="toast-header">
+					<img src="images/FinantierPayLogo.png" class="rounded me-2"
+						alt="FinantierPay Logo" width=40 height=30> <strong
+						class="me-auto"><i>FinantierPay</i></strong> <!-- <small
+						class="text-muted">just now</small> -->
+					<a th:href="@{/notifications/read/{id}(id=${notifications.notificationsId})}" class="btn-close"></a>
+				</div>
+				<div class="toast-body">
+					<div th:text=${notifications.message}></div>
+					<div class="mt-2 pt-2 border-top" >
+						<a th:href="@{/notifications}" class="btn btn-primary btn-sm">View Notifications</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<section>
+		<div class="container mb-4">
+			<div class="row d-flex justify-content-center">
+				<div class="col-lg-5 mt-3"
+					sec:authorize="hasAnyRole('USER', 'MERCHANT')">
+					<div id="linechart" sec:authorize="hasAnyRole('USER', 'MERCHANT')"></div>
+					<div class="d-grid gap-2 mt-2">
+						<a th:href="@{/membership}"
+							class="btn btn-success btn-lg btn-block"
+							sec:authorize="hasRole('USER')">View Membership</a>
+					</div>
+					<div class="d-grid gap-2 mt-2">
+						<a th:href="@{/guidelines}"
+							class="btn btn-success btn-lg btn-block"
+							sec:authorize="hasRole('MERCHANT')">View Payment
+							Documentation</a>
+					</div>
+				</div>
+				<div class="col-lg-4 mt-3">
+					<h5 class="text-center bg-info" style="padding: 15px;">
+						Last Login: <span th:if="${account.last_login_date_time != ''}"
+							th:text="${#temporals.format(account.last_login_date_time, 'dd-MM-yyyy HH:mm')}"></span><span
+							th:if="${account.last_login_date_time == null}">-</span>
+					</h5>
+					<div class="bg-warning" style="padding: 20px;"
+						sec:authorize="hasAnyRole('USER', 'MERCHANT')">
+						<h5 sec:authorize="hasRole('USER')">
+							Total Wallets Amount<span th:if="${walletno != 0}"
+								style="float: right;"
+								th:text="${#numbers.formatCurrency(totalamount)}"></span><span
+								th:if="${walletno == 0}" style="float: right;"> $ - </span>
+						</h5>
+						<h5 sec:authorize="hasRole('MERCHANT')">
+							Wallet Amount<span th:if="${walletno != 0}" style="float: right;"
+								th:text="${#numbers.formatCurrency(totalamount)}"></span><span
+								th:if="${walletno == 0}" style="float: right;"> $ - </span>
+						</h5>
+
+						<div class="input-group form-group justify-content-md-end">
+							<a th:href="@{/wallet/create}" sec:authorize="hasRole('USER')"
+								class="btn btn-secondary" th:if="${walletno == 0}">Create
+								Wallet</a>
+							<form th:action="@{/wallet/merchant/save}" method="post">
+								<button type="submit" sec:authorize="hasRole('MERCHANT')"
+									class="btn btn-secondary" th:if="${walletno == 0}">Create
+									Wallet</button>
+							</form>
+							<a sec:authorize="hasRole('USER')" th:href="@{/wallet}"
+								class="btn btn-secondary" th:if="${walletno != 0}">View All
+								Wallets</a> <a sec:authorize="hasRole('MERCHANT')"
+								th:href="@{/wallet}" class="btn btn-secondary"
+								th:if="${walletno != 0}">View Wallet</a>
+						</div>
+					</div>
+					<br>
+					<div sec:authorize="hasAnyRole('USER', 'MERCHANT')">
+						<h5>Recent Transactions</h5>
+						<table class="table bordered table-striped table-hover bg-white">
+							<thead class="table-info">
+								<tr>
+									<th>Date/Time</th>
+									<th sec:authorize="hasRole('USER')">Wallet ID</th>
+									<th>Activity</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:each="transaction : ${transactionList}">
+									<tr th:if="${transactionStat.index <3}">
+										<td
+											th:text="${#temporals.format(transaction.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
+										<td sec:authorize="hasRole('USER')"
+											th:text="${transaction.wallet.walletId}"></td>
+										<td th:text="${transaction.activity}"></td>
+										<td class="text-success fw-bold"
+											th:if="${transaction.activity=='Received' OR transaction.activity=='Deposit'}"
+											th:text="${'+' + #numbers.formatCurrency(transaction.amount)}"></td>
+										<td class="text-danger fw-bold"
+											th:if="${transaction.activity=='Sent'  OR transaction.activity=='Withdraw'}"
+											th:text="${'-' + #numbers.formatCurrency(transaction.amount)}"></td>
+									</tr>
+							</tbody>
+						</table>
+						<div class="text-center mb-2"
+							th:if="${transactionList.size() == 0}">No Transactions Yet</div>
+						<div class="d-grid gap-2">
+							<a th:href="@{transactionhistory}"
+								sec:authorize="hasRole('USER')"
+								class="btn btn-success btn-lg btn-block">View All
+								Transactions History</a> <a th:href="@{transactionhistory}"
+								sec:authorize="hasRole('MERCHANT')"
+								class="btn btn-success btn-lg btn-block">View Transaction
+								History</a>
+						</div>
+					</div>
+
+					<div class="d-grid gap-2 mb-3"
+						sec:authorize="hasAnyRole('STAFF', 'ADMIN')">
+						<a th:href="@{/users}" class="btn btn-success btn-lg btn-block">View
+							Users</a>
+					</div>
+					<div class="d-grid gap-2 mb-3"
+						sec:authorize="hasAnyRole('STAFF', 'ADMIN')">
+						<a th:href="@{/merchants}"
+							class="btn btn-success btn-lg btn-block">View Merchants</a>
+					</div>
+					<div class="d-grid gap-2 mb-3"
+						sec:authorize="hasAnyRole('STAFF', 'ADMIN')">
+						<a th:href="@{/transactionrecords}"
+							class="btn btn-success btn-lg btn-block"> View Transaction
+							Records</a>
+					</div>
+					<div class="d-grid gap-2 mb-3"
+						sec:authorize="hasAnyRole('STAFF', 'ADMIN')">
+						<a th:href="@{/rewards}" class="btn btn-success btn-lg btn-block">
+							View Rewards</a>
+					</div>
+					<div class="d-grid gap-2 mb-3"
+						sec:authorize="hasAnyRole('STAFF', 'ADMIN')">
+						<a th:href="@{/reports}" class="btn btn-success btn-lg btn-block">
+							View Reports</a>
+					</div>
+				</div>
+				<div class="col-lg-3 mt-3"
+					sec:authorize="hasAnyRole('USER', 'MERCHANT')">
+					<h4 class="text-center">Your QR Code</h4>
+					<img th:src="${'data:image/png;base64,' + qrcode}" alt="qrcode"
+						height="220" width="250" class="mx-auto d-block">
+					<div class="bg-white mt-2">
+						<h4 class="text-center">Scan QR Code</h4>
+						<div style="padding: 10px;">
+							<button id="Camera"
+								class="btn btn-primary button input-group justify-content-center" style="z-index:0;">Turn
+								On Camera Access</button>
+						</div>
+						<video id="preview" style="display: none;"></video>
+						<div id="CannotScan" class="text-center" style="display: none;">Cannot
+							Scan? Turn Off Camera to import QR Code.</div>
+						<div style="padding: 10px;">
+							<button id="OffCamera"
+								class="btn btn-primary offbutton input-group justify-content-center"
+								style="display: none;">Turn Off Camera</button>
+						</div>
+						<form method="post" th:action="@{/qrcodeReader}"
+							enctype="multipart/form-data">
+							<p class="text-danger text-center" th:if="${errorMessage}"
+								th:text="${errorMessage}" style="padding: 5px;"></p>
+							<p class="text-danger text-center" id="error"
+								style="padding: 5px;"></p>
+							<p id="error"></p>
+							<div id="importQR" class="text-center mt-2"
+								style="padding: 10px;">
+								<label for="qrCodeFile">Import QR Code</label><input type="file"
+									class="form-control" id="qrCodeFile" name="qrCodeFile"
+									onchange="this.form.submit()" accept="image/png image/jpeg">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Get Account Role of loggedInUsers -->
+		<input id="role" type="hidden" th:value="${account.role}">
+		<!-- Get Wallet ID of Merchant loggedInUsers -->
+		<input id="walletId" type="hidden" sec:authorize="hasRole('MERCHANT')"
+			th:value="${wallet.walletId}">
+	</section>
+	<script type="text/javascript" th:inline="javascript">
+	const MonthlyDepositsAmountList = /*[[${MonthlyDepositsAmountList}]]*/[];
+	const MonthlyCreditedAmountList = /*[[${MonthlyCreditedAmountList}]]*/[];
+	const MonthList = /*[[${MonthList}]]*/[];
+	const yearList = /*[[${yearList}]]*/[];
+	
+	var role = document.getElementById("role").value;
+
+	var title = "";
+	if (role == "ROLE_MERCHANT") {	
+		var walletId = document.getElementById("walletId").value;
+		title = "1-Year Monthly Financial Statement For Wallet ID: " + walletId + " (";
+	} else if (role == "ROLE_USER") {
+		title = "1-Year Monthly Financial Statement For All Wallets (";
+	}
+		
+	Highcharts.chart('linechart', {
+
+			title : {
+				text : title + yearList[0] + '/' + yearList[1] + ')'
+			},
+			xAxis : {
+		        categories: MonthList,				
+		        title: {
+			        text: 'Monthly'
+			    },
+				accessibility : {
+					rangeDescription : 'Months of the Year'
+				}
+			},
+
+			yAxis : {
+				title: {
+			        text: 'Amount Spend/Amount Received'
+			    },
+				accessibility : {
+					rangeDescription : 'Range: 1 to 1000'
+				}
+			},
+
+			series : [ {
+				name: 'Total Amount Received',
+				data : MonthlyDepositsAmountList,
+			}, {
+				name: 'Total Amount Spent',
+				data : MonthlyCreditedAmountList,
+			}]
+		});
+	</script>
+	<script type="text/javascript">
+		var button = document.querySelector('.button')
+		button.addEventListener('click', function(event) {
+  			Instascan.Camera.getCameras().then(function (cameras) {
+				if (cameras.length > 0) {
+	  				scanner.start(cameras[0]);
+	  				document.getElementById("preview").style.display = "block";
+	  				document.getElementById("importQR").style.display = "none";
+	  				document.getElementById("Camera").style.display = "none";
+	  				document.getElementById("CannotScan").style.display = "block";
+	  				document.getElementById("OffCamera").style.display = "block";
+				} else {
+	  				alert('No cameras found in Your browser');
+				}
+  			}).catch(function (e) {
+				alert("Please enable camera access");
+  			});
+		})
+
+  		let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+  		scanner.addListener('scan', function (content) {
+  			let result = content.includes("http://localhost:8080/");
+  			if (result == true) {
+  				window.location.href = content;
+  			} else {
+  				document.getElementById("preview").style.display = "none";
+  				scanner.stop().then(function () { 
+  					console.log('Camera Stop');
+  	  				document.getElementById("importQR").style.display = "block";
+  	  				document.getElementById("Camera").style.display = "block";
+  	  				document.getElementById("OffCamera").style.display = "none";
+  	  				document.getElementById("CannotScan").style.display = "none";
+  				});
+  				document.getElementById("error").innerHTML = "Invalid QR Code";
+  			}
+  		
+ 	 });		
+  		var offbutton = document.querySelector('.offbutton')
+		offbutton.addEventListener('click', function(event) {
+			document.getElementById("preview").style.display = "none";
+			scanner.stop().then(function () { 
+				console.log('Camera Stop');
+  				document.getElementById("importQR").style.display = "block";
+  				document.getElementById("Camera").style.display = "block";
+  				document.getElementById("OffCamera").style.display = "none";
+  				document.getElementById("CannotScan").style.display = "none";
+			});
+			
+		});
+		
+	</script>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

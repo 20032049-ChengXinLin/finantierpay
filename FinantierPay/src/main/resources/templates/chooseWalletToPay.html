@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Choose Wallet To Pay</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+</script>
+</head>
+<body>
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<img src="/images/FinantierPayLogo.png" alt="Logo" width="50"
+							height="35"> <i style="font-size: 35;">FinantierPay</i>
+					</h5>
+					<!-- should be able to cross and return to shoppingcart -->
+					<div class="text-end">
+						<a th:href="@{/shoppingcart}" class="close"><i
+							class="fa fa-times fa-xl text-muted"></i></a>
+					</div>
+				</div>
+				<div class="modal-header">
+					<h5 class="modal-title">PAYMENT</h5>
+					<div class="text-end">
+						<i class="fa-solid fa-cart-shopping"></i> <span
+							th:text="${#numbers.formatCurrency(totalAmt)}"></span> <span
+							th:text="${account.country.countryCode}"></span>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-primary">
+						Hi, <span th:text="${account.username}"></span>!
+					</div>
+					<h5>Ship To</h5>
+					<div class="mb-3">
+						<span th:text="${account.first_name + ' ' + account.last_name}"></span><br>
+						<span th:text="${account.email}"></span><br> <span
+							th:text="${'+' + account.country.countryCallingCode + ' ' + account.phone}"></span><br>
+						<span th:text="${account.address}"></span>
+					</div>
+					<hr>
+					<form class="needs-validation" th:action="@{/chooseWalletToPay}"
+						method="post">
+						<h5 class="mb-4">SELECT WALLET ID TO PAY</h5>
+						<div class="row mb-2">
+							<div class="col-md-4">
+								<label for="wallet_id" class="form-label">Voucher<i
+									class="text-muted"> (Optional)</i></label>
+							</div>
+							<div class="col-md-8">
+								<select class="form-control" name="voucherId"
+									onchange="this.form.submit()">
+									<option value="0" th:if="${voucherId == 0}">Select
+										Voucher</option>
+									<option
+										th:text="${voucher.storeName + ' ' + #numbers.formatCurrency(voucher.voucher_value) + ' ExpiryDate: ' + #temporals.format(voucher.expiryDate, 'dd/MM/yyyy')}"
+										th:if="${voucherId != 0 And voucher.voucher_value <= totalAmt And voucher.voucher_value >= 1 And voucher.status=='Available'}"
+										th:value="${voucher.voucherId}"></option>
+									<option
+										th:text="${voucher.storeName + ' ' + #numbers.formatPercent(voucher.voucher_value, 1, 0) + ' ExpiryDate: ' + #temporals.format(voucher.expiryDate, 'dd/MM/yyyy')}"
+										th:if="${voucherId != 0 And voucher.voucher_value <= totalAmt And voucher.voucher_value < 1 And voucher.status=='Available'}"
+										th:value="${voucher.voucherId}"></option>
+									<option th:each="voucher : ${voucherlist}"
+										th:value="${voucher.voucherId}"
+										th:text="${voucher.storeName + ' ' + #numbers.formatCurrency(voucher.voucher_value) + ' ExpiryDate: ' + #temporals.format(voucher.expiryDate, 'dd/MM/yyyy')}"
+										th:if="${voucherId != voucher.voucherId And voucher.voucher_value <= totalAmt And voucher.voucher_value >= 1 And voucher.status=='Available' And (voucher.storeName == 'FinantierPay' Or voucherStoreName == storeName)}"></option>
+									<option th:each="voucher : ${voucherlist}"
+										th:value="${voucher.voucherId}"
+										th:text="${voucher.storeName + ' ' + #numbers.formatPercent(voucher.voucher_value, 1, 0) + ' ExpiryDate: ' + #temporals.format(voucher.expiryDate, 'dd/MM/yyyy')}"
+										th:if="${voucherId != voucher.voucherId And voucher.voucher_value <= totalAmt And voucher.voucher_value < 1 And voucher.status=='Available' And (voucher.storeName == 'FinantierPay' Or voucherStoreName == storeName)}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="row mb-2">
+							<div class="col-md-4">
+								<label for="wallet_id" class="form-label">Wallet ID:<span
+									class="text-danger">*</span></label>
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" name="walletIdpayment"
+									onchange="this.form.submit()" required>
+									<option value="0" th:if="${UserWalletId == 0 }">Choose
+										Wallet ID</option>
+									<option th:each="wallet : ${listWallets}"
+										th:value="${wallet.walletId}"
+										th:text="'Wallet ID ' + ${wallet.walletId} + ': ' + ${#numbers.formatCurrency(wallet.totalAmount)}"
+										th:if="${voucherId == 0 AND wallet.totalAmount >= totalAmt}"></option>
+									<option th:each="wallet : ${listWallets}"
+										th:value="${wallet.walletId}"
+										th:text="'Wallet ID ' + ${wallet.walletId} + ': ' + ${#numbers.formatCurrency(wallet.totalAmount)}"
+										th:if="${voucherId != 0 AND wallet.totalAmount >= totalamount}"></option>
+								</select>
+
+								<div class="invalid-feedback">Please Select One Wallet ID
+									You Would Like To Pay</div>
+							</div>
+						</div>
+
+						<div class="row mb-4">
+							<div class="col-md-4">
+								<label for="wallet_id" class="form-label">CashBack</label>
+							</div>
+							<div class="col-md-6">
+								<input type="hidden" name="cashback_voucher"
+									th:value="${account.cashback_voucher}"> <input
+									class="form-control"
+									th:value="${#numbers.formatPercent(account.cashback_voucher, 1, 0)}"
+									readonly>
+							</div>
+						</div>
+						<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url -->
+						<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+
+						<!-- User wallet ID, voucher -->
+						<input class="form-control" id="UserWalletId" name="UserWalletId"
+							type="hidden" th:value="${UserWalletId}"> <input
+							class="form-control" id="voucherId" name="voucherId"
+							type="hidden" th:value="${voucherId}"> <input
+							th:if="${voucherId == 0}" class="form-control" id="totalamount"
+							name="totalamount" type="hidden" th:value="${totalamount}">
+						<input th:if="${voucherId != 0}" class="form-control"
+							id="totalamount" name="totalamount" type="hidden"
+							th:value="${totalamount}">
+					</form>
+
+					<form th:action="@{/chooseWalletToTopUp}" method="post">
+						<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url -->
+						<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+						<div class="d-grid gap-2 text-center mb-3">
+							<button type="submit" class="btn btn-light btn-lg">Not
+								Enough Money? Click Here To Top Up</button>
+						</div>
+					</form>
+
+
+					<form th:action="@{/chooseWalletToTransfer}" method="post">
+						<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url -->
+						<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+						<div class="d-grid gap-2 text-center mb-3">
+							<button type="submit" class="btn btn-light btn-lg">Transfer
+								Money to Another Wallet?</button>
+						</div>
+					</form>
+
+					<hr>
+					<div th:if="${UserWalletId != 0}">
+						<form class="needs-validation" th:action="@{/walletpin}"
+							method="post" novalidate>
+							<h5>
+								<u>CONFIRMATION</u>
+							</h5>
+							<h5>
+								WALLET ID: <span th:text="${UserWalletId}"></span>
+							</h5>
+							<h5 th:if="${voucherId != 0}">
+								VOUCHER VALUE: <span th:if="${voucher.voucher_value < 1}"
+									th:text="${#numbers.formatPercent(voucher.voucher_value,1,0)}"></span><span
+									th:if="${voucher.voucher_value >=1}"
+									th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></span>
+							</h5>
+							<hr>
+							<div class="row">
+								<h5 class="col-md-6">TOTAL AMOUNT TO PAY</h5>
+								<h5 class="col-md-6 text-end">
+									<span th:text="${#numbers.formatCurrency(totalamount)}"></span>
+									<span th:text="${account.country.countryCode}"></span>
+								</h5>
+							</div>
+							<hr>
+							<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url -->
+							<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+								type="hidden" th:value="${url}"> <input
+								class="form-control" id="storeName" name="storeName"
+								type="hidden" th:value="${storeName}"> <input
+								class="form-control" id="MerchantWalletId"
+								name="MerchantWalletId" type="hidden"
+								th:value="${MerchantWalletId}"> <input
+								class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+								th:value="${totalAmt}">
+
+							<!-- User wallet ID, voucher, total Amount, cashback Voucher -->
+							<input class="form-control" id="UserWalletId" name="UserWalletId"
+								type="hidden" th:value="${UserWalletId}"> <input
+								class="form-control" id="voucherId" name="voucherId"
+								type="hidden" th:value="${voucherId}"> <input
+								th:if="${voucherId == 0}" class="form-control" id="totalamount"
+								name="totalamount" type="hidden" th:value="${totalamount}">
+							<input th:if="${voucherId != 0}" class="form-control"
+								id="totalamount" name="totalamount" type="hidden"
+								th:value="${totalamount}"> <input type="hidden"
+								name="cashback_voucher" th:value="${account.cashback_voucher}">
+
+							<div class="d-grid gap-2 text-center mb-2">
+								<button type="submit" class="btn btn-info btn-lg btn-block">Confirm
+									and Next</button>
+							</div>
+						</form>
+						<!-- <form th:action="@{/chooseWalletToPay}" method="post">
+							Merchant StoreName, Wallet ID, total Cost, redirect-url
+							<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+								type="hidden" th:value="${url}"> <input
+								class="form-control" id="storeName" name="storeName"
+								type="hidden" th:value="${storeName}"> <input
+								class="form-control" id="MerchantWalletId"
+								name="MerchantWalletId" type="hidden"
+								th:value="${MerchantWalletId}"> <input
+								class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+								th:value="${totalAmt}">
+
+							User wallet ID, voucher
+							<input class="form-control" id="UserWalletId" name="UserWalletId"
+								type="hidden" th:value="${UserWalletId}"> <input
+								class="form-control" id="voucherId" name="voucherId"
+								type="hidden" th:value="${voucherId}"> <input
+								th:if="${voucherId == 0}" class="form-control" id="totalamount"
+								name="totalamount" type="hidden" th:value="${totalamount}">
+							<input th:if="${voucherId != 0}" class="form-control"
+								id="totalamount" name="totalamount" type="hidden"
+								th:value="${totalamount}">
+							<div class="d-grid gap-2 text-center mb-2">
+								<button type="submit" class="btn btn-danger btn-lg btn-block">Cancel</button>
+							</div>
+						</form> -->
+					</div>
+
+					<!-- Form Validation -->
+					<script>
+						'use strict'
+						var form = document.querySelector('.needs-validation')
+						form.addEventListener('submit', function(event) {
+							if (!form.checkValidity()) {
+								event.preventDefault()
+								event.stopPropagation()
+							}
+							form.classList.add('was-validated')
+						})
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

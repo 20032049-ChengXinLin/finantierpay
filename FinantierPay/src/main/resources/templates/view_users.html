@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - View Users</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container">
+		<h3 class="text-center">View Users</h3>
+		<hr>
+
+
+		<form th:action="@{/users}">
+			<div class="input-group d-flex justify-content-end">
+				<div class="form-outline">
+					<select class="form-control" name="isLocked"
+						onchange="this.form.submit()" required>
+						
+						<option value="">Search
+							Status</option>
+						<option th:value="True" th:if="${isLocked != 'True'}">Active</option>
+						<option th:value="False" th:if="${isLocked != 'False'}">Inactive</option>
+					</select>
+				</div>
+			</div>
+		</form>
+
+		<table class="table bordered table-hover bg-white mt-2">
+			<thead class="table-info">
+				<tr>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Account</th>
+					<th>Voucher</th>
+					<th>Points History</th>
+					<th>Points Earned</th>
+					<th>Wallets</th>
+					<th>Status</th>
+
+				</tr>
+			</thead>
+			<th:block th:each="user : ${listUsers}">
+				<tr>
+					<td th:text="${user.accountId}"></td>
+					<td th:text="${user.first_name + ' ' + user.last_name}"></td>
+					<td><a class="btn btn-info" th:href="@{/user/account}">View
+							Account</a></td>
+					<td><a class="btn btn-info"
+						th:href="@{/user/voucher/{id}(id=${user.accountId})}">View
+							Voucher</a></td>
+					<td><a class="btn btn-info"
+						th:href="@{/user/pointhistory/{id}(id=${user.accountId})}">View
+							Points History</a></td>
+					<td><a class="btn btn-info"
+						th:href="@{/user/pointearned/{id}(id=${user.accountId})}">View
+							Points Earned</a></td>
+					<td><a class="btn btn-info"
+						th:href="@{/user/{id}/wallets(id=${user.accountId})}">View
+							Wallets</a></td>
+					<td><span class="text-danger fw-bold"
+							th:if="${user.isLocked == false}">Inactive: <span th:text="${user.date_deleted.plusDays(30)}"></span></span>
+						<span class="text-success fw-bold" th:if="${user.isLocked == true }">Active</span></td>
+
+				</tr>
+		</table>
+		<div class="text-center mb-3" th:if="${listUsers.size() == 0}">No
+			Account Type for Users is Found</div>
+	</div>
+	<div th:if="${listUsers.size() < 3}" class="fixed-bottom">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+	<div th:if="${listUsers.size() >= 3}">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

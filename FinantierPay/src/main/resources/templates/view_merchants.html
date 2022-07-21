@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - View Merchants</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container">
+		<h3 class="text-center">View Merchants</h3>
+		<hr>
+		<div class="d-flex justify-content-end mb-3">
+			<form th:action="@{/merchants}">
+				<div class="input-group">
+					<div class="form-outline">
+						<input type="text" class="form-control" placeholder="Search"
+							name="keyword" id="keyword" th:value="${keyword}"
+							onchange="this.form.submit()" required />
+					</div>
+					<button th:if="${keyword == null}" type="button"
+						class="btn btn-primary">
+						<i class="fas fa-search"></i>
+					</button>
+					<a th:if="${keyword != null}" type="button" class="btn btn-danger"
+						th:href="@{/merchants}"> <i class="fa-solid fa-xmark"></i>
+					</a>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			function clearSearch() {
+				window.location = "[[@{/merchants}]]";
+			}
+		</script>
+		<div th:if="${editSuccess}" th:text="${editSuccess}"
+			class="alert alert-success"></div>
+		<table class="table bordered table-hover bg-white">
+			<thead class="table-info">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Date of Birth</th>
+					<th>Phone</th>
+					<th>Address</th>
+					<th>StoreName</th>
+					<th>Account Type</th>
+					<th>Wallet</th>
+					<th>Status</th>
+					<th sec:authorize="hasRole('ADMIN')">Action</th>
+
+				</tr>
+			</thead>
+			<th:block th:each="merchant : ${listMerchants}">
+				<tr>
+					<td th:text="${merchant.accountId}"></td>
+					<td th:text="${merchant.first_name + ' ' + merchant.last_name}"></td>
+					<td th:text="${merchant.username}"></td>
+					<td th:text="${merchant.email}"></td>
+					<td th:text="${merchant.date_of_birth}"></td>
+					<td th:text="${merchant.phone}"></td>
+					<td th:text="${merchant.address}+ ' ' +${merchant.postal_code}"></td>
+					<td th:text="${merchant.storeName}"></td>
+					<td th:text="${merchant.role}"></td>
+					<td><a
+						th:href="@{/merchant/{id}/wallets(id=${merchant.accountId})}"
+						class="btn btn-info">View wallet</a></td>
+					<td><span class="text-danger fw-bold"
+						th:if="${merchant.isLocked == false}">Inactive: <span
+							th:text="${merchant.date_deleted.plusDays(30)}"></span></span> <span
+						class="text-success fw-bold" th:if="${merchant.isLocked == true }">Active</span></td>
+					<td sec:authorize="hasRole('ADMIN')"><a
+						th:href="@{/merchant/edit/{id}(id=${merchant.accountId})}"><i
+							class="fas fa-pencil-alt" style="color: blue;"></i></a></td>
+				</tr>
+		</table>
+	</div>
+	<div class="text-center" th:if="${listMerchants.size() == 0}">No
+		Account type for Merchant is Found</div>
+
+	
+		<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

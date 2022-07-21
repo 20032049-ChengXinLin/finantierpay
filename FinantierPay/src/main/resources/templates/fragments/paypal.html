@@ -1,0 +1,84 @@
+
+<div class="row border-bottom fw-bold">
+	<div id="paypal-button-container" th:if="${(topUpAmt)==0}"
+		th:class="${'btn disabled'}"></div>
+		<div id="paypal-button-container" th:if="${(topUpAmt)<0}"
+		th:class="${'btn disabled'}"></div>
+	<div id="paypal-button-container" th:if="${(topUpAmt)!=0}"></div>
+	<form th:action="@{/wallet/process_topup}" method="post"
+		id="paypalForm">
+		<input type="hidden" name="formtopupTotal" id="formtopupTotal"
+			th:value="${topUpAmt}"> <input type="hidden" name="walletId"
+			id="walletId" th:value="${walletId}"><input type="hidden"
+			name="transactionId" id="transactionId">
+	</form>
+
+	<script>
+		var topUpTotal = document.getElementById("formtopupTotal").value;
+		console.log("Top Up Total: " + topUpTotal);
+
+		paypal
+				.Buttons(
+						{
+							style: {
+						          shape: 'rect',
+						          color: 'gold',
+						          layout: 'horizontal',
+						          label: 'paypal',
+						          tagline: true
+						        },
+						        
+							createOrder : function(data, actions) {
+								// This function sets up the details of the transaction, 
+								// including the amount and line item details.
+								return actions.order.create({
+									purchase_units : [ {
+										amount : {
+											value : topUpTotal
+										}
+									} ]
+								});
+							},
+							onApprove : function(data, actions) {
+								// This function captures the funds from the transaction.
+								return actions.order
+										.capture()
+										.then(
+												function(details) {
+
+													//Extracting some information from details
+													var transactionId = details.purchase_units[0].payments.captures[0].id;
+													var completedBy = details.payer.name.given_name;
+
+													//Printing to the console some details
+													console
+															.log('Transaction completed by '
+																	+ completedBy);
+													console
+															.log("Transaction ID: "
+																	+ transactionId);
+
+													//Printing full details JSON
+													console
+															.log(JSON
+																	.stringify(details));
+
+													//Calling processTopUp function
+													processTopUp(transactionId);
+												});
+							}
+						}).render('#paypal-button-container');
+
+		function processTopUp(transactionId) {
+
+			//Set transactionId into the hidden values in the paypalForm
+			document.getElementById("transactionId").value = transactionId;
+
+			//Submit the paypalForm to be processed at the backend
+			document.getElementById("paypalForm").submit();
+			console.log("Processing top up in backend: " + transactionId);
+
+		}
+	</script>
+
+</div>

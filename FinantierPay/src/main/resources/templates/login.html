@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<section class="vh-50">
+		<div class="container py-5 h-100">
+			<div
+				class="row d-flex align-items-center justify-content-center h-100">
+				<div class="col-md-8 col-lg-7 col-xl-6">
+					<img
+						src="images/login.svg"
+						class="img-fluid" alt="Phone image">
+				</div>
+				<div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+					<form th:action="@{/login}" method="post">
+						<div class="d-flex justify-content-center">
+							<h3>FinantierPay Login Account</h3>
+						</div>
+						<div class="border-top border-secondary card-body">
+							<div th:if="${param.error} and ${session.SPRING_SECURITY_LAST_EXCEPTION.message} eq 'Bad credentials'">
+								<p class="alert alert-danger">Invalid username and password</p>
+							</div>
+							<div th:if="${param.error}  and ${session.SPRING_SECURITY_LAST_EXCEPTION.message} eq 'User is disabled'"
+								class="alert alert-danger">Please Verify Your Email before you login</div>
+								<div th:if="${param.error}  and ${session.SPRING_SECURITY_LAST_EXCEPTION.message} eq 'User account is locked'" 
+								class="alert alert-danger">Sorry! Your Account has been deleted.</div>
+							<div th:if="${param.logout}" class="alert alert-success">You
+								have been logged out</div>
+							<div th:if="${message}" class="alert alert-success">
+								You have successfully reset your password<br> You may now
+								login with your new password
+							</div>
+							<!-- Email input -->
+							<div class="form-outline mb-4">
+								<input type="text" class="form-control form-control-lg"
+									id="username" name="username" placeholder="username" />
+							</div>
+
+							<!-- Password input -->
+							<div class="form-outline mb-4">
+								<input type="password" class="form-control form-control-lg"
+									id="password" name="password" placeholder="password" />
+							</div>
+
+							<div class="form-outline mb-4">
+								<!-- Checkbox -->
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="remember"
+										name="remember-me"><label class="form-check-label"
+										for="remember">Remember Me</label>
+								</div>
+							</div>
+							<!-- Submit button -->
+							<div class="d-grid gap-2">
+								<button type="submit" class="btn btn-primary btn-lg btn-block">Sign
+									in</button>
+							</div>
+						</div>
+					</form>
+					<div class="form-outline mt-4">
+						<div class="text-center">
+							Don't have an account? <a th:href="@{/register}"
+								style="text-decoration: underline; color: blue;">Sign Up</a>
+						</div>
+						<div class="text-center">
+							<a th:href="@{/forgot_password}"
+								style="text-decoration: underline; color: blue;">Forgot your
+								password?</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+</body>
+</html>

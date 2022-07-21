@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>FinantierPay - Voucher Redemption</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/css/bootstrap.js"></script>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FInantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-2">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 850px;">
+				<div class="card-header">
+					<h3 class="text-center">Voucher Redemption</h3>
+				</div>
+				<div class="card-body">
+					<h4 class="text-center mb-4">Are You Sure You Want To Redeem
+						This Voucher?</h4>
+					<div class="row">
+						<div class="col-md-6">
+							<img class="rounded border"
+								th:src="@{/uploads/rewards/{id}/{imageName}(id=${reward.rewardsId},imageName=${reward.image})}"
+								width=100%, height=340>
+						</div>
+						<div class="col-md-6">
+							<h4 class="text-center fw-bold">
+								<span th:text="${reward.storeName}" class="text-primary"></span>
+								<span th:text="${#numbers.formatCurrency(reward.value)}"
+									class="text-danger"></span><span class="text-primary">
+									Voucher</span>
+							</h4>
+							<hr>
+							<h5>
+								Expiry Date: <span class="text-danger" th:text="${expirydate}"></span>
+							</h5>
+							<br>
+							<h6 class="text-danger">
+								<u>Terms And Conditions *</u>
+							</h6>
+							<ul>
+								<li>Voucher is <b>non-refundable</b> and <b>exchangeable</b>
+									for cash.
+								</li>
+								<li>Voucher can only be used in FinantierPay Payment
+									Website.</li>
+								<li>Voucher is not valid with any other offers.</li>
+								<li>Voucher is not redeemable with any other coupon.</li>
+								<li>Expiry date would be 6 months from current date.</li>
+							</ul>
+							<form th:action="@{/voucher/redeem/{id}(id=${reward.rewardsId})}" method="post">
+								<div class="d-grid gap-2">
+									<button type="Submit" class="btn btn-success btn-lg"
+										onclick="if (!confirm('Are you sure you want to redeem this voucher?')) { return false }">Redeem Voucher</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/FinantierPay_footer"></div>
+</body>
+</html>

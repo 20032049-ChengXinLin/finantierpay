@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Confirm Transfer Wallet Money</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-3">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 500px;">
+				<div class="card-header">
+					<h3 class="text-center">Confirm Transfer Money</h3>
+				</div>
+				<div class="card-body">
+					<div class="text-center">
+						<form th:action="@{/wallet/{id}/success(id=${wallet.walletId})}"
+							method="post">
+							<h5>Transfer Wallet ID</h5>
+							<div class=" mb-3 row">
+								<label for="wallet_id" class="form-label col-md-5 fw-bold">
+									Wallet ID:</label>
+								<div class="col-md-6">
+									<input class="form-control" id="walletId" name="walletId"
+										type="number" th:value="${walletId}" readonly>
+								</div>
+							</div>
+							<div class="mb-3 row">
+								<label for="wallet_id" class="form-label col-md-5 fw-bold">Transfer
+									Amount:</label>
+								<div class="col-md-6">
+									<input class="form-control" id="totalAmt" name="totalAmt"
+										type="number" th:value="${totalAmt}" readonly>
+								</div>
+							</div>
+							<hr>
+							<h5 class="text-danger">Using Wallet ID</h5>
+							<div class=" mb-3 row">
+								<label for="wallet_id" class="form-label col-md-5 fw-bold">
+									Wallet ID:</label>
+								<div class="col-md-6">
+									<input class="form-control" id="current_wallet_id" name="current_wallet_id"
+										type="number" th:value="${wallet.walletId}" readonly>
+								</div>
+							</div>
+							<div class="mb-3 row">
+								<label for="wallet_id" class="form-label col-md-5 fw-bold">Balance
+									Amount:</label>
+								<div class="col-md-6">
+									<input class="form-control" id="current_totalAmt" name="current_totalAmt"
+										type="number" th:value="${wallet.totalAmount}" readonly>
+								</div>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-info">Confirm</button>
+								<a th:href="@{/}" class="btn btn-danger">Cancel</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

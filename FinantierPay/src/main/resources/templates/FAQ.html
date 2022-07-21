@@ -1,0 +1,814 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - FAQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/jquery/jquery.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+<style>
+section {
+	padding: 20px;
+}
+
+section a {
+	text-decoration: underline;
+	color: blue;
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<section class="container">
+		<h2 class="text-center">Frequently Asked Questions</h2>
+		<hr>
+		<h4>Account</h4>
+		<div class="accordion w-100" id="basicAccordion">
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingOne">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseOne" aria-expanded="false"
+						aria-controls="collapseOne">How do I sign up account?</button>
+				</h2>
+				<div id="basicAccordionCollapseOne"
+					class="accordion-collapse collapse" aria-labelledby="headingOne"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can click on <a th:href="@{/register}">register account</a>.
+						It will bring you to the register page where you need to enter all
+						the fields required in order to register an account.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingTwo">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseTwo" aria-expanded="false"
+						aria-controls="collapseTwo">Why I cannot register my
+						account?</button>
+				</h2>
+				<div id="basicAccordionCollapseTwo"
+					class="accordion-collapse collapse" aria-labelledby="headingTwo"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						<ul>
+							<li>You did not fill out all the mandatory fields.</li>
+							<li>You must be <b>above 12 years old</b> to sign up for
+								account.
+							</li>
+							<li>Your chosen username already exist. Please should choose
+								another one.</li>
+							<li>Your email address already exist. Thats means that you
+								already have an account. Please <a th:href="@{/login}">login</a>
+								to your account. If you forgot your password. Click <a
+								th:href="@{/forgot_password}">here</a>
+							</li>
+							<li>Your <b>country</b> must <b>match</b> with the <b>validation</b>
+								of your country <b>phone number</b> and <b>postal code</b>.
+							</li>
+							<li>Your password must contains <b>minimum</b> eight
+								characters, <b>at least</b> one uppercase letter, one lowercase
+								letter, one number and one special character.
+							</li>
+							<li>Your <b>password</b> does <b>not match</b> with <b>confirm
+									password</b>.
+							</li>
+							<li>If you are from <b>Merchant</b>, you need to <b>select</b>
+								Account Type <b>Merchant</b> and enter the <b>Name of your
+									store</b> that you are using <b>FinantierPay as your payment
+									function</b> in order to register account.
+							</li>
+						</ul>
+						<p>
+							Need help? <a th:href="@{/help}">Contact us</a>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingThree">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseThree"
+						aria-expanded="false" aria-controls="collapseOne">What
+						are the different account type?</button>
+				</h2>
+				<div id="basicAccordionCollapseThree"
+					class="accordion-collapse collapse" aria-labelledby="headingThree"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						There are 2 different account types you can choose from. <br>
+						<br> <b>Merchant</b> - If you are from a merchant websites
+						and planning to use the wallet to receive payment from the user.
+						You should choose <b>Merchant</b> as your account type.<br> <b>User</b>
+						- If you are planning to use your wallet to top-up and send
+						payment to the merchant or another user. You should choose <b>User</b>
+						as your account type.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingFour">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseFour" aria-expanded="false"
+						aria-controls="collapseFour">Why I cannot login to my
+						account after I successfully register?</button>
+				</h2>
+				<div id="basicAccordionCollapseFour"
+					class="accordion-collapse collapse" aria-labelledby="headingFour"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You need to go to email account
+						that you have sign up for to verify your FinantierPay account
+						after successfully register. You will not be able to login if you
+						do not verify your email address.</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingFive">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseFive" aria-expanded="false"
+						aria-controls="collapseFive">I did not receive any email
+						after I register my account.</button>
+				</h2>
+				<div id="basicAccordionCollapseFive"
+					class="accordion-collapse collapse" aria-labelledby="headingFive"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Your email address sign up for may be different from the email
+						account you login. If you need help <a th:href="@{/help}">Contact
+							us</a>.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingSix">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseSix" aria-expanded="false"
+						aria-controls="collapseOne">What happen if I forgot my
+						password?</button>
+				</h2>
+				<div id="basicAccordionCollapseSix"
+					class="accordion-collapse collapse" aria-labelledby="headingSix"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can click on <a th:href="@{/forgot_password}">Forgot
+							password</a> to reset your password. You need to enter your email
+						address that you have register in order to receive a reset
+						password link.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingSeven">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseSeven"
+						aria-expanded="false" aria-controls="collapseSeven">The
+						system could not find my email address after I try to reset my
+						password.</button>
+				</h2>
+				<div id="basicAccordionCollapseSeven"
+					class="accordion-collapse collapse" aria-labelledby="headingSeven"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						This could happen due to the following reason:
+						<ul>
+							<li>You forgot the email address when you first register an
+								account.</li>
+							<li>You do not have FinantierPay account.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingEight">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseEight"
+						aria-expanded="false" aria-controls="collapseEight">I did
+						not receive any email link to reset my password.</button>
+				</h2>
+				<div id="basicAccordionCollapseEight"
+					class="accordion-collapse collapse" aria-labelledby="headingEight"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						<a th:href="@{/help}">Contact Us</a>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingNine">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseNine" aria-expanded="false"
+						aria-controls="collapseNine">I want to change my account
+						information. What Should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapseNine"
+					class="accordion-collapse collapse" aria-labelledby="headingNine"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can click on <a th:href="@{/setting}">setting</a> and click on
+						<a th:href="@{/account}">My Account</a> to view your account
+						Information that you have register. If you would like to change
+						your information. Click on <b>Update Account</b> to edit your
+						information. <br> <br> <span class="text-danger fw-bold">Please
+							note:</span> You can only change your postal code, address and phone
+						number based on the country you put when you register an account.
+						<br> If you would like to change your other account
+						information. Please <a th:href="@{/help}">Contact Us.</a>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="headingTen">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapseTen" aria-expanded="false"
+						aria-controls="collapseTen">I want to change my current
+						password. What Should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapseTen"
+					class="accordion-collapse collapse" aria-labelledby="headingTen"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can click on <a th:href="@{/setting}">setting</a> and click on
+						<b>change account password </b> to change your password. You will
+						need to enter the current password in order to change your
+						password and the confirm password must match with the new password
+						in order for you to change your account password successfully.
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<h4>User</h4>
+		<div class="accordion w-100" id="basicAccordion">
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading1">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse1" aria-expanded="false"
+						aria-controls="collapse1">Set Up Wallet Pin For First
+						Logged In Users</button>
+				</h2>
+				<div id="basicAccordionCollapse1"
+					class="accordion-collapse collapse" aria-labelledby="heading1"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You are required to set up your wallet pin for your wallet when
+						you first login to your account after you verify your account
+						through your email address.<br> You will be prompt to set up
+						your wallet pin before you can view other pages.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading2">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse2" aria-expanded="false"
+						aria-controls="collapse2">How many wallets I can have?</button>
+				</h2>
+				<div id="basicAccordionCollapse2"
+					class="accordion-collapse collapse" aria-labelledby="heading2"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You can have as many wallet as
+						you want. Each time you create wallet, you must set up 6-digits
+						wallet pin.</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading3">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse3" aria-expanded="false"
+						aria-controls="collapse3">How do I create new wallets?</button>
+				</h2>
+				<div id="basicAccordionCollapse3"
+					class="accordion-collapse collapse" aria-labelledby="heading3"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Go to <a th:href="@{/wallet}">View Wallets</a> page and there will
+						be button for you to create new wallets.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading4">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse4" aria-expanded="false"
+						aria-controls="collapse4">I am unable to set up 6-digits
+						wallet pin when creating a new wallet.</button>
+				</h2>
+				<div id="basicAccordionCollapse4"
+					class="accordion-collapse collapse" aria-labelledby="heading4"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You only <b>allow</b> to <b>enter</b> numeric 6-digits with no
+						space, word or characters. You are <b>required</b> to remember the
+						6-digits pin as you <b>need</b> to <b>confirm</b> the 6-digits pin
+						before you can <b>create new wallet</b>.<br> You will <b>not</b>
+						be able to <b>create</b> new wallet if the <b>confirm</b> 6-digits
+						pin <b>does not match</b> with the 6-digits pin you intend to set
+						up.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading5">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse5" aria-expanded="false"
+						aria-controls="collapse5">I want to change my wallet pin.
+						What should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapse5"
+					class="accordion-collapse collapse" aria-labelledby="heading5"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Go to <a th:href="@{/wallets}">View Wallets</a> Click on update
+						and reset pin button and reset your password.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading6">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse6" aria-expanded="false"
+						aria-controls="collapse6">I forgot my wallet pin. What
+						should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapse6"
+					class="accordion-collapse collapse" aria-labelledby="heading6"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Go to <a th:href="@{/wallets}">View Wallets</a> Click on update
+						and reset pin button and reset your password.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading7">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse7" aria-expanded="false"
+						aria-controls="collapse7">What is the wallet pin used
+						for?</button>
+				</h2>
+				<div id="basicAccordionCollapse7"
+					class="accordion-collapse collapse" aria-labelledby="heading7"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You will need your wallet pin when you made payments on E-Commerce
+						Websites that uses FinantierPay as their payment method. <br>
+						Your payment will not be process if your 6-digits wallet pin is
+						wrong.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading8">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse8" aria-expanded="false"
+						aria-controls="collapse8">Why I cannot made payment on
+						ECommerce websites using FinantierPay Payment Platform.</button>
+				</h2>
+				<div id="basicAccordionCollapse8"
+					class="accordion-collapse collapse" aria-labelledby="heading8"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						It could be following reason:
+						<ul>
+							<li>You do not have enough wallet money to made payment.</li>
+							<li>You have exceeded your payment limit per day.</li>
+							<li>Your wallet pin is wrong.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading9">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse9" aria-expanded="false"
+						aria-controls="collapse9">How do I made payment on
+						E-Commerce Websites?</button>
+				</h2>
+				<div id="basicAccordionCollapse9"
+					class="accordion-collapse collapse" aria-labelledby="heading9"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You will need to login to FinantierPay account and select wallet
+						you would like to pay. If you have any voucher you would like to
+						use to offset the payment, you will need to <b>select voucher.</b>
+						<br> <br> <span class="text-danger fw-bold">Please
+							note:</span> <br>
+						<ul>
+							<li>Your voucher apply only when it is FinantierPay or the
+								store Name for the Ecommerce websites that you are making
+								payment with.</li>
+							<li>You will only proceed once you have select the wallet Id
+								you would like to use.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading10">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse10" aria-expanded="false"
+						aria-controls="collapse10">My Wallet Amount is not
+						enough. How should I Top Up?</button>
+				</h2>
+				<div id="basicAccordionCollapse10"
+					class="accordion-collapse collapse" aria-labelledby="heading10"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can top up your wallet on FinantierPay website or Payment
+						Website. <br> <br>For <b>FinantierPay website</b>, you
+						will need to click on <a th:href="@{/wallets}">View Wallets</a>
+						and <b>top-up button</b> to top up your wallet amount. <br>For
+						<b>Payment Website</b>, you can click on the button to top up your
+						wallet on <b>select wallet to pay</b> page.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading11">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse11" aria-expanded="false"
+						aria-controls="collapse11">What are different payment
+						method to top up my wallet?</button>
+				</h2>
+				<div id="basicAccordionCollapse11"
+					class="accordion-collapse collapse" aria-labelledby="heading11"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">Right now, we only support paypal
+						payment method. There will be more payment method coming soon!</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading12">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse12" aria-expanded="false"
+						aria-controls="collapse12">I cannot top up my wallet.
+						What should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapse12"
+					class="accordion-collapse collapse" aria-labelledby="heading12"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You will need to select any of the button to top up your wallet or
+						enter the wallet amount you would like to top up. You will be able
+						to see the total amount you would like to top-up before you
+						proceed with the payment page. <br> <span
+							class="text-danger fw-bold">Please note: </span>You will need to
+						enter a <b>minimum</b> of $0.01 to top up your wallet.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading13">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse13" aria-expanded="false"
+						aria-controls="collapse13">I would like to transfer money
+						from one wallet to another wallet. What Should I do?</button>
+				</h2>
+				<div id="basicAccordionCollapse13"
+					class="accordion-collapse collapse" aria-labelledby="heading13"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You can transfer your wallet money to another wallet on
+						FinantierPay website or Payment Website. <br> <br>For <b>FinantierPay
+							website</b>, you will need to click on <a th:href="@{/wallets}">View
+							Wallets</a> and <b>transfer money button</b> to transfer your wallet
+						amount to another wallet. <br>For <b>Payment Website</b>, you
+						can click on the button to transfer your wallet to another wallet
+						on <b>select wallet to pay</b> page. <br> <br> <span
+							class="text-danger fw-bold">Please note:</span>
+						<ul>
+							<li>You can only transfer money to another wallet when you
+								have <b>more than</b> one wallet and the amount that you intend
+								to transfer must be more than $0.00.
+							</li>
+							<li>Your transfer payment will success only when you are
+								within the payment Limit for your wallet per day.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading14">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse14" aria-expanded="false"
+						aria-controls="collapse14">How should I check/update my
+						payment Limit per day.</button>
+				</h2>
+				<div id="basicAccordionCollapse14"
+					class="accordion-collapse collapse" aria-labelledby="heading14"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Go to <a th:href="@{/settings}">account Settings</a> and click on
+						change wallet limit per day to change your payment Limit. <br>
+						<br> <span class="text-danger fw-bold">Please Note:</span> By
+						default, your payment Limit for making payment, transfer money to
+						another wallet and transfer money to another account is $1000 per
+						day.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading15">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse15" aria-expanded="false"
+						aria-controls="collapse15">What is QR code at the home
+						page for?</button>
+				</h2>
+				<div id="basicAccordionCollapse15"
+					class="accordion-collapse collapse" aria-labelledby="heading15"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						This is your QR code when you would like to receive money from
+						another user account. You can save the QR code and send to another
+						user so that they can transfer you money either by importing your
+						QR code or scan your QR code. <br> <br> <span
+							class="text-danger fw-bold">Please note:</span>
+						<ul>
+							<li>You will need a valid QR code in order to process the
+								payment.</li>
+							<li>You can scan the QR code only when it is a different
+								user QR code.</li>
+							<li>The QR code you intend to transfer money to another
+								account must have a valid wallet for you to send money to them.</li>
+							<li>You need to select wallet ID that you would like to
+								transfer money to and the <b>minimum</b> for you to transfer is
+								$0.01 and the <b>maximum</b> is your wallet amount.
+							</li>
+							<li>The payment will not be process if you exceed your
+								wallet payment limit per day.</li>
+							<li>The account that you are transferring to will receive
+								the money on their first wallet ID. They can transfer money to
+								another wallet if they do not want the amount to be in their
+								first wallet.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading16">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse16" aria-expanded="false"
+						aria-controls="collapse16">How do I earn points?</button>
+				</h2>
+				<div id="basicAccordionCollapse16"
+					class="accordion-collapse collapse" aria-labelledby="heading16"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						For each cents you used FinantierPay Wallet to <b>make payment</b>
+						, you will earn 1 points into your account. You will be able to
+						redeem your points before the expiry date on <a
+							th:href="@{/rewards}">Rewards page</a>. <br> <br> <span
+							class="text-danger fw-bold">Please note:</span> The expiry date
+						of your points will be 6 months from the payment transaction date.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading17">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse17" aria-expanded="false"
+						aria-controls="collapse17">How do I redeem voucher?</button>
+				</h2>
+				<div id="basicAccordionCollapse17"
+					class="accordion-collapse collapse" aria-labelledby="heading17"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Your membership points will need to be more than the points in the
+						rewards page in order to redeem voucher.<br> <br> <span
+							class="text-danger fw-bold">Please note:</span> The expiry date
+						of your voucher will be <b>6 months</b> from the date you
+						redeemed.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading18">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse18" aria-expanded="false"
+						aria-controls="collapse18">What are different types of
+						membership levels that we offers?</button>
+				</h2>
+				<div id="basicAccordionCollapse18"
+					class="accordion-collapse collapse" aria-labelledby="heading18"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						The user must hit a minimum of the points stated below for their
+						membership levels to change. <br> <br> <b>Gold</b> -
+						More than or equal to 1000 points. <br> <b>Silver</b> -
+						Between 500 to 999 Points <br> <b>Bronze</b> - Between 100 to
+						499 Points <br> <b>Rookie</b> - Between 0 to 99 Points <br>
+						<br> When the user first register an account, the user will
+						become a <b>Rookie</b> membership. The user need to earn points by
+						making payment using FinantierPay wallet so that their membership
+						levels will increase.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading19">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse19" aria-expanded="false"
+						aria-controls="collapse19">What are the benefits for each
+						membership levels?</button>
+				</h2>
+				<div id="basicAccordionCollapse19"
+					class="accordion-collapse collapse" aria-labelledby="heading19"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						The user will be entited to a cashback percent based on their
+						membership levels each time they used FinantierPay wallet to make
+						payment. The cashback amount will be deposited to their wallet ID
+						that they have used to make payment. <br> <br> <b>Gold</b>
+						- 15% CashBack <br> <b>Silver</b> - 10% CashBack <br> <b>Bronze</b>
+						- 5% CashBack <br> <b>Rookie</b> - 3% CashBack
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading20">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse20" aria-expanded="false"
+						aria-controls="collapse20">Why my membership levels
+						changed?</button>
+				</h2>
+				<div id="basicAccordionCollapse20"
+					class="accordion-collapse collapse" aria-labelledby="heading20"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						You did not make payments for more than 9 months. Your membership
+						levels will drop one level down from current membership levels and
+						your points will be reset. <br> You did not make payments for
+						more than 12 months. Your membership will drop 2 levels down from
+						current membership levels and your points will be reset.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading21">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse21" aria-expanded="false"
+						aria-controls="collapse21">I cannot view my past
+						transaction for more than a year.</button>
+				</h2>
+				<div id="basicAccordionCollapse21"
+					class="accordion-collapse collapse" aria-labelledby="heading21"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You will be able to view your
+						transaction for past 1 year from current date.</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading22">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse22" aria-expanded="false"
+						aria-controls="collapse22">I cannot view my points
+						History and my voucher for more than a year.</button>
+				</h2>
+				<div id="basicAccordionCollapse22"
+					class="accordion-collapse collapse" aria-labelledby="heading22"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You will be able to view your
+						points History and voucher for past 1 year from current date.</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading23">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse23" aria-expanded="false"
+						aria-controls="collapse23">I did not received any
+						notifications/email.</button>
+				</h2>
+				<div id="basicAccordionCollapse23"
+					class="accordion-collapse collapse" aria-labelledby="heading23"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You will receive
+						notifications/email when you top up your wallet amount, transfer
+						money to another account, withdraw wallet amount and make payment
+						on E-commerce website.</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading24">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse24" aria-expanded="false"
+						aria-controls="collapse24">How can I withdraw money back
+						to my bank account.</button>
+				</h2>
+				<div id="basicAccordionCollapse24"
+					class="accordion-collapse collapse" aria-labelledby="heading24"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Go to <a th:href="@{/wallet}">View Wallets</a> and click on view
+						wallet and there will be a button for you to withdraw your wallet
+						amount to your bank. <br>Right now, we only support paypal as
+						withdrawal for your wallet.
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading25">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse25" aria-expanded="false"
+						aria-controls="collapse25">What is the interest earned?</button>
+				</h2>
+				<div id="basicAccordionCollapse25"
+					class="accordion-collapse collapse" aria-labelledby="heading25"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You will earned a interest of 2%
+						based on the total wallet amount you have on the last day of every
+						month.</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<h4>Merchant</h4>
+		<div class="accordion w-100" id="basicAccordion">
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading26">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse26" aria-expanded="false"
+						aria-controls="collapse26">How do I receive payments?</button>
+				</h2>
+				<div id="basicAccordionCollapse26"
+					class="accordion-collapse collapse" aria-labelledby="heading26"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">
+						Read the view payment documents on the home page. If you need help
+						<a th:href="@{/help}">Contact Us</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="accordion w-100" id="basicAccordion">
+			<div class="accordion-item mb-2">
+				<h2 class="accordion-header" id="heading27">
+					<button class="accordion-button collapsed" type="button"
+						data-bs-toggle="collapse"
+						data-bs-target="#basicAccordionCollapse27" aria-expanded="false"
+						aria-controls="collapse27">How do I know the payments
+						success?</button>
+				</h2>
+				<div id="basicAccordionCollapse27"
+					class="accordion-collapse collapse" aria-labelledby="heading27"
+					data-mdb-parent="#basicAccordion">
+					<div class="accordion-body">You will receive an notifications
+						and email to alert you that the user have successfully make a
+						purchase. Your wallet amount will increase.</div>
+				</div>
+			</div>
+		</div>
+		<div
+			class="support-button text-center d-flex align-items-center justify-content-center mt-4 wow fadeInUp"
+			data-wow-delay="0.5s"
+			style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+			<i class="lni-emoji-sad"></i>
+			<p class="mb-0 px-2">Can't find your answers?</p>
+			<a th:href="@{/help}"> Help & Support</a>
+		</div>
+	</section>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Payment Success</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+</script>
+</head>
+<body>
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<img src="/images/FinantierPayLogo.png" alt="Logo" width="50"
+							height="35"> <i style="font-size: 35;">FinantierPay</i>
+					</h5>
+					<!-- should be able to cross and return to shoppingcart -->
+					<div class="text-end">
+						<a th:href="@{/shoppingcart}" class="close"><i
+							class="fa fa-times fa-xl text-muted"></i></a>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex justify-content-center">
+						<div style="text-align: center;" class="mt-5 mb-5">
+							<i class="fa fa-check fa-5x" style="color: green"></i>
+							<h4>
+								<b>Successfully made payment</b>
+							</h4>
+						</div>
+					</div>
+				</div>
+				<form id="member_signup" th:action="@{{url}(url=${url})}"
+					method="post">
+					<input id="totalAmt" name="totalAmt" th:value="${totalAmt}">
+					<input id="transactionId" name="transactionId"
+						th:value="${transactionId}"> <input id="walletId"
+						name="walletId" th:value="${walletId}"> <input
+						id="postal_code" name="postalCode"
+						th:value="${wallet.account.postal_code}"> <input
+						id="username" name="username"
+						th:value="${wallet.account.username}"> <input id="email"
+						name="email" th:value="${wallet.account.email}"> <input
+						id="country" name="country"
+						th:value="${wallet.account.country.countryName}"> <input
+						id="address" name="address" th:value="${wallet.account.address}">
+					<input type="submit" value="submit">
+				</form>
+				<script>
+					window.onload = function() {
+						document.forms['member_signup'].submit();
+					}
+				</script>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

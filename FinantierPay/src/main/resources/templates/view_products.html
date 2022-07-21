@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>CSW Shoes - View Products</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<script src="/bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments/header"></div>
+		<main>
+			<div class="h1">View Products</div>
+			<a href="/products/add" class="btn btn-primary">Add Products</a>
+			<table class="table bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Gender</th>
+						<th>Brand</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Size</th>
+						<th>Product Code</th>
+						<th>Description</th>
+						<th>Total Products Sold</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="products : ${listProducts}">
+						<td th:text="${products.name}"></td>
+						<td><a th:href="@{/products/{id}(id=${products.productsId})}"
+							th:text="${products.name}"></a></td>
+						<td th:text="${products.gender}"></td>
+						<td th:text="${products.brand}"></td>
+						<td th:text="${products.price}"></td>
+						<td th:text="${products.quantity}"></td>
+						<td th:text="${products.size}"></td>
+						<td th:text="${products.productCode}"></td>
+						<td th:text="${products.description}"></td>
+						<td th:text="${products.totalProductsSold}"></td>
+						<td><a th:href="@{/products/edit/{id}(id=${products.id})}">Edit</a>
+							| <a th:href="@{/products/delete/{id}(id=${products.id})}">Delete</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</main>
+		<div th:replace="fragments/footer"></div>
+	</div>
+</body>
+</html>
+

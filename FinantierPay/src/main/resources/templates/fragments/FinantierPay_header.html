@@ -1,0 +1,67 @@
+<header>
+	<nav class="navbar fixed-top navbar-expand-lg navbar-light"
+		style="background-color: #e3f2fd;">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+				aria-controls="navbarTogglerDemo03" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<a class="navbar-brand" href="/"> <img
+				src="/images/FinantierPayLogo.png" alt="Logo" width="50" height="35"><i
+				style="font-size: 35;">FinantierPay</i>
+			</a>
+			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+				<form class="d-flex">
+					<input class="form-control me-2" type="search" placeholder="Search"
+						aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+			<div style="float: right">
+				<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+					<ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a
+							sec:authorize="hasAnyRole('USER', 'MERCHANT')"
+							th:href="@{/notifications}" class="nav-link position-relative">
+								Notifications <i class="fa fa-bell text-danger"
+								th:if="${unread != 0}" aria-hidden="true"></i><i
+								class="fa fa-bell" th:if="${unread == 0}" aria-hidden="true"></i><span th:if="${unread != 0}" 
+								class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+									<span th:text="${unread}" th:if="${unread <= 99}"></span><span th:if="${unread > 99}">99+</span><span
+									class="visually-hidden">unread messages</span>
+							</span>
+						</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/about}">About</a></li>
+						<li class="nav-item"><a sec:authorize="hasAnyRole('USER', 'MERCHANT')"
+							class="nav-link" th:href="@{/request_help}"> Help</a><a sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+							class="nav-link" th:href="@{/help}"> Help</a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/faq}">FAQ</a></li>
+						<li class="nav-item"><a
+							sec:authorize="hasAnyRole('ADMIN', 'STAFF')" class="nav-link"
+							th:href="@{/}">Staff</a></li>
+						<li class="nav-item"><a sec:authorize="hasAnyRole('USER', 'MERCHANT')"
+							class="nav-link" th:href="@{/settings}">Settings</a><a sec:authorize="hasAnyRole('ADMIN', 'STAFF')"
+							class="nav-link" th:href="@{/account}">Account</a></li>
+
+						<!-- UserName Authentication -->
+						<li class="nav-item"><a sec:authorize="isAuthenticated()"
+							class="nav-link active">Welcome <span
+								sec:authentication="principal.username"></span></a></li>
+						<!-- Login -->
+						<li class="nav-item"><a sec:authorize="!isAuthenticated()"
+							class="nav-link" th:href="@{/login}">Login</a></li>
+						<!-- Log out -->
+						<li class="nav-item">
+							<form sec:authorize="isAuthenticated()" th:action="@{/logout}"
+								method="post">
+								<button class="btn nav-link" type="submit">Logout</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+</header>

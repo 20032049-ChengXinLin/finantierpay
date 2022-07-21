@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Send Wallet Money</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-3">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 500px;">
+				<div class="card-header">
+					<h3 class="text-center">Sent Money to Other Wallet</h3>
+				</div>
+				<div class="card-body">
+					<div th:if="${NoWallet}">
+						<h5 class="text-center text-danger">Sorry. You are unable to
+							send money.</h5>
+						<p class="text-center">
+							You do not have any other wallet created. <br> Please <b
+								class="text-danger">create</b> a <b class="text-danger">New
+								Wallet</b> in order to send the money.
+						</p>
+						<h6 class="text-center text-primary">
+							<b>Thank You!</b>
+						</h6>
+					</div>
+					<div th:if="${WalletFound}" class="text-center">
+						<form class="needs-validation" th:action="@{/wallet/{id}/confirm(id=${wallet.walletId})}"
+							method="post" novalidate>
+
+							<h5 class="text-danger">
+								Current Wallet ID <b><span th:text="${walletId}"></span></b><br>
+								Balance: <b><span
+									th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span></b>
+							</h5>
+							<hr>
+							<h5>
+								<b>Select Wallet ID You Would like to send money to</b>
+							</h5>
+							<br>
+							<div class="offset-md-1 mb-3 row">
+								<label for="wallet_id" class="form-label col-md-4 fw-bold">Select
+									Wallet ID:</label>
+								<div class="col-md-6">
+									<select class="form-control" name="walletId" required><option
+											value="">Select Wallet ID</option>
+										<option th:each="wallet : ${walletList}"
+											th:value="${wallet.walletId}"
+											th:text="'Wallet ID ' + ${wallet.walletId} + ': ' + ${#numbers.formatCurrency(wallet.totalAmount)}"
+											th:if="${wallet.walletId != walletId}"></option></select>
+									<div class="invalid-feedback text-start">Please Select Wallet ID You would like to transfer.</div>
+									<div th:if="${errorWalletId}" th:text="${errorWalletId}" class="text-danger text-start"></div>
+								</div>
+							</div>
+							<div class="offset-md-1 mb-3 row">
+								<label for="wallet_id" class="form-label col-md-4 fw-bold">Enter
+									Amount:</label>
+								<div class="col-md-6">
+									<input class="form-control" id="totalAmt" name="totalAmt"
+										type="number" th:value="0.00" min=0.01 step="0.01"
+										th:max="${wallet.totalAmount}" required>
+									<div class="invalid-feedback text-start">Amount must be more than $0.01 and less than or equal to your wallet Amount <span th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span></div>
+									<div th:if="${errorAmt}" th:text="${errorAmt}" class="text-danger text-start"></div>
+								</div>
+							</div>
+							<div class="text-end">
+								<button type="submit" class="btn btn-info" onclick="if (!confirm('Are you sure you want to continue?')) { return false }">Next</button>
+								<a th:href="@{/wallet/{id}(id=${walletId})}" class="btn btn-danger">Cancel</a>
+							</div>
+						</form>
+						<!-- Form Validation -->
+						<script type="text/javascript" th:inline="javascript">
+							'use strict'
+							var form = document
+									.querySelector('.needs-validation')
+
+							form.addEventListener('submit', function(event) {
+								if (!form.checkValidity()) {
+									event.preventDefault()
+									event.stopPropagation()
+								}
+								form.classList.add('was-validated')
+							})
+						</script>
+						<!-- End Form Validation -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:if="${NoWallet}" class="fixed-bottom">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+	<div th:if="${WalletFound}">
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>

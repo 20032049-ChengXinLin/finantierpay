@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Transfer Success</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-3">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 500px;">
+				<div class="card-header">
+					<h3 class="text-center">Transfer Successful</h3>
+				</div>
+				<div class="card-footer text-center">
+					<h5>You have successfully transfer money to</h5>
+					<h5 class="fw-bold">
+						USERNAME: <span class="text-warning"
+							th:text="${#strings.toUpperCase(ToWallet.account.username)}"></span>
+					</h5>
+					<br>
+					<div class="mb-3 row">
+						<label for="wallet_id" class="h5 form-label col-md-5 fw-bold">Total
+							Amount:</label>
+						<div class="col-md-6">
+							<input class="form-control" id="totalAmt" name="totalAmt"
+								type="number" th:value="${totalAmt}" readonly>
+						</div>
+					</div>
+					<hr>
+					<h5 class="fw-bold text-danger">My Wallet</h5>
+					<div class="mb-3 row">
+						<label for="wallet_id" class="h5 form-label col-md-5 fw-bold">Wallet
+							ID:</label>
+						<div class="col-md-6">
+							<input class="form-control" id="walletId" name="walletId"
+								type="text" th:value="${Wallet.walletId}" readonly>
+						</div>
+					</div>
+					<div class="mb-3 row">
+						<label for="wallet_id" class="h5 form-label col-md-5 fw-bold">Balance
+							Amount:</label>
+						<div class="col-md-6">
+							<input class="form-control" id="FromWalletId" name="FromWalletId"
+								type="text" th:value="${#numbers.formatCurrency(Wallet.totalAmount)}" readonly>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div th:replace="fragments/FinantierPay_footer"></div>
+</body>
+</html>

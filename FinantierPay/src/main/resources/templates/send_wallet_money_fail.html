@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Failed to Sent Wallet Money</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container mb-3">
+		<div class="d-flex justify-content-center">
+			<div class="card" style="width: 600px;">
+				<div class="card-header">
+					<h3 class="text-center">Failed To Sent Wallet Amount</h3>
+				</div>
+				<div class="card-body">
+					<div class="text-center">
+						<h5 class="text-success fw-bold">
+							You have failed to sent money <br> from Wallet ID <span
+								th:text="${wallet.walletId}" class="text-danger"></span> to
+							Wallet ID <span th:text="${walletId}" class="text-danger"></span>
+						</h5>
+						<h5>Reason: You have reached the limit of sending out the money per day.</h5>
+						<br>
+						<h5>FROM WALLET ID</h5>
+						<table class="table bordered table-striped table-hover bg-white">
+							<thead class="table-info">
+								<tr>
+									<th>Date/Time</th>
+									<th>Wallet ID</th>
+									<th>Transaction ID</th>
+									<th>Amount Sent</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr>
+									<td
+										th:text="${#temporals.format(currentDateTime, 'dd-MM-yyyy HH:mm')}"></td>
+									<td th:text="${wallet.walletId}"></td>
+									<td th:text="${FailtransactionId}"></td>
+									<td th:text="${#numbers.formatCurrency(totalAmt)}"></td>
+									<td th:text="${status}" class="text-danger fw-bold"></td>
+								</tr>
+							</tbody>
+						</table>
+						<h5>
+							Total balance amount remained in this wallet: <span
+								th:text="${#numbers.formatCurrency(wallet.totalAmount)}"
+								class="text-success fw-bold"></span>
+						</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>

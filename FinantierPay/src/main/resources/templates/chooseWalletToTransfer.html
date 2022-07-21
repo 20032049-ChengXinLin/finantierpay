@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Choose Wallet To Transfer</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+</script>
+</head>
+<body>
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<img src="/images/FinantierPayLogo.png" alt="Logo" width="50"
+							height="35"> <i style="font-size: 35;">FinantierPay</i>
+					</h5>
+					<!-- should be able to cross and return to shoppingcart -->
+					<div class="text-end">
+						<a th:href="@{/shoppingcart}" class="close"><i
+							class="fa fa-times fa-xl text-muted"></i></a>
+					</div>
+				</div>
+				<div class="modal-header">
+					<h5 class="modal-title">PAYMENT</h5>
+					<div class="text-end">
+						<i class="fa-solid fa-cart-shopping"></i> <span
+							th:text="${#numbers.formatCurrency(totalAmt)}"></span> <span
+							th:text="${account.country.countryCode}"></span>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-primary">
+						Hi, <span th:text="${account.username}"></span>!
+					</div>
+					<h5>Ship To</h5>
+					<div class="mb-3">
+						<span th:text="${account.first_name + ' ' + account.last_name}"></span><br>
+						<span th:text="${account.email}"></span><br> <span
+							th:text="${'+' + account.country.countryCallingCode + ' ' + account.phone}"></span><br>
+						<span th:text="${account.address}"></span>
+					</div>
+					<hr>
+					<div th:if="${NoWallet}">
+						<h5 class="text-center text-danger">Sorry. You are unable to
+							send money.</h5>
+						<p class="text-center">
+							You do not have any other wallet created. <br> Please <b
+								class="text-danger">create</b> a <b class="text-danger">New
+								Wallet</b> in order to send the money.
+						</p>
+						<h6 class="text-center text-primary">
+							<b>Thank You!</b>
+						</h6>
+					</div>
+					<form th:action="@{/chooseWalletToTransfer}" th:if="${WalletFound}" method="post">
+						<h5 class="mb-4">SELECT WALLET ID TO TRANSFER FROM</h5>
+						<div class="row mb-4">
+							<div class="col-md-4">
+								<label for="wallet_id" class="form-label">Wallet ID:<span
+									class="text-danger">*</span></label>
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" name="walletIdTransferFrom"
+									onchange="this.form.submit()" required>
+									<option value="0" th:if="${FromWalletId == 0}">Select
+										Wallet ID</option>
+									<option th:if="${FromWalletId != 0}" th:value="${FromWalletId}"
+										th:text="'Wallet ID ' + ${FromWalletId} + ': ' + ${#numbers.formatCurrency(FromWallet.totalAmount)}"></option>
+									<option th:each="wallet : ${listWallets}"
+										th:value="${wallet.walletId}"
+										th:if="${FromWalletId != wallet.walletId And wallet.totalAmount != 0}"
+										th:text="'Wallet ID ' + ${wallet.walletId} + ': ' + ${#numbers.formatCurrency(wallet.totalAmount)}"></option>
+								</select>
+							</div>
+						</div>
+						<hr>
+
+						<!-- Merchant StoreName, URL, Wallet ID, total Cost -->
+						<input class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+					</form>
+					<form class="needs-validation" method="post"
+						th:if="${FromWalletId != 0}"
+						th:action="@{/chooseWalletToTransfer/process_transfer}" novalidate>
+						<div>
+							<h5 class="mb-4">SELECT WALLET ID TO TRANSFER TO</h5>
+							<div class="row mb-4">
+								<div class="col-md-4">
+									<label for="wallet_id" class="form-label">Wallet ID:<span
+										class="text-danger">*</span></label>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" name="walletIdTransferTo" required>
+										<option value="" th:if="${ToWalletId == 0}">Select
+											Wallet ID</option>
+										<option th:each="wallet : ${listWallets}"
+											th:value="${wallet.walletId}"
+											th:if="${ToWalletId != wallet.walletId And FromWalletId != wallet.walletId}"
+											th:text="'Wallet ID ' + ${wallet.walletId} + ': ' + ${#numbers.formatCurrency(wallet.totalAmount)}"></option>
+									</select>
+									<div class="invalid-feedback">Please Select Wallet ID You
+										Like To Transfer To</div>
+								</div>
+							</div>
+							<div class="row mb-4" th:if="${FromWalletId != 0}">
+								<div class="col-md-4">
+									<label for="wallet_id" class="form-label">Enter Amount:<span
+										class="text-danger">*</span></label>
+								</div>
+								<div class="col-md-6">
+									<input class="form-control" id="transferAmt" name="transferAmt"
+										type="number" th:value="${transferAmt}" th:min=0.01
+										step="0.01" th:max="${FromWallet.totalAmount}" required>
+									<div class="invalid-feedback">Amount must be more than $0.01 and less than or equal to <span th:text="${#numbers.formatCurrency(FromWallet.totalAmount)}"></span></div>
+								</div>
+
+							</div>
+						</div>
+
+						<!-- Merchant StoreName, URL, Wallet ID, total Cost -->
+						<input class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+
+						<!-- User -->
+						<input class="form-control" id="walletIdTransferFrom"
+							name="walletIdTransferFrom" type="hidden"
+							th:value="${FromWalletId}">
+
+						<div class="d-grid gap-2 text-center mb-2">
+							<button type="submit" class="btn btn-info btn-lg btn-block">Confirm
+								and Next</button>
+						</div>
+					</form>
+					<!-- Form Validation -->
+					<script type="text/javascript" th:inline="javascript">
+						'use strict'
+						var form = document.querySelector('.needs-validation')
+
+						form.addEventListener('submit', function(event) {
+							if (!form.checkValidity()) {
+								event.preventDefault()
+								event.stopPropagation()
+							}
+							form.classList.add('was-validated')
+						})
+					</script>
+					<!-- End Form Validation -->
+					<form th:action="@{/chooseWalletToPay}" method="post">
+						<!-- Merchant StoreName, URL, Wallet ID, total Cost -->
+						<input class="form-control" id="storeName" name="storeName"
+							type="hidden" th:value="${storeName}"> <input
+							class="form-control" id="Redirect-URL" name="Redirect-URL"
+							type="hidden" th:value="${url}"> <input
+							class="form-control" id="MerchantWalletId"
+							name="MerchantWalletId" type="hidden"
+							th:value="${MerchantWalletId}"> <input
+							class="form-control" id="totalAmt" name="totalAmt" type="hidden"
+							th:value="${totalAmt}">
+
+						<div class="d-grid gap-2 text-center mb-3">
+
+							<button type="submit" class="btn btn-light btn-lg">Enough
+								Money? Go Back</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>FinantierPay - Guidelines for Merchant</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/css/bootstrap.js"></script>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+<style>
+textarea {
+background-color:lightgrey;
+}
+</style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container py-3">
+		<div class="row justify-content-center align-items-center h-100">
+			<div class="col-12 col-lg-12 col-xl-8">
+				<div class="card shadow-2-strong card-registration rounded">
+					<div class="card-header text-center">
+						<h4>View Guidelines on how to implement FinantierPay Payment
+							to Your Website</h4>
+					</div>
+					<div class="card-body text-center">
+						<h5 class="text-start text-primary fw-bold">Step 1:</h5>
+						<ul class="text-start">
+							<li>Add Input function as shown below to your payment
+								checkout.</li>
+							<li>Do not change the <span class="fw-bold">id="totalAmt"
+									name="totalAmt"</span> as this is the total amount that the user are
+								going to pay when using FinantierPay wallet.
+							</li>
+							<li>You only change the value based on your ECommerce
+								Payment System. Remember to include the total amount name you
+								put on the system that the user going to pay.</li>
+						</ul>
+
+						<textarea cols="77" rows="7" readonly>	
+<!-- Do not modify the id and name, Change the value to the Shopping Cart total value name-->
+<input type="hidden" id="totalAmt" name="totalAmt" th:value="'${cartTotal}'">
+
+<!-- Link to FinantierPay Button, Do not change the id name -->
+<a id="finantierPayLink"></a>
+				</textarea>
+						<br>
+						<br>
+						<h5 class="text-start text-primary fw-bold">Examples:</h5>
+						<img
+							src="images/guidelines_merchant_FinantierPayPaymentButton.png"
+							width="700" height="80"> <br> <br>
+						<hr>
+						<h5 class="text-start text-primary fw-bold">Step 2:</h5>
+						<ul class="text-start">
+							<li>Format For Src:
+								"http://localhost:8080/finantierPay/finantierPayPayment.js?walletId=<b><-Your
+									Wallet Id-></b>&storeName=<b><-Name of your Store-></b>&Redirect-URL=<b><-Your
+									receipt/success page after user make payment-></b>"
+							</li>
+							<li>Do not modify <b>script type="text/javascript"</b> and
+								the <b>id="finantierPay"</b>.
+							</li>
+							<li>You should change your wallet ID into your wallet ID and
+								storeName equals to your store name that you have put when you
+								register an account.</li>
+							<li>Redirect-URL is the url that you are redirecting the
+								website to after user successfully made payment.</li>
+							<li class="text-danger">Please note: You will not be able to
+								click on the FinantierPay Payment Button if your wallet ID and
+								storeName did not match and the account type must be "Merchant".
+								<br>Also, the total amount that needs to be pay.</li>
+						</ul>
+						<textarea cols="77" rows="9" readonly>	
+<!-- Put this script before the end body tag, Change the wallet ID to your own FinantierPay wallet ID-->
+<script type="text/javascript" id="finantierPay" 
+src="http://localhost:8080/finantierPay/finantierPayPayment.js?walletId=<YourWalletID>&storeName=<YourStoreName>&Redirect-URL=<RedirectURLSuccessPage>"></script>
+<!-- End of Script -->
+					</textarea>
+					<br>
+						<br>
+						<h5 class="text-start text-primary fw-bold">Examples:</h5>
+						<br> <img src="images/guidelines_merchant_script.png"
+							width="710" height="70"> <br> <br>
+						<hr>
+						<h5 class="text-start text-primary fw-bold">Step 3:</h5>
+						<ul class="text-start">
+							<li>Your Success Redirect URL must be @PostMapping in your controller.
+							</li>
+							<li>You may free free to use transactionId, totalAmt, addresss, country, postalCode to generate your success receipt
+							</li>
+							<li class="text-danger">Please note: If you would like to use any of the parameters. Do not change the name of @RequestParam() as shown below.</li>
+						</ul>
+					<textarea cols="77" rows="10" readonly>	
+@PostMapping("/transaction_successful")
+public String processOrder(Model model, @RequestParam("totalAmt") String cartTotal,
+	@RequestParam("transactionId") String transactionId, @RequestParam("address") String address,
+	@RequestParam("country") String country, @RequestParam("postalCode") String postalCode) {
+			
+	...
+}
+					</textarea>
+					<br>
+						<br>
+						<h5 class="text-start text-primary fw-bold">Examples:</h5>
+						<img src="images/guidelines_merchant_paymentsuccess.png"
+							width="710" height="90">
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/FinantierPay_footer"></div>
+
+</body>
+</html>
+

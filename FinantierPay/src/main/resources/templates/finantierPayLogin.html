@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - Login Account for Payment</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/jquery/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#myModal").modal('show');
+	});
+</script>
+</head>
+<body>
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="mt-3 text-end" style="padding-right: 15px;">
+					<a th:href="@{/shoppingcart}" class="close"><i
+						class="fa fa-times fa-xl text-muted"></i></a>
+				</div>
+				<!-- should be able to cross and return to shoppingcart -->
+
+				<div style="text-align: center;">
+					<img src="/images/FinantierPayLogo.png" alt="FinantierPay"
+						style="width: 30%">
+				</div>
+
+				<div class="text-center">
+					<h5 class="modal-title">Pay with FinantierPay</h5>
+
+					<p>With a FinantierPay account, you are able to make purchases,
+						earn rewards and more, do check it out!</p>
+
+					<form th:action="@{/finantierPay/login}" method="post">
+						<div class="border-top border-secondary card-body">
+							<div th:if="${LoginError}">
+								<p th:text="${LoginError}" class="alert alert-danger"></p>
+							</div>
+										
+							<!-- Username input -->
+							<div class="form-outline mb-4">
+								<input type="text" class="form-control form-control-lg"
+									id="username" name="username" placeholder="Username" />
+							</div>
+
+							<!-- Password input -->
+							<div class="form-outline mb-4">
+								<input type="password" class="form-control form-control-lg"
+									id="password" name="password" placeholder="Password" />
+							</div>
+
+							<!-- Merchant Wallet ID and Username -->
+							<input type="hidden" name="storeName" th:value="${storeName}">
+							<input type="hidden" name="MerchantWalletId" th:value="${MerchantWalletId}">
+							<input type="hidden" name="Redirect-URL" th:value="${url}">
+							
+							<!-- Total Amt that User need to pay -->
+							<input type="hidden" name="totalAmt" th:value="${totalAmt}">
+							
+							<!-- Submit button -->
+							<div class="d-grid gap-2">
+								<button type="submit" class="btn btn-primary btn-lg btn-block">Log
+									In</button>
+							</div>
+						</div>
+					</form>
+
+					<div class="form-outline mt-4">
+						<div class="text-center">
+							Don't have an account? <a th:href="@{/register}"
+								style="text-decoration: underline; color: blue;">Sign Up</a>
+						</div>
+						<div class="text-center">
+							<a th:href="@{/forgot_password}"
+								style="text-decoration: underline; color: blue;">Forgot your
+								password?</a><br> <br>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

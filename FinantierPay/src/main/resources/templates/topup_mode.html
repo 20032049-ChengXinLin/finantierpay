@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>FinantierPay - Wallet Top-Up</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script
+src="https://www.paypal.com/sdk/js?client-id=ATUcI7Kj-m1d-VLoYGFY6FN-FxywzbcZ0CkAymmeSr6-u15DRtTFXWtywWWcwLxjqLR49r5kZqL5AkYn&currency=SGD&components=buttons">
+</script>
+<style th:replace="fragments/FinantierPay_style"></style>
+
+</head>
+<body>
+<div th:replace="fragments/FinantierPay_header"></div>
+	<div class="container card">
+		<div class="card-body">
+			<div class="payment-type">
+				<h3>Choose payment method below</h3>
+				<div class="types flex justify-space-between">
+					
+					<div class="type" onclick="showDiv('toggle')">
+						<div class="logo">
+							<i class="fa fa-credit-card"></i>
+						</div>
+						<div class="text">
+							<p>Pay with Credit Card</p>
+						</div>
+					</div>
+					
+					<div class="type selected" href="">
+						<div class="logo">
+							<i class="fab fa-paypal"></i>
+						</div>
+						<div class="text">
+							<p>Pay with PayPal</p>
+						</div>
+					</div>
+					<div class="type">
+						<div class="logo">
+							<i class="fab fa-amazon"></i>
+						</div>
+						<div class="text">
+							<p>Pay with Amazon</p>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			</div>
+			</div>
+			<div th:replace="fragments/paypal"></div>
+			<div th:replace="fragments/FinantierPay_footer"></div>
+			</body>
+		
+<!-- 			<article id="toggle" style="display:none"> -->
+<!-- 			<div class="payment-info flex justify-space-between"> -->
+<!-- 				<div class="column billing"> -->
+<!-- 					<div class="title"> -->
+<!-- 						<div class="num">1</div> -->
+<!-- 						<h4>Billing Info</h4> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="name">Full Name</label> -->
+<!-- 						<input id="name" type="text" placeholder="Full Name"> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="address">Billing Address</label> -->
+<!-- 						<input id="address" type="text" placeholder="Billing Address"> -->
+<!-- 					</div> -->
+<!-- 					<div class="flex justify-space-between"> -->
+<!-- 						<div class="field half"> -->
+<!-- 							<label for="city">City</label> -->
+<!-- 							<input id="city" type="text" placeholder="City"> -->
+<!-- 						</div> -->
+<!-- 						<div class="field half"> -->
+<!-- 							<label for="state">State</label> -->
+<!-- 							<input id="state" type="text" placeholder="State"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="zip">Zip</label> -->
+<!-- 						<input id="zip" type="text" placeholder="Zip"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="column shipping"> -->
+<!-- 					<div class="title"> -->
+<!-- 						<div class="num">2</div> -->
+<!-- 						<h4>Credit Card Info</h4> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="name">Cardholder Name</label> -->
+<!-- 						<input id="name" type="text" placeholder="Full Name"> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="address">Card Number</label> -->
+<!-- 						<input id="address" type="text" placeholder="1234-5678-9012-3456"> -->
+<!-- 					</div> -->
+<!-- 					<div class="flex justify-space-between"> -->
+<!-- 						<div class="field half"> -->
+<!-- 							<label for="city">Exp. Month</label> -->
+<!-- 							<input id="city" type="text" placeholder="12"> -->
+<!-- 						</div> -->
+<!-- 						<div class="field half"> -->
+<!-- 							<label for="state">Exp. Year</label> -->
+<!-- 							<input id="state" type="text" placeholder="19"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="field full"> -->
+<!-- 						<label for="zip">CVC Number</label> -->
+<!-- 						<input id="zip" type="text" placeholder="468"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			</article> -->
+<!-- 		</div> -->
+<!-- 		<div class="card-actions flex justify-space-between"> -->
+<!-- 			<div class="flex-start"> -->
+<!-- 				<button class="button button-link">Back</button> -->
+<!-- 			</div> -->
+<!-- 			<div class="flex-end"> -->
+<!-- 				<button class="button button-primary">Proceed</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+	
+<!-- <script type="text/javascript">
+ function showArticle(toggle) {
+ 	document.getElementById(toggle).style.display = 'block';
+ } -->
+<!-- </script> -->
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinantierPay - View Account</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/brands.min.css" rel="stylesheet" />
+<link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
+<script src="/bootstrap/css/bootstrap.js"></script>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<style th:replace="fragments/FinantierPay_style"></style>
+</head>
+<body>
+	<div th:replace="fragments/FinantierPay_header"></div>
+	<main>
+		<div class="container py-3">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-12 col-xl-10">
+					<div class="card shadow-2-strong card-registration"
+						style="border-radius: 15px;">
+						<div class="card-header text-center">
+							<h3>View Account</h3>
+						</div>
+						<div class="card-body p-4 p-md-5">
+							<div class="alert alert-success" th:if=${success}
+								th:text=${success}></div>
+							<div class="row">
+								<div class="col-md-4 mb-4">
+									<label for="firstName" class="form-label">First name:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="firstName" type="text" class="form-control"
+										th:value="${account.first_name}" readonly />
+								</div>
+
+								<div class="col-md-4 mb-4">
+									<label for="lastName" class="form-label">Last name:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="lastName" type="text" class="form-control"
+										th:value="${account.last_name}" readonly />
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-md-4 mb-4">
+									<label for="mobileNo" class="form-label">Mobile Number:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="mobileNo" type="text" class="form-control"
+										th:value="${account.phone}" readonly />
+								</div>
+
+								<div class="col-md-6 mb-4">
+									<label for="email" class="form-label">Email Address:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="email" type="email" class="form-control"
+										th:value="${account.email}" name="account_email"
+										oninput="checkEmail(this);" readonly />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4 mb-4">
+									<label for="dob" class="form-label">Date of Birth:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="dob" type="date" class="form-control"
+										th:value="${account.date_of_birth}" readonly />
+								</div>
+
+								<div class="col-md-6 mb-4">
+									<label for="address" class="form-label">Residential
+										Address: </label> <input id="address" type="text" class="form-control"
+										th:value="${account.address}" readonly />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4 mb-4">
+									<label for="country" class="form-label">Country:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="country" type="text" class="form-control"
+										th:value="${account.country.countryName}" readonly />
+								</div>
+
+								<div class="col-md-4 mb-4">
+									<label for="postalCode" class="form-label">Postal Code:<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="postalCode" type="text" class="form-control"
+										th:value="${account.postal_code}" readonly />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4 mb-4">
+									<label for="userName" class="form-label">Username: </label> <input
+										id="userName" type="text" class="form-control"
+										th:value="${account.username}" name="account_username"
+										readonly />
+								</div>
+								<div class="col-md-4 mb-4">
+									<label for="userName" class="form-label">Account Type<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="userName" type="text" class="form-control"
+										th:if="${account.role=='ROLE_USER'}" value="USER"
+										name="account_username" readonly /> <input id="userName"
+										type="text" class="form-control"
+										th:if="${account.role=='ROLE_MERCHANT'}" value="MERCHANT"
+										name="account_username" readonly /><input id="userName"
+										type="text" class="form-control"
+										th:if="${account.role=='ROLE_ADMIN'}" value="ADMIN"
+										name="account_username" readonly /><input id="userName"
+										type="text" class="form-control"
+										th:if="${account.role=='ROLE_STAFF'}" value="STAFF"
+										name="account_username" readonly />
+								</div>
+							</div>
+							<div class="row" sec:authorize="hasRole('MERCHANT')">
+								<div class="col-md-4 mb-4">
+									<label for="userName" class="form-label">Store Name<span
+										class="text-danger fw-bold"></span>
+									</label> <input id="storeName" type="text" class="form-control"
+										th:value="${account.storeName}"
+										name="storeName" readonly />
+								</div>
+							</div>
+							<div class="input-group form-group justify-content-md-end"
+								sec:authorize="hasAnyRole('USER', 'MERCHANT')">
+								<a th:href="@{/account/edit/{id}(id=${account.accountId})}"
+									class="btn btn-primary" style="width: 200px;">Update</a>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div>
+		<div th:replace="fragments/FinantierPay_footer"></div>
+	</div>
+</body>
+</html>
