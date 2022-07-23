@@ -252,10 +252,16 @@ public class AccountController {
 	}
 
 	@GetMapping("/verify")
-	public String verifyUser(@Param("code") String code) {
+	public String verifyUser(@Param("code") String code, Model model) {
 		if (verify(code)) {
+			int unread = notificationsService.unreadNotificiations();
+			model.addAttribute("unread", unread);
+
 			return "verify_success";
 		} else {
+			int unread = notificationsService.unreadNotificiations();
+			model.addAttribute("unread", unread);
+
 			return "verify_fail";
 		}
 	}
@@ -280,15 +286,8 @@ public class AccountController {
 				account.setCashback_voucher(0.03);
 
 				notifications.setMessage(
-						"You can now create your new wallet, top-up and make payment. You are also entited to membership levels. Your membership levels is ROOKIE.");
-			} else if (account.getRole().equals("ROLE_MERCHANT")) {
-				account.setMembership_levels("NONE");
-				account.setCashback_voucher(0.00);
-
-				notifications.setMessage(
-						"You can now create your new wallet and receive payment from your Ecommerce Websites.");
+						"You can now create your new wallet, top-up and make payment. You are also entitled to membership levels. Your membership levels is ROOKIE.");
 			}
-
 			notificationsRepository.save(notifications);
 			return true;
 		}

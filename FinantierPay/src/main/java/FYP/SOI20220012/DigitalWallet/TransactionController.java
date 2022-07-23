@@ -18,12 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +30,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,8 +38,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.lowagie.text.DocumentException;
 
 /**
  * @author 20032049
@@ -755,20 +747,22 @@ public class TransactionController {
 	}
 
 	@GetMapping("/transaction/export/excel")
-	public void exportToExcel(HttpServletResponse response) throws IOException {
+	public String exportToExcel(HttpServletResponse response) throws IOException {
 		response.setContentType("application/octet-stream");
 		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormatter.format(new Date());
 
 		String headerKey = "Content-Disposition";
-		String headerValue = "attachment; filename=transactions_" + currentDateTime + ".xlsx";
+		String headerValue = "attachment; filename=transactions_" + currentDateTime + ".xls";
 		response.setHeader(headerKey, headerValue);
 
 		List<Transaction> listTransaction = transactionRepository.findAll();
 		System.out.println(listTransaction.size());
 		TransactionExcelExporter excelExporter = new TransactionExcelExporter(listTransaction);
-
+		
 		excelExporter.export(response);
+		
+		return "export_success";
 	}
 
 }

@@ -65,6 +65,9 @@ public class FinantierPayLoginController {
 
 	@Autowired
 	private JavaMailSender javaMailSender;
+	
+	@Autowired
+	private NotificationsService notificationsService;
 
 	@GetMapping("/login")
 	public String login() {
@@ -137,7 +140,7 @@ public class FinantierPayLoginController {
 				if (count == 0) {
 					System.out.println("count" + count);
 					double currentAmt = wallet.getTotalAmount();
-					double interestEarned = currentAmt * 0.02;
+					double interestEarned = currentAmt * 0.0002;
 					double interestEarnedformatted = (double) Math.round(interestEarned * 100d) / 100d;
 					double newAmt = currentAmt + interestEarned;
 					double newAmtformatted = (double) Math.round(newAmt * 100d) / 100d;
@@ -637,7 +640,9 @@ public class FinantierPayLoginController {
 	}
 
 	@GetMapping("/403")
-	public String error403() {
+	public String error403(Model model) {
+		int unread = notificationsService.unreadNotificiations();
+		model.addAttribute("unread", unread);
 
 		return "403";
 	}

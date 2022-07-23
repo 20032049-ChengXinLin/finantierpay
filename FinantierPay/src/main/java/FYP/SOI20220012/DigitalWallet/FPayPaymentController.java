@@ -83,7 +83,7 @@ public class FPayPaymentController {
 	
 	@GetMapping("/finantierPayPayment")
 	public String finantierPayPayment(@RequestParam("walletId") int walletId, @RequestParam("storeName") String storeName,
-			@RequestParam("totalAmt") double total, @RequestParam("Redirect-URL") String url, Model model) {
+			@RequestParam("totalAmt") double total, @RequestParam("Redirect-URL") String url, @RequestParam("current-URL") String currenturl, Model model) {
 
 		System.out.println(storeName);
 		List<Wallet> Walletlist = walletRepository.findAll();
@@ -99,7 +99,7 @@ public class FPayPaymentController {
 		}
 
 		if (a == false) {
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 		// Validate Merchant Username
 		Wallet wallet = walletRepository.getById(walletId);
@@ -113,17 +113,18 @@ public class FPayPaymentController {
 
 		if (b == false) {
 			System.out.println("hello");
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 		System.out.println(total);
 		// Validate Shopping cart
 		if (total == 0) {
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 
 		model.addAttribute("MerchantWalletId", walletId);
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("url", url);
+		model.addAttribute("currenturl", currenturl);
 		model.addAttribute("totalAmt", total);
 
 		// CurrentDate
@@ -144,7 +145,7 @@ public class FPayPaymentController {
 	
 	@PostMapping("/finantierPaylogin")
 	public String finantierPayLogin(@RequestParam("MerchantWalletId") int walletId, @RequestParam("storeName") String storeName,
-			@RequestParam("totalAmt") double total, @RequestParam("Redirect-URL") String url, Model model) {
+			@RequestParam("totalAmt") double total, @RequestParam("Redirect-URL") String url, @RequestParam("current-URL") String currenturl, Model model) {
 
 		System.out.println(storeName);
 		List<Wallet> Walletlist = walletRepository.findAll();
@@ -160,7 +161,7 @@ public class FPayPaymentController {
 		}
 
 		if (a == false) {
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 		// Validate Merchant Username
 		Wallet wallet = walletRepository.getById(walletId);
@@ -174,19 +175,19 @@ public class FPayPaymentController {
 
 		if (b == false) {
 			System.out.println("hello");
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 		System.out.println(total);
 		// Validate Shopping cart
 		if (total == 0) {
-			return "redirect:/shoppingcart";
+			return currenturl;
 		}
 
 		model.addAttribute("MerchantWalletId", walletId);
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("url", url);
 		model.addAttribute("totalAmt", total);
-
+		model.addAttribute("currenturl", currenturl);
 		// CurrentDate
 		LocalDate currentDate = LocalDate.now();
 
@@ -206,7 +207,7 @@ public class FPayPaymentController {
 	@PostMapping("/finantierPay/login")
 	public String FinantierPayLoginProcess(HttpServletRequest request, @RequestParam("MerchantWalletId") int walletId,
 			@RequestParam("storeName") String storeName, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt, @RequestParam("username") String username,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt, @RequestParam("username") String username,
 			@RequestParam("password") String password, Model model, RedirectAttributes redirectAttributes) {
 
 		// Validate if input username and password is empty
@@ -216,6 +217,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
+			model.addAttribute("currenturl", currenturl);
 			return "finantierPayLogin";
 		}
 
@@ -228,6 +230,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
+			model.addAttribute("currenturl", currenturl);
 			return "finantierPayLogin";
 		}
 
@@ -241,6 +244,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
+			model.addAttribute("currenturl", currenturl);
 			return "finantierPayLogin";
 		}
 
@@ -256,6 +260,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
+			model.addAttribute("currenturl", currenturl);
 			return "finantierPayLogin";
 		}
 
@@ -271,7 +276,7 @@ public class FPayPaymentController {
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("url", url);
 		model.addAttribute("totalAmt", totalAmt);
-		
+		model.addAttribute("currenturl", currenturl);
 		return "finantierPayPayment_LoginSuccess";
 	}
 	
@@ -279,7 +284,7 @@ public class FPayPaymentController {
 	@PostMapping("/chooseWalletToPay")
 	public String ProcessChooseWallet(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int walletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt,
 			@RequestParam(value = "walletIdpayment", defaultValue = "0") int UserWalletId,
 			@RequestParam(value = "voucherId", defaultValue = "0") int voucherId, Model model) {
 
@@ -310,6 +315,7 @@ public class FPayPaymentController {
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("MerchantWalletId", walletId);
 		model.addAttribute("url", url);
+		model.addAttribute("currenturl", currenturl);
 		model.addAttribute("totalAmt", totalAmt);
 
 		model.addAttribute("account", account);
@@ -334,13 +340,14 @@ public class FPayPaymentController {
 		}
 		model.addAttribute("voucherId", voucherId);
 		model.addAttribute("UserWalletId", UserWalletId);
+
 		return "chooseWalletToPay";
 	}
 
 	@PostMapping("/chooseWalletToTopUp")
 	public String chooseWalletToTopUp(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt,
 			@RequestParam(value = "walletIdTopUp", defaultValue = "0") int walletIdTopUp,
 			@RequestParam(value = "topUpAmt", defaultValue = "0") double topUpAmt, Model model) {
 
@@ -352,10 +359,19 @@ public class FPayPaymentController {
 
 		// Find Wallet Based on Logged In Users Account
 		List<Wallet> walletlist = walletRepository.findByAccount_AccountIdAndIsDeleted(loggedInAccountId, false);
-
+		String errorAmt = "";
+		if (topUpAmt < 0) {
+			errorAmt = "Top up amount must not be a negative amount";
+			model.addAttribute("errorAmt", errorAmt);
+		} else if (topUpAmt == 0) {
+			model.addAttribute("topUpAmt", 0);
+		} else if (topUpAmt > 0) {
+			model.addAttribute("topUpAmt", topUpAmt);
+		}
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("MerchantWalletId", MerchantWalletId);
 		model.addAttribute("url", url);
+		model.addAttribute("currenturl", currenturl);
 		model.addAttribute("totalAmt", totalAmt);
 		model.addAttribute("account", account);
 		model.addAttribute("listWallets", walletlist);
@@ -363,15 +379,13 @@ public class FPayPaymentController {
 		Wallet wallet = walletRepository.getById(walletIdTopUp);
 		model.addAttribute("walletId", walletIdTopUp);
 		model.addAttribute("wallet", wallet);
-		model.addAttribute("topUpAmt", topUpAmt);
-
 		return "chooseWalletToTopUp";
 	}
-
+	
 	@PostMapping("/chooseWalletToTopUp/process_topup")
 	public String processTopUp(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt, @RequestParam("formtopupTotal") double topUpTotal,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt, @RequestParam("formtopupTotal") double topUpTotal,
 			@RequestParam("walletIdTopUp") int walletIdTopUp, @RequestParam("transactionId") String transactionId,
 			Model model) {
 
@@ -409,8 +423,8 @@ public class FPayPaymentController {
 		notifications.setDateTime(currentDateTime);
 		notifications.setTitle("Top Up Wallet ID Success!");
 
-		notifications.setMessage("You have successfully top up your wallet ID " + wallet.getWalletId() + " and $"
-				+ topUpTotal + " has been credited to your Wallet ID " + wallet.getWalletId()
+		notifications.setMessage("You have successfully top up $"
+				+ topUpTotal + " to your Wallet ID " + wallet.getWalletId()
 				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + newupdateWalletAmtValue + ".");
 
 		notificationsRepository.save(notifications);
@@ -423,11 +437,12 @@ public class FPayPaymentController {
 		model.addAttribute("currentDateTime", currentDateTime);
 		model.addAttribute("updateWalletAmt", updateWalletAmt);
 		model.addAttribute("walletEmail", walletEmail);
+		
 		// Send email
 		String subject = "Top-Up Successfully!";
 		String body = "Dear " + username + ",\n\n" + "Transaction ID: " + transactionId + "\n"
 				+ "You have successfully topped up $" + topUpTotal + " to Wallet ID " + wallet.getWalletId() + "\n"
-				+ "Total Amount in this wallet: $" + updateWalletAmt + "\n\nBest Regards, \nFinantierPay";
+				+ "Total Amount in this wallet: $" + newupdateWalletAmtValue + "\n\nBest Regards, \nFinantierPay";
 		String to = walletEmail;
 		sendEmail(to, subject, body);
 
@@ -436,14 +451,14 @@ public class FPayPaymentController {
 		model.addAttribute("MerchantWalletId", MerchantWalletId);
 		model.addAttribute("url", url);
 		model.addAttribute("totalAmt", totalAmt);
-
+		model.addAttribute("currenturl", currenturl);
 		return "payment_topup_success";
 	}
 
 	@PostMapping("/chooseWalletToTransfer")
 	public String chooseWalletToTransfer(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt,
 			@RequestParam(value = "walletIdTransferTo", defaultValue = "0") int walletIdTransferTo,
 			@RequestParam(value = "walletIdTransferFrom", defaultValue = "0") int walletIdTransferFrom,
 			@RequestParam(value = "transferAmt", defaultValue = "0") double transferAmt, Model model) {
@@ -467,7 +482,8 @@ public class FPayPaymentController {
 		model.addAttribute("totalAmt", totalAmt);
 		model.addAttribute("account", account);
 		model.addAttribute("listWallets", walletlist);
-
+		model.addAttribute("currenturl", currenturl);
+		
 		model.addAttribute("FromWalletId", walletIdTransferFrom);
 		model.addAttribute("ToWalletId", walletIdTransferTo);
 		model.addAttribute("transferAmt", transferAmt);
@@ -488,7 +504,7 @@ public class FPayPaymentController {
 	@PostMapping("/chooseWalletToTransfer/process_transfer")
 	public String confirmWalletToTransfer(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt, @RequestParam("walletIdTransferTo") int walletIdTransferTo,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt, @RequestParam("walletIdTransferTo") int walletIdTransferTo,
 			@RequestParam("walletIdTransferFrom") int walletIdTransferFrom,
 			@RequestParam("transferAmt") double transferAmt, Model model) {
 
@@ -504,6 +520,7 @@ public class FPayPaymentController {
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("MerchantWalletId", MerchantWalletId);
 		model.addAttribute("url", url);
+		model.addAttribute("currenturl", currenturl);
 		model.addAttribute("totalAmt", totalAmt);
 		model.addAttribute("account", account);
 		model.addAttribute("listWallets", walletlist);
@@ -525,7 +542,7 @@ public class FPayPaymentController {
 	@PostMapping("/chooseWalletToTransfer/save")
 	public String saveWalletToTransfer(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt, @RequestParam("walletIdTransferTo") int walletIdTransferTo,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt, @RequestParam("walletIdTransferTo") int walletIdTransferTo,
 			@RequestParam("walletIdTransferFrom") int walletIdTransferFrom,
 			@RequestParam("transferAmt") double transferAmt, Model model) {
 		
@@ -604,7 +621,7 @@ public class FPayPaymentController {
 			model.addAttribute("MerchantWalletId", MerchantWalletId);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
-			
+			model.addAttribute("currenturl", currenturl);
 			return "send_payment_wallet_money_fail";
 			
 		} else {
@@ -706,6 +723,7 @@ public class FPayPaymentController {
 			model.addAttribute("MerchantWalletId", MerchantWalletId);
 			model.addAttribute("url", url);
 			model.addAttribute("totalAmt", totalAmt);
+			model.addAttribute("currenturl", currenturl);
 		}
 
 		return "send_payment_wallet_money_success";
@@ -713,7 +731,7 @@ public class FPayPaymentController {
 	
 	@PostMapping("/walletpin")
 	public String walletPin(@RequestParam("storeName") String storeName, @RequestParam("MerchantWalletId") int MerchantWalletId,
-			@RequestParam("Redirect-URL") String url, @RequestParam("totalAmt") double totalAmt,
+			@RequestParam("Redirect-URL") String url, @RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt,
 			@RequestParam("totalamount") double totalamount, @RequestParam("UserWalletId") int UserWalletId,
 			@RequestParam(value = "voucherId", defaultValue = "0") int voucherId,
 			@RequestParam("cashback_voucher") double cashback, Model model) {
@@ -736,6 +754,7 @@ public class FPayPaymentController {
 		model.addAttribute("storeName", storeName);
 		model.addAttribute("MerchantWalletId", MerchantWalletId);
 		model.addAttribute("url", url);
+		model.addAttribute("currenturl", currenturl);
 		model.addAttribute("totalamount", totalamount);
 		model.addAttribute("totalAmt", totalAmt);
 
@@ -749,7 +768,7 @@ public class FPayPaymentController {
 	@PostMapping("/paymentsuccess")
 	public String paymentSuccess(@RequestParam("storeName") String storeName,
 			@RequestParam("MerchantWalletId") int MerchantWalletId, @RequestParam("Redirect-URL") String url,
-			@RequestParam("totalAmt") double totalAmt, @RequestParam("totalamount") double totalamount,
+			@RequestParam("current-URL") String currenturl, @RequestParam("totalAmt") double totalAmt, @RequestParam("totalamount") double totalamount,
 			@RequestParam("UserWalletId") int UserWalletId,
 			@RequestParam(value = "voucherId", defaultValue = "0") int voucherId,
 			@RequestParam("cashback_voucher") double cashback, @RequestParam("d1") String digit1,
@@ -779,6 +798,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("MerchantWalletId", MerchantWalletId);
 			model.addAttribute("url", url);
+			model.addAttribute("currenturl", currenturl);
 			model.addAttribute("totalAmt", totalAmt);
 
 			model.addAttribute("UserWalletId", UserWalletId);
@@ -808,6 +828,7 @@ public class FPayPaymentController {
 			model.addAttribute("storeName", storeName);
 			model.addAttribute("MerchantWalletId", MerchantWalletId);
 			model.addAttribute("url", url);
+			model.addAttribute("currenturl", currenturl);
 			model.addAttribute("totalAmt", totalAmt);
 
 			model.addAttribute("UserWalletId", UserWalletId);
@@ -913,6 +934,7 @@ public class FPayPaymentController {
 			notificationsRepository.save(Usernotifications);
 
 			model.addAttribute("url", url);
+			model.addAttribute("currenturl", currenturl);
 			model.addAttribute("totalAmt", totalAmt);
 			model.addAttribute("totalamount", totalamount);
 			model.addAttribute("wallet", UserWallet);
@@ -1146,7 +1168,7 @@ public class FPayPaymentController {
 
 			Merchantnotifications.setMessage("You have received $" + newtotalAmtValue + " from "
 					+ UserWallet.getAccount().getUsername().toUpperCase() + " to wallet ID "
-					+ MerchantWallet.getWalletId() + " from " + MerchantWallet.getAccount().getStoreName().toUpperCase()
+					+ MerchantWallet.getWalletId() + " on " + MerchantWallet.getAccount().getStoreName().toUpperCase()
 					+ ". Your current balance is now $" + newAddedValue + ".");
 
 			notificationsRepository.save(Merchantnotifications);
@@ -1162,6 +1184,7 @@ public class FPayPaymentController {
 			sendEmail(Merchant, Merchantsubject, Merchantbody);
 
 			model.addAttribute("url", url);
+			model.addAttribute("currenturl", currenturl);
 			model.addAttribute("totalAmt", totalAmt);
 			model.addAttribute("wallet", UserWallet);
 			model.addAttribute("walletId", UserWalletId);

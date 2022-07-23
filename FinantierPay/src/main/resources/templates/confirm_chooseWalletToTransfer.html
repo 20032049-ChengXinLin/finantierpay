@@ -26,7 +26,7 @@
 					</h5>
 					<!-- should be able to cross and return to shoppingcart -->
 					<div class="text-end">
-						<a th:href="@{/shoppingcart}" class="close"><i
+						<a th:href="@{${currenturl}}" class="close"><i
 							class="fa fa-times fa-xl text-muted"></i></a>
 					</div>
 				</div>
@@ -81,7 +81,9 @@
 						<input class="form-control" id="storeName" name="storeName"
 							type="hidden" th:value="${storeName}"> <input
 							class="form-control" id="Redirect-URL" name="Redirect-URL"
-							type="hidden" th:value="${url}"> <input
+							type="hidden" th:value="${url}"><input
+							class="form-control" id="current-URL" name="current-URL"
+							type="hidden" th:value="${currenturl}"> <input
 							class="form-control" id="MerchantWalletId"
 							name="MerchantWalletId" type="hidden"
 							th:value="${MerchantWalletId}"> <input
@@ -106,7 +108,9 @@
 						<input class="form-control" id="storeName" name="storeName"
 							type="hidden" th:value="${storeName}"> <input
 							class="form-control" id="Redirect-URL" name="Redirect-URL"
-							type="hidden" th:value="${url}"> <input
+							type="hidden" th:value="${url}"><input
+							class="form-control" id="current-URL" name="current-URL"
+							type="hidden" th:value="${currenturl}"> <input
 							class="form-control" id="MerchantWalletId"
 							name="MerchantWalletId" type="hidden"
 							th:value="${MerchantWalletId}"> <input

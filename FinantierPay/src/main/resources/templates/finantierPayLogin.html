@@ -20,7 +20,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="mt-3 text-end" style="padding-right: 15px;">
-					<a th:href="@{/shoppingcart}" class="close"><i
+					<a th:href="@{${currenturl}}" class="close"><i
 						class="fa fa-times fa-xl text-muted"></i></a>
 				</div>
 				<!-- should be able to cross and return to shoppingcart -->
@@ -41,7 +41,7 @@
 							<div th:if="${LoginError}">
 								<p th:text="${LoginError}" class="alert alert-danger"></p>
 							</div>
-										
+
 							<!-- Username input -->
 							<div class="form-outline mb-4">
 								<input type="text" class="form-control form-control-lg"
@@ -56,12 +56,14 @@
 
 							<!-- Merchant Wallet ID and Username -->
 							<input type="hidden" name="storeName" th:value="${storeName}">
-							<input type="hidden" name="MerchantWalletId" th:value="${MerchantWalletId}">
-							<input type="hidden" name="Redirect-URL" th:value="${url}">
-							
+							<input type="hidden" name="MerchantWalletId"
+								th:value="${MerchantWalletId}"> <input type="hidden"
+								name="Redirect-URL" th:value="${url}"> <input
+								class="form-control" id="current-URL" name="current-URL"
+								type="hidden" th:value="${currenturl}">
 							<!-- Total Amt that User need to pay -->
 							<input type="hidden" name="totalAmt" th:value="${totalAmt}">
-							
+
 							<!-- Submit button -->
 							<div class="d-grid gap-2">
 								<button type="submit" class="btn btn-primary btn-lg btn-block">Log

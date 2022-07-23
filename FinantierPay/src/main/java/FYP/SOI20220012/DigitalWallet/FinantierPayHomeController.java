@@ -349,7 +349,7 @@ public class FinantierPayHomeController {
 		}
 
 		// QR Code LocalHost: URL Account link
-		String byteArray = "http://localhost:8080/account/" + loggedInAccountId + "/wallet";
+		String byteArray = "https://finantierpay.azurewebsites.net/account/" + loggedInAccountId + "/wallet";
 
 		byte[] image = new byte[0];
 		try {
@@ -407,7 +407,7 @@ public class FinantierPayHomeController {
 				redirectAttributes.addFlashAttribute("errorMessage", "Invalid QR Code");
 				return "redirect:/";
 			} else {
-				if (qrContent.contains("http://localhost:8080/")) {
+				if (qrContent.contains("https://finantierpay.azurewebsites.net/")) {
 
 					return "redirect:" + qrContent;
 				} else {

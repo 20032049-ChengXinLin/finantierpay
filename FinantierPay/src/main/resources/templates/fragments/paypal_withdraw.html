@@ -1,13 +1,19 @@
 
 <div class="row border-bottom fw-bold" id="paypal-button-container">
 	<form th:action="@{/wallet/process_withdraw}" method="post"
-		id="paypalForm">
+		id="paypalForm" sec:authorize="hasRole('USER')">
 		<input type="hidden" name="formWithdrawTotal" id="formWithdrawTotal"
-			th:value="${withdrawAmt}"> <input type="hidden" name="walletId"
-			id="walletId" th:value="${walletId}"><input type="hidden"
-			name="transactionId" id="transactionId">
+			th:value="${withdrawAmt}"> <input type="hidden"
+			name="walletId" id="walletId" th:value="${walletId}"><input
+			type="hidden" name="transactionId" id="transactionId">
 	</form>
-
+	<form th:action="@{/wallet/merchant/process_withdraw}" method="post"
+		id="paypalForm" sec:authorize="hasRole('MERCHANT')">
+		<input type="hidden" name="formWithdrawTotal" id="formWithdrawTotal"
+			th:value="${withdrawAmt}"> <input type="hidden"
+			name="walletId" id="walletId" th:value="${walletId}"><input
+			type="hidden" name="transactionId" id="transactionId">
+	</form>
 	<script>
 		var withdrawTotal = document.getElementById("formWithdrawTotal").value;
 		console.log("Withdraw Total: " + withdrawTotal);
@@ -15,14 +21,14 @@
 		paypal
 				.Buttons(
 						{
-							style: {
-						          shape: 'rect',
-						          color: 'gold',
-						          layout: 'horizontal',
-						          label: 'paypal',
-						          tagline: false
-						        },
-						        
+							style : {
+								shape : 'rect',
+								color : 'gold',
+								layout : 'horizontal',
+								label : 'paypal',
+								tagline : false
+							},
+
 							createOrder : function(data, actions) {
 								// This function sets up the details of the transaction, 
 								// including the amount and line item details.

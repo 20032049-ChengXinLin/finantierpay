@@ -1,20 +1,23 @@
 
 <div class="row border-bottom fw-bold">
-	<div id="paypal-button-container" th:if="${(topUpAmt)==0 Or walletId==0}"
-		th:class="${'btn disabled'}"></div>
-	<div id="paypal-button-container" th:if="${(topUpAmt)!=0 AND walletId!=0}"></div>
+<div id="paypal-button-container"
+		th:if="${(topUpAmt)==0 Or walletId==0}" th:class="${'btn disabled'}"></div>
+	<div id="paypal-button-container"
+		th:if="${(topUpAmt)!=0 AND walletId!=0}"></div>
 	<form th:action="@{/chooseWalletToTopUp/process_topup}" method="post"
 		id="paypalForm">
 		<input type="hidden" name="formtopupTotal" id="formtopupTotal"
-			th:value="${topUpAmt}"> <input type="hidden" name="walletIdTopUp"
-			id="walletIdTopUp" th:value="${walletId}"><input type="hidden"
-			name="transactionId" id="transactionId">
-			
+			th:value="${topUpAmt}"> <input type="hidden"
+			name="walletIdTopUp" id="walletIdTopUp" th:value="${walletId}"><input
+			type="hidden" name="transactionId" id="transactionId">
+
 		<!-- Merchant StoreName, URL, Wallet ID, total Cost -->
 		<input class="form-control" id="storeName" name="storeName"
 			type="hidden" th:value="${storeName}"> <input
 			class="form-control" id="Redirect-URL" name="Redirect-URL"
 			type="hidden" th:value="${url}"> <input class="form-control"
+			id="current-URL" name="current-URL" type="hidden"
+			th:value="${currenturl}"> <input class="form-control"
 			id="MerchantWalletId" name="MerchantWalletId" type="hidden"
 			th:value="${MerchantWalletId}"> <input class="form-control"
 			id="totalAmt" name="totalAmt" type="hidden" th:value="${totalAmt}">
@@ -27,13 +30,13 @@
 		paypal
 				.Buttons(
 						{
-							style: {
-						          shape: 'rect',
-						          color: 'gold',
-						          layout: 'horizontal',
-						          label: 'paypal',
-						          tagline: true
-						        },
+							style : {
+								shape : 'rect',
+								color : 'gold',
+								layout : 'horizontal',
+								label : 'paypal',
+								tagline : true
+							},
 							createOrder : function(data, actions) {
 								// This function sets up the details of the transaction, 
 								// including the amount and line item details.

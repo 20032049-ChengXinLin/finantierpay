@@ -60,7 +60,7 @@ public class ServiceRequestController {
 
 	@Autowired
 	private NotificationsRepository notificationsRepository;
-	
+
 	@Autowired
 	private NotificationsService notificationsService;
 
@@ -84,9 +84,14 @@ public class ServiceRequestController {
 		LocalDate currentDate = LocalDate.now();
 		ServiceRequest firstDateTime = serviceRequestRepository.findTopByOrderByDateTimeAsc();
 		LocalDate firstServiceRequestDateTime = firstDateTime.getDateTime().toLocalDate();
-		
+
 		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
-		String startMonth = firstServiceRequestDateTime.format(dateformatter);
+		String startMonth = "";
+		if (firstDateTime == null) {
+			startMonth = currentDate.format(dateformatter);
+		} else {
+			startMonth = firstServiceRequestDateTime.format(dateformatter);
+		}
 		String endMonth = currentDate.format(dateformatter);
 		if (startMonthYear.equals("null") && endMonthYear.equals("null")) {
 			startMonthYear = startMonth;
@@ -155,7 +160,8 @@ public class ServiceRequestController {
 	}
 
 	@PostMapping("/help/edit/{id}")
-	public String saveHelp(@PathVariable("id") int id, @RequestParam("status") String status, RedirectAttributes redirectAttributes) {
+	public String saveHelp(@PathVariable("id") int id, @RequestParam("status") String status,
+			RedirectAttributes redirectAttributes) {
 		ServiceRequest serviceRequest = serviceRequestRepository.getById(id);
 		serviceRequest.setStatus(status);
 		serviceRequestRepository.save(serviceRequest);

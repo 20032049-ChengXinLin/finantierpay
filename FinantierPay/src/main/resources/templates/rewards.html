@@ -37,7 +37,7 @@
 								th:if="${rewards.storeName == storeName}">
 								<div class="column rounded">
 									<img class="rounded border"
-										th:src="@{/uploads/rewards/{id}/{imageName}(id=${rewards.rewardsId},imageName=${rewards.image})}"
+										th:src="@{/images/rewards/{id}/{imageName}(id=${rewards.rewardsId},imageName=${rewards.image})}"
 										width=100%, height=150>
 									<p>
 										<span style="color: orange;" th:text="${rewards.storeName}"></span><br>
@@ -54,7 +54,7 @@
 										Expiry Date:<br> <b><span th:text="${expirydate}"></span></b>
 									</p>
 									<a
-										th:href="@{/rewards/redeem/{id}(id=${rewards.rewardsId})}"
+										th:href="{/rewards/redeem/{id}(id=${rewards.rewardsId})}"
 										class="btn btn-outline-danger btn-sm mb-2"
 										th:if="${rewards.points <= account.balance_points}">Redeem</a>
 									<a th:href="@{/}"

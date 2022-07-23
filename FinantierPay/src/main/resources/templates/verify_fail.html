@@ -14,12 +14,13 @@
 <body>
 	<div th:replace="fragments/FinantierPay_header"></div>
 
-	<div class="container text-center mb-5 mt-5" style="height: 200px;">
-		<h3>Sorry, we could not verify account. It maybe already
-			verified, or verification code is incorrect.</h3>
+	<div
+		class="container mt-5 mb-5 d-flex align-items-center justify-content-center"
+		style="height: 200px;">
+		<h3>Sorry, we could not verify the account. You have already verified your account or the verification code is incorrect</h3>
 	</div>
 
-		<div th:replace="fragments/FinantierPay_footer"></div>
+	<div th:replace="fragments/FinantierPay_footer"></div>
 
 </body>
 </html>

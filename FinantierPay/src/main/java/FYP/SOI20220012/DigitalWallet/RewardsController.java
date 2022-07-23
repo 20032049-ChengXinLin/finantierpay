@@ -50,6 +50,9 @@ public class RewardsController {
 	@Autowired
 	private NotificationsService notificationsService;
 	
+	@Autowired
+	private NotificationsRepository notificationsRepository;
+	
 	@GetMapping("/rewards")
 	public String rewards(Model model) {
 
@@ -153,7 +156,8 @@ public class RewardsController {
 		}
 		// deduct membership points
 		double totalpointsDeducted = totalpoints - reward.getPoints();
-		account.setBalance_points(totalpointsDeducted);
+		double newtotalpointsDeducted = (double) Math.round(totalpointsDeducted * 100d) / 100d;
+		account.setBalance_points(newtotalpointsDeducted);
 		accountRepository.save(account);
 		
 		// Redeem Voucher
@@ -166,6 +170,18 @@ public class RewardsController {
 		voucher.setArchive("No");
 		voucherRepository.save(voucher);
 
+
+		// Notifications
+		Notifications notifications = new Notifications();
+		notifications.setAccount(account);
+		notifications.setDateTime(dateTime);
+		notifications.setTitle("Successfully Redeemed Voucher!");
+
+		notifications.setMessage("You have successfully redeemed $" + reward.getValue() + " "
+				+ reward.getStoreName().toUpperCase() + " voucher. You are now left with " + newtotalpointsDeducted +" points. The expiry date of your voucher will be on " + expirydate + ". Please use your voucher before the expiry date.");
+
+		notificationsRepository.save(notifications);
+		
 		model.addAttribute("voucher", voucher);
 		int unread = notificationsService.unreadNotificiations();
 		model.addAttribute("unread", unread);

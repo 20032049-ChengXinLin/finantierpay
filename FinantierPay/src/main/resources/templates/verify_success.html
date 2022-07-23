@@ -13,13 +13,18 @@
 </head>
 <body>
 	<div th:replace="fragments/FinantierPay_header"></div>
-	
-	<div class="container text-center mb-5 mt-5" style="height: 200px;">
-    <h3>Congratulations, your account has been verified.</h3>
-    <h4>Click <a th:href="@{/login}" style="text-decoration:underline; color:blue">here</a> to Login</h4>
+
+	<div
+		class="container mt-5 mb-5 d-flex align-items-center justify-content-center"
+		style="height: 200px;">
+		<h3>Congratulations, your account has been verified.</h3>
+		<h4>
+			Click <a th:href="@{/login}"
+				style="text-decoration: underline; color: blue">here</a> to Login
+		</h4>
 	</div>
 
-		<div th:replace="fragments/FinantierPay_footer"></div>
+	<div th:replace="fragments/FinantierPay_footer"></div>
 
 </body>
 </html>

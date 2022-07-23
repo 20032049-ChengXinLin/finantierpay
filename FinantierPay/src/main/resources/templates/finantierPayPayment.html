@@ -18,45 +18,27 @@
 <body>
 	<div id="myModal" class="modal fade">
 		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">
-						<img src="/images/FinantierPayLogo.png" alt="Logo" width="50"
-							height="35"> <i style="font-size: 35;">FinantierPay</i>
-					</h5>
-					<!-- should be able to cross and return to shoppingcart -->
-					<div class="text-end">
-						<a th:href="@{/shoppingcart}" class="close"><i
-							class="fa fa-times fa-xl text-muted"></i></a>
-					</div>
-				</div>
-				<div class="modal-body">
-					<div class="d-flex justify-content-center">
-						<div style="text-align: center;" class="mt-5 mb-5">
-							<i class="fa fa-check fa-5x" style="color: green"></i>
-							<h4>
-								<b>Successfully made payment</b>
-							</h4>
-						</div>
-					</div>
-				</div>
-				<form id="finantierPay_login" th:action="@{/finantierPaylogin}" method="post">
-					<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url -->
-					<input class="form-control" id="Redirect-URL" name="Redirect-URL"
-						type="hidden" th:value="${url}"> <input
-						class="form-control" id="storeName" name="storeName" type="hidden"
-						th:value="${storeName}"> <input class="form-control"
-						id="MerchantWalletId" name="MerchantWalletId" type="hidden" th:value="${MerchantWalletId}">
-					<input class="form-control" id="totalAmt" name="totalAmt"
-						type="hidden" th:value="${totalAmt}">
-				</form>
-				<script>
-					window.onload = function() {
-						document.forms['finantierPay_login'].submit();
-					}
-				</script>
-			</div>
+
+			<form id="finantierPay_login" th:action="@{/finantierPaylogin}"
+				method="post">
+				<!-- Merchant StoreName, Wallet ID, total Cost, redirect-url, current url-->
+				<input class="form-control" id="Redirect-URL" name="Redirect-URL"
+					type="hidden" th:value="${url}"> <input
+					class="form-control" id="current-URL" name="current-URL"
+					type="hidden" th:value="${currenturl}"> <input
+					class="form-control" id="storeName" name="storeName" type="hidden"
+					th:value="${storeName}"> <input class="form-control"
+					id="MerchantWalletId" name="MerchantWalletId" type="hidden"
+					th:value="${MerchantWalletId}"> <input class="form-control"
+					id="totalAmt" name="totalAmt" type="hidden" th:value="${totalAmt}">
+			</form>
+			<script>
+				window.onload = function() {
+					document.forms['finantierPay_login'].submit();
+				}
+			</script>
 		</div>
 	</div>
+
 </body>
 </html>

@@ -293,7 +293,8 @@ public class WalletController {
 		// Saving Wallet Repository
 		double currentWalletAmt = wallet.getTotalAmount();
 		double updateWalletAmt = currentWalletAmt + topUpTotal;
-		wallet.setTotalAmount(updateWalletAmt);
+		double newupdatedValue = (double) Math.round(updateWalletAmt * 100d) / 100d;
+		wallet.setTotalAmount(newupdatedValue);
 		walletRepository.save(wallet);
 
 		// Sending Success Top Up Notifications
@@ -307,9 +308,9 @@ public class WalletController {
 		notifications.setDateTime(currentDateTime);
 		notifications.setTitle("Top Up Wallet ID Success!");
 
-		notifications.setMessage("You have successfully top up your wallet ID " + wallet.getWalletId() + " and $"
-				+ topUpTotal + " has been credited to your Wallet ID " + wallet.getWalletId()
-				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + updateWalletAmt + ".");
+		notifications.setMessage("You have successfully top up $"
+				+ topUpTotal + " to your Wallet ID " + wallet.getWalletId()
+				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + newupdatedValue + ".");
 
 		notificationsRepository.save(notifications);
 		String walletEmail = wallet.getAccount().getEmail();
@@ -319,13 +320,13 @@ public class WalletController {
 		model.addAttribute("wallet", wallet);
 		model.addAttribute("transactionId", transactionId);
 		model.addAttribute("currentDateTime", currentDateTime);
-		model.addAttribute("updateWalletAmt", updateWalletAmt);
+		model.addAttribute("updateWalletAmt", newupdatedValue);
 		model.addAttribute("walletEmail", walletEmail);
 		// Send email
 		String subject = "Top-Up Successfully!";
 		String body = "Dear " + username + ",\n\n" + "Transaction ID: " + transactionId + "\n"
 				+ "You have successfully topped up $" + topUpTotal + " to Wallet ID " + wallet.getWalletId() + "\n"
-				+ "Total Amount in this wallet: $" + updateWalletAmt + "\n\nBest Regards, \nFinantierPay";
+				+ "Total Amount in this wallet: $" + newupdatedValue + "\n\nBest Regards, \nFinantierPay";
 		String to = walletEmail;
 		sendEmail(to, subject, body);
 		int unread = notificationsService.unreadNotificiations();
@@ -904,8 +905,8 @@ public class WalletController {
 		notifications.setDateTime(currentDateTime);
 		notifications.setTitle("Withdraw Wallet ID Success!");
 
-		notifications.setMessage("You have successfully withdraw from your wallet ID " + wallet.getWalletId() + " and $"
-				+ newValue + " has been withdrew your Wallet ID " + wallet.getWalletId()
+		notifications.setMessage("You have successfully withdrawn $" + newupdateWalletAmt + " from your wallet ID "
+				+ wallet.getWalletId()
 				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + newupdateWalletAmt + ".");
 
 		notificationsRepository.save(notifications);
@@ -929,6 +930,73 @@ public class WalletController {
 		model.addAttribute("unread", unread);
 		return "withdraw_success";
 	}
+	
+	@PostMapping("/wallet/merchant/process_withdraw")
+	public String saveWithdraw(Model model, @RequestParam("formWithdrawTotal") double withdrawTotal,
+			@RequestParam("walletId") int walletId, @RequestParam("transactionId") String transactionId) {
+		Wallet wallet = walletRepository.getById(walletId);
+
+		// Create Transaction
+		Transaction transaction = new Transaction();
+
+		// Current Date Time
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		transaction.setWallet(wallet);
+		transaction.setActivity("Withdraw");
+		transaction.setStatus("Success");
+		transaction.setArchive("No");
+		transaction.setTransactionId(transactionId);
+		transaction.setDateTime(currentDateTime);
+		transaction.setAmount(withdrawTotal);
+		transaction.setDescription("Successfully Wallet Withdraw");
+
+		transactionRepository.save(transaction);
+
+		// Saving Wallet Repository
+		double currentWalletAmt = wallet.getTotalAmount();
+		double newValue = (double) Math.round(withdrawTotal * 100d) / 100d;
+		double updateWalletAmt = currentWalletAmt - newValue;
+		double newupdateWalletAmt = (double) Math.round(updateWalletAmt * 100d) / 100d;
+		wallet.setTotalAmount(updateWalletAmt);
+
+		walletRepository.save(wallet);
+
+		// Sending Success Top Up Notifications
+		AccountDetails loggedInAccount = (AccountDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		int loggedInAccountId = loggedInAccount.getAccount().getAccountId();
+		Account account = accountRepository.getById(loggedInAccountId);
+		Notifications notifications = new Notifications();
+		notifications.setAccount(account);
+		notifications.setDateTime(currentDateTime);
+		notifications.setTitle("Withdraw Wallet ID Success!");
+
+		notifications.setMessage("You have successfully withdrawn $" + newupdateWalletAmt + " from your wallet ID "
+				+ wallet.getWalletId()
+				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + newupdateWalletAmt + ".");
+
+		notificationsRepository.save(notifications);
+		String walletEmail = wallet.getAccount().getEmail();
+		String username = wallet.getAccount().getUsername();
+		// Pass info to view to display success page
+		model.addAttribute("withdrawTotal", withdrawTotal);
+		model.addAttribute("wallet", wallet);
+		model.addAttribute("transactionId", transactionId);
+		model.addAttribute("currentDateTime", currentDateTime);
+		model.addAttribute("updateWalletAmt", updateWalletAmt);
+		model.addAttribute("walletEmail", walletEmail);
+		// Send email
+		String subject = "Withdraw Successfully!";
+		String body = "Dear " + username + ",\n\n" + "Transaction ID: " + transactionId + "\n"
+				+ "You have successfully withdraw $" + newValue + " from Wallet ID " + wallet.getWalletId() + "\n"
+				+ "Total Amount in this wallet: $" + newupdateWalletAmt + "\n\nBest Regards, \nFinantierPay";
+		String to = walletEmail;
+		sendEmail(to, subject, body);
+		int unread = notificationsService.unreadNotificiations();
+		model.addAttribute("unread", unread);
+		return "withdraw_success";
+	}
+
 
 	@GetMapping("/wallet/{id}/delete")
 	public String deleteWallet(@PathVariable("id") Integer id, RedirectAttributes RedirectAttributes) {

@@ -22,18 +22,20 @@
 				</div>
 				<div class="card-body">
 					<div>
-						<form class="needs-validation" th:action="@{/wallet/{id}/withdraw(id=${wallet.walletId})}"
+						<form class="needs-validation"
+							th:action="@{/wallet/{id}/withdraw(id=${wallet.walletId})}"
 							method="post" novalidate>
 
 							<h5 class="text-danger text-center">
 								Current Wallet ID <b><span th:text="${walletId}"></span></b><br>
 								Balance: <b><span id="currentBalance"
-									th:value="${#numbers.formatCurrency(wallet.totalAmount)}" th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span></b>
+									th:value="${#numbers.formatCurrency(wallet.totalAmount)}"
+									th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span></b>
 							</h5>
 							<hr>
-							
+
 							<br>
-							
+
 							<div class="offset-md-1 mb-3 row">
 								<label for="wallet_id" class="form-label col-md-4 fw-bold">Enter
 									Withdraw Amount:</label>
@@ -41,15 +43,28 @@
 									<input class="form-control" id="withdrawAmt" name="withdrawAmt"
 										type="number" th:value="0.00" min=0.01 step="0.01"
 										th:max="${wallet.totalAmount}" required>
-									<div class="invalid-feedback text-start">Please enter an amount between $0.01 and your wallet Amount <span th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span> (inclusive)</div>
-									<div th:if="${errorAmt}" th:text="${errorAmt}" class="text-danger text-start"></div>
+									<div class="invalid-feedback text-start"
+										th:if="${wallet.totalAmount != 0}">
+										Please enter an amount between $0.01 and your wallet Amount <span
+											th:text="${#numbers.formatCurrency(wallet.totalAmount)}"></span>
+										(inclusive)
+									</div>
+									<div class="invalid-feedback text-start"
+										th:if="${wallet.totalAmount == 0}">The current balance
+										of this wallet is $0.00. You cannot withdraw any amount from
+										this wallet.</div>
+									<!-- 									<div th:if="${errorAmt}" th:text="${errorAmt}"
+										class="text-danger text-start"></div> -->
 								</div>
 							</div>
-							
-							<br><br>
+
+							<br> <br>
 							<div class="text-end">
-								<button class="btn btn-info" type="submit" onclick="errorMessage()">Next</button>
-								<a th:href="@{/wallet/{id}(id=${walletId})}" class="btn btn-danger">Cancel</a>
+								<button class="btn btn-info" type="submit">Next</button>
+								<a th:href="@{/wallet/{id}(id=${walletId})}"
+									class="btn btn-danger" sec:authorize="hasRole('USER')">Cancel</a>
+								<a th:href="@{/wallet}" class="btn btn-danger"
+									sec:authorize="hasRole('MERCHANT')">Cancel</a>
 							</div>
 						</form>
 						<!-- Form Validation -->
@@ -67,36 +82,7 @@
 							})
 						</script>
 						<!-- End Form Validation -->
-						
-						
-						<script>
-    						function errorMessage() {
-        					var error = document.getElementById("error")
-        					if (document.getElementById("withdrawAmt").value == 0) {
-             				
-           					 	// Changing content and color of content
-           	 					error.textContent = "Please Enter the Total Amount that You would like to withdraw."
-            					error.style.color = "red"
-            					
-        					} else if (document.getElementById("withdrawAmt").value < 0) {
-   
-           					 	// Changing content and color of content
-           	 					error.textContent = "Please Enter a Positive amount."
-            					error.style.color = "red"
-            					
-        					} else if (document.getElementById("withdrawAmt").value > document.getElementById("currentBalance").value) {
-   
-           					 	// Changing content and color of content
-           	 					error.textContent = "You cannot withdraw more than your wallet balance."
-            					error.style.color = "red"
-            					
-        					} else {
-        						
-            					error.textContent = ""
-            				
-        					}
-    					}
-						</script>
+
 					</div>
 				</div>
 			</div>

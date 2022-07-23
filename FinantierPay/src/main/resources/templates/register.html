@@ -9,6 +9,7 @@
 <link href="/font-awesome/css/solid.min.css" rel="stylesheet" />
 <script src="/bootstrap/css/bootstrap.js"></script>
 <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <style th:replace="fragments/FinantierPay_style"></style>
 </head>
 <body>
@@ -23,8 +24,10 @@
 							<h3>Sign Up Account</h3>
 						</div>
 						<div class="card-body p-4 p-md-5">
-							<form class="needs-validation" th:action="@{/process_register}"
-								method="post" th:object="${account}" novalidate>
+							<form class="needs-validation" id="myForm"
+								th:action="@{/process_register}" method="post"
+								th:object="${account}" onsubmit="check_if_capcha_is_filled"
+								novalidate>
 
 								<div class="row">
 									<div class="col-md-4 mb-4">
@@ -228,6 +231,13 @@
 										<p class="text-danger" th:if="${pattern}" th:text="${pattern}"></p>
 									</div>
 								</div>
+								<div class="g-recaptcha" data-callback="capcha_filled"
+									data-expired-callback="capcha_expired"
+									data-sitekey="6LdDnxMhAAAAANocS_mncmjTGPwKKxSyXBJ94okE">
+								</div>
+								
+								<div id="robot" class="text-danger"></div>
+								<br>
 								<div class="row">
 									<div class="col-md-8">
 										<div class="text-danger">
@@ -260,6 +270,14 @@
 
 		<!-- Form Validation -->
 		<script type="text/javascript" th:inline="javascript">
+			window.onload = function() {
+				var recaptcha = document.forms["myForm"]["g-recaptcha-response"];
+				recaptcha.required = true;
+				recaptcha.oninvalid = function(e) {
+					// do something
+					document.getElementById("robot").innerHTML = "Please check the box if you are not a robot.";
+				}
+			}
 			var country = "";
 			function checkCountry(fieldCountry) {
 				country = fieldCountry.value;

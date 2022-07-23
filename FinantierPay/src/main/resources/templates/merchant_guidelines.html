@@ -14,7 +14,7 @@
 <style th:replace="fragments/FinantierPay_style"></style>
 <style>
 textarea {
-background-color:lightgrey;
+	background-color: lightgrey;
 }
 </style>
 </head>
@@ -49,17 +49,16 @@ background-color:lightgrey;
 <!-- Link to FinantierPay Button, Do not change the id name -->
 <a id="finantierPayLink"></a>
 				</textarea>
-						<br>
-						<br>
+						<br> <br>
 						<h5 class="text-start text-primary fw-bold">Examples:</h5>
 						<img
 							src="images/guidelines_merchant_FinantierPayPaymentButton.png"
-							width="700" height="80"> <br> <br>
+							width="700" height="100"> <br> <br>
 						<hr>
 						<h5 class="text-start text-primary fw-bold">Step 2:</h5>
 						<ul class="text-start">
 							<li>Format For Src:
-								"http://localhost:8080/finantierPay/finantierPayPayment.js?walletId=<b><-Your
+								"https://finantierpay.azurewebsites.net/finantierPay/finantierPayPayment.js?walletId=<b><-Your
 									Wallet Id-></b>&storeName=<b><-Name of your Store-></b>&Redirect-URL=<b><-Your
 									receipt/success page after user make payment-></b>"
 							</li>
@@ -74,39 +73,41 @@ background-color:lightgrey;
 							<li class="text-danger">Please note: You will not be able to
 								click on the FinantierPay Payment Button if your wallet ID and
 								storeName did not match and the account type must be "Merchant".
-								<br>Also, the total amount that needs to be pay.</li>
+								<br>Also, the total amount that needs to be pay.
+							</li>
 						</ul>
 						<textarea cols="77" rows="9" readonly>	
 <!-- Put this script before the end body tag, Change the wallet ID to your own FinantierPay wallet ID-->
-<script type="text/javascript" id="finantierPay" 
-src="http://localhost:8080/finantierPay/finantierPayPayment.js?walletId=<YourWalletID>&storeName=<YourStoreName>&Redirect-URL=<RedirectURLSuccessPage>"></script>
+<script type="text/javascript" id="finantierPay"
+								src="https://finantierpay.azurewebsites.net/finantierPay/finantierPayPayment.js?walletId=<YourWalletID>&storeName=<YourStoreName>&Redirect-URL=<RedirectURLSuccessPage>"></script>
 <!-- End of Script -->
 					</textarea>
-					<br>
-						<br>
+						<br> <br>
 						<h5 class="text-start text-primary fw-bold">Examples:</h5>
-						<br> <img src="images/guidelines_merchant_script.png"
-							width="710" height="70"> <br> <br>
+						<img
+							src="images/guidelines_merchant_script.png"
+							width="800" height="100"> <br> <br>
 						<hr>
 						<h5 class="text-start text-primary fw-bold">Step 3:</h5>
 						<ul class="text-start">
-							<li>Your Success Redirect URL must be @PostMapping in your controller.
-							</li>
-							<li>You may free free to use transactionId, totalAmt, addresss, country, postalCode to generate your success receipt
-							</li>
-							<li class="text-danger">Please note: If you would like to use any of the parameters. Do not change the name of @RequestParam() as shown below.</li>
+							<li>Your Success Redirect URL must be @GetMapping in your
+								controller.</li>
+							<li>You may free free to use transactionId, totalAmt,
+								addresss, country, postalCode to generate your success receipt</li>
+							<li class="text-danger">Please note: If you would like to
+								use any of the parameters. Do not change the name of
+								@RequestParam() as shown below.</li>
 						</ul>
-					<textarea cols="77" rows="10" readonly>	
-@PostMapping("/transaction_successful")
-public String processOrder(Model model, @RequestParam("totalAmt") String cartTotal,
+						<textarea cols="77" rows="10" readonly>	
+@GetMapping("/transaction_successful")
+public String processOrder(Model model, @RequestParam("totalAmt") String totalAmt,
 	@RequestParam("transactionId") String transactionId, @RequestParam("address") String address,
 	@RequestParam("country") String country, @RequestParam("postalCode") String postalCode) {
 			
 	...
 }
 					</textarea>
-					<br>
-						<br>
+						<br> <br>
 						<h5 class="text-start text-primary fw-bold">Examples:</h5>
 						<img src="images/guidelines_merchant_paymentsuccess.png"
 							width="710" height="90">
