@@ -468,7 +468,7 @@ public class UsersController {
 			notificationsRepository.save(notifications);
 
 			RedirectAttributes.addFlashAttribute("success", "Wallet ID: " + id
-					+ " successfully updated wallet limit from $" + oldWalletAmount + " to $" + updatedWalletAmount);
+					+ " successfully updated wallet amount from $" + oldWalletAmount + " to $" + updatedWalletAmount);
 		}
 		if (updatedWalletAmount == oldWalletAmount) {
 			RedirectAttributes.addFlashAttribute("warning", "No update was made.");

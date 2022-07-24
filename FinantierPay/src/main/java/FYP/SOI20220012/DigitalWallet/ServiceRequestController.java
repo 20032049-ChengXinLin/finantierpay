@@ -83,13 +83,13 @@ public class ServiceRequestController {
 
 		LocalDate currentDate = LocalDate.now();
 		ServiceRequest firstDateTime = serviceRequestRepository.findTopByOrderByDateTimeAsc();
-		LocalDate firstServiceRequestDateTime = firstDateTime.getDateTime().toLocalDate();
-
+		
 		DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
 		String startMonth = "";
-		if (firstDateTime == null) {
+		if (firstDateTime == null) {		
 			startMonth = currentDate.format(dateformatter);
 		} else {
+			LocalDate firstServiceRequestDateTime = firstDateTime.getDateTime().toLocalDate();
 			startMonth = firstServiceRequestDateTime.format(dateformatter);
 		}
 		String endMonth = currentDate.format(dateformatter);

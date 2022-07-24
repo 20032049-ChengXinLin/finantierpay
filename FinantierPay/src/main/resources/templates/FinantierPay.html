@@ -295,7 +295,7 @@ video {
 
   		let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
   		scanner.addListener('scan', function (content) {
-  			let result = content.includes("http://localhost:8080/");
+  			let result = content.includes("https://finantierpay.azurewebsites.net/");
   			if (result == true) {
   				window.location.href = content;
   			} else {

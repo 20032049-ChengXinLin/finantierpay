@@ -910,7 +910,7 @@ public class FPayPaymentController {
 			newFailedTransaction.setArchive("No");
 			newFailedTransaction.setWallet(UserWallet);
 			newFailedTransaction.setDescription(
-					"Failed To Made Payment To " + MerchantWallet.getAccount().getStoreName().toUpperCase());
+					"Failed To Made Payment On " + MerchantWallet.getAccount().getStoreName().toUpperCase());
 			// Voucher - User
 			Voucher voucher = null;
 			if (voucherId != 0) {
@@ -927,8 +927,8 @@ public class FPayPaymentController {
 			Usernotifications.setTitle("Failed To Made Payment!");
 
 			Usernotifications.setMessage(
-					"You have failed to made payment to " + MerchantWallet.getAccount().getStoreName().toUpperCase()
-							+ " $" + totalamount + " using wallet ID " + UserWallet.getWalletId()
+					"You have failed to made payment of $" + totalamount + " on " + MerchantWallet.getAccount().getStoreName().toUpperCase()
+							+ " using wallet ID " + UserWallet.getWalletId()
 							+ ". Current balance remained as $" + UserWallet.getTotalAmount());
 
 			notificationsRepository.save(Usernotifications);
@@ -1178,7 +1178,7 @@ public class FPayPaymentController {
 			String Merchantbody = "Dear " + MerchantWallet.getAccount().getUsername().toUpperCase() + ",\n\n"
 					+ "Transaction ID: " + MerchanttransactionId + "\n" + "You have received $" + newtotalAmtValue + " from "
 					+ UserWallet.getAccount().getUsername().toUpperCase() + " to wallet ID "
-					+ MerchantWallet.getWalletId() + " from " + MerchantWallet.getAccount().getStoreName().toUpperCase()
+					+ MerchantWallet.getWalletId() + " on " + MerchantWallet.getAccount().getStoreName().toUpperCase()
 					+ "\n" + "Total Balance: $" + AddAmt + "\n\nBest Regards, \nFinantierPay";
 			String Merchant = MerchantWallet.getAccount().getEmail();
 			sendEmail(Merchant, Merchantsubject, Merchantbody);

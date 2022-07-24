@@ -254,13 +254,13 @@ public class AccountController {
 	@GetMapping("/verify")
 	public String verifyUser(@Param("code") String code, Model model) {
 		if (verify(code)) {
-			int unread = notificationsService.unreadNotificiations();
-			model.addAttribute("unread", unread);
+//			int unread = notificationsService.unreadNotificiations();
+//			model.addAttribute("unread", unread);
 
 			return "verify_success";
 		} else {
-			int unread = notificationsService.unreadNotificiations();
-			model.addAttribute("unread", unread);
+//			int unread = notificationsService.unreadNotificiations();
+//			model.addAttribute("unread", unread);
 
 			return "verify_fail";
 		}
@@ -287,8 +287,8 @@ public class AccountController {
 
 				notifications.setMessage(
 						"You can now create your new wallet, top-up and make payment. You are also entitled to membership levels. Your membership levels is ROOKIE.");
+				notificationsRepository.save(notifications);
 			}
-			notificationsRepository.save(notifications);
 			return true;
 		}
 

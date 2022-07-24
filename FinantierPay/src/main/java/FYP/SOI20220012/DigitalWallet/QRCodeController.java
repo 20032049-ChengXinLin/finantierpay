@@ -252,7 +252,7 @@ public class QRCodeController {
 
 			Fromnotifications.setMessage("You have sent $" + amount + " to "
 					+ ToWallet.getAccount().getUsername().toUpperCase() + " using wallet ID " + FromWallet.getWalletId()
-					+ ". Your current balance is now $" + deductedAmt + ".");
+					+ ". Your current balance is now $" + newdeductedValue + ".");
 
 			notificationsRepository.save(Fromnotifications);
 
@@ -261,7 +261,7 @@ public class QRCodeController {
 			String Frombody = "Dear " + FromWallet.getAccount().getUsername().toUpperCase() + ",\n\n"
 					+ "Transaction ID: " + FromtransactionId + "\n" + "You have successfully sent $" + amount + " to "
 					+ ToWallet.getAccount().getUsername().toUpperCase() + " using wallet ID " + FromWallet.getWalletId()
-					+ "\n" + "Total Amount left for this wallet is: $" + deductedAmt
+					+ "\n" + "Total Amount left for this wallet is: $" + newdeductedValue
 					+ "\n\nBest Regards, \nFinantierPay";
 			String Fromto = FromWallet.getAccount().getEmail();
 			sendEmail(Fromto, Fromsubject, Frombody);

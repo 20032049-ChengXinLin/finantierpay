@@ -427,10 +427,10 @@ public class FinantierPayHomeController {
 	}
 
 	@GetMapping("/about")
-	public String about(Model model) {
+	public String about() {
 
-		int unread = notificationsService.unreadNotificiations();
-		model.addAttribute("unread", unread);
+//		int unread = notificationsService.unreadNotificiations();
+//		model.addAttribute("unread", unread);
 
 		return "about";
 	}
@@ -450,10 +450,10 @@ public class FinantierPayHomeController {
 	}
 
 	@GetMapping("/faq")
-	public String faq(Model model) {
+	public String faq() {
 
-		int unread = notificationsService.unreadNotificiations();
-		model.addAttribute("unread", unread);
+//		int unread = notificationsService.unreadNotificiations();
+//		model.addAttribute("unread", unread);
 
 		return "FAQ";
 	}

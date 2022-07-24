@@ -230,6 +230,7 @@ public class FinantierPayLoginController {
 					totalpoints += pointsExpirydate.get(x).getPointsEarned();
 				}
 				double remainingpoints = account.getBalance_points() - totalpoints;
+				double newremainingpointsValue = (double) Math.round(remainingpoints * 100d) / 100d;
 				if (count == 0) {
 					if (currentDate.compareTo(alertMinus3days) == 0) {
 						Notifications notifications = new Notifications();
@@ -279,10 +280,12 @@ public class FinantierPayLoginController {
 					pointsHistoryRepository.save(pointsHistory);
 
 					double pointsDeducted = account.getBalance_points() - pointsEarnedList.get(i).getPointsEarned();
-					account.setBalance_points(pointsDeducted);
+					double newpointsDeductedValue = (double) Math.round(pointsDeducted * 100d) / 100d;
+					account.setBalance_points(newpointsDeductedValue);
 
 					double totalpointsDeducted = account.getTotal_points() - pointsEarnedList.get(i).getPointsEarned();
-					account.setTotal_points(totalpointsDeducted);
+					double newtotalpointsDeductedValue = (double) Math.round(totalpointsDeducted * 100d) / 100d;
+					account.setTotal_points(newtotalpointsDeductedValue);
 					accountRepository.save(account);
 
 					pointsEarnedList.get(i).setPointsEarned(0);
@@ -301,7 +304,7 @@ public class FinantierPayLoginController {
 						notifications.setDateTime(currentDateTime);
 						notifications.setTitle("Your Points Have Expired :(");
 						notifications.setMessage("Sorry! Your Points of " + totalpoints + " has expired as of "
-								+ expirydate + ". You left with " + remainingpoints + " POINTS.");
+								+ expirydate + ". You left with " + newremainingpointsValue + " POINTS.");
 						notificationsRepository.save(notifications);
 					}
 				}
@@ -641,8 +644,8 @@ public class FinantierPayLoginController {
 
 	@GetMapping("/403")
 	public String error403(Model model) {
-		int unread = notificationsService.unreadNotificiations();
-		model.addAttribute("unread", unread);
+//		int unread = notificationsService.unreadNotificiations();
+//		model.addAttribute("unread", unread);
 
 		return "403";
 	}

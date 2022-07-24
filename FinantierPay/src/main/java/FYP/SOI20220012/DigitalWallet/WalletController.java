@@ -905,7 +905,7 @@ public class WalletController {
 		notifications.setDateTime(currentDateTime);
 		notifications.setTitle("Withdraw Wallet ID Success!");
 
-		notifications.setMessage("You have successfully withdrawn $" + newupdateWalletAmt + " from your wallet ID "
+		notifications.setMessage("You have successfully withdraw $" + newupdateWalletAmt + " from your wallet ID "
 				+ wallet.getWalletId()
 				+ ". Total balance for Wallet ID " + wallet.getWalletId() + " is now $" + newupdateWalletAmt + ".");
 
@@ -1135,6 +1135,8 @@ public class WalletController {
 		}
 
 		if (errorMsg != "") {
+			int unread = notificationsService.unreadNotificiations();
+			model.addAttribute("unread", unread);
 			model.addAttribute("errorMsg", errorMsg);
 			model.addAttribute("wallet", wallet);
 			return "current_walletpin";
@@ -1148,7 +1150,8 @@ public class WalletController {
 			String wrongmsg = "Wrong current pin";
 			model.addAttribute("errorMsg", wrongmsg);
 			model.addAttribute("wallet", wallet);
-
+			int unread = notificationsService.unreadNotificiations();
+			model.addAttribute("unread", unread);
 			return "current_walletpin";
 		}
 		model.addAttribute("wallet", wallet);
