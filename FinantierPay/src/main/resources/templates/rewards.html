@@ -54,7 +54,7 @@
 										Expiry Date:<br> <b><span th:text="${expirydate}"></span></b>
 									</p>
 									<a
-										th:href="{/rewards/redeem/{id}(id=${rewards.rewardsId})}"
+										th:href="@{/rewards/redeem/{id}(id=${rewards.rewardsId})}"
 										class="btn btn-outline-danger btn-sm mb-2"
 										th:if="${rewards.points <= account.balance_points}">Redeem</a>
 									<a th:href="@{/}"
