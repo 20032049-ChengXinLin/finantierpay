@@ -187,7 +187,7 @@ video {
 					<img th:src="${'data:image/png;base64,' + qrcode}" alt="qrcode"
 						height="220" width="250" class="mx-auto d-block">
 					<div class="bg-white mt-2">
-						<h4 class="text-center">Scan QR Code</h4>
+						<h5 class="text-center">Scan QR Code To Transfer</h5>
 						<div style="padding: 10px;">
 							<button id="Camera"
 								class="btn btn-primary button input-group justify-content-center" style="z-index:0;">Turn
@@ -210,7 +210,7 @@ video {
 							<p id="error"></p>
 							<div id="importQR" class="text-center mt-2"
 								style="padding: 10px;">
-								<label for="qrCodeFile">Import QR Code</label><input type="file"
+								<label for="qrCodeFile">Import QR Code To Transfer</label><input type="file"
 									class="form-control" id="qrCodeFile" name="qrCodeFile"
 									onchange="this.form.submit()" accept="image/png image/jpeg">
 							</div>
