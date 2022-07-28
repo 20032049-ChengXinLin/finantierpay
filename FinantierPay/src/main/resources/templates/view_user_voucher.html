@@ -141,7 +141,10 @@
 						<td
 							th:text="${#temporals.format(voucher.expiryDate, 'dd-MM-yyyy')}"></td>
 						<td th:text="${voucher.storeName}"></td>
-						<td th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></td>
+						<td th:if="${voucher.voucher_value < 1 }"
+							th:text="${#numbers.formatPercent(voucher.voucher_value,1,0)}"></td>
+						<td th:if="${voucher.voucher_value >= 1 }"
+							th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></td>
 						<td
 							th:if="${voucher.status == 'Expired' Or voucher.status == 'Redeemed'}"
 							class="text-danger fw-bold" th:text="${voucher.status}"></td>
@@ -160,7 +163,10 @@
 						<td
 							th:text="${#temporals.format(voucher.expiryDate, 'dd-MM-yyyy')}"></td>
 						<td th:text="${voucher.storeName}"></td>
-						<td th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></td>
+						<td th:if="${voucher.voucher_value < 1 }"
+							th:text="${#numbers.formatPercent(voucher.voucher_value,1,0)}"></td>
+						<td th:if="${voucher.voucher_value >= 1 }"
+							th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></td>
 						<td th:if="${voucher.status == 'Redeemed'}"
 							class="text-danger fw-bold" th:text="${voucher.status}"></td>
 						<td th:if="${voucher.status == 'Expired'}"

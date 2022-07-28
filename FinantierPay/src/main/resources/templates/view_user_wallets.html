@@ -24,8 +24,9 @@
 					<th>Daily Transaction Payment Limit</th>
 					<th>View Transaction</th>
 					<th>View Deleted Transaction</th>
-					<th>Status</th>
 					<th sec:authorize="hasRole('ADMIN')">Action</th>
+					<th>Status</th>
+					
 				</tr>
 			</thead>
 			<th:block th:each="wallet : ${listUserWallets}">
