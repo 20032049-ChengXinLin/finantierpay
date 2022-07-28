@@ -24,6 +24,8 @@
 					<th>Daily Transaction Payment Limit</th>
 					<th>View Transaction</th>
 					<th>View Deleted Transaction</th>
+					<th sec:authorize="hasRole('ADMIN')">Action</th>
+					<th>Status</th>
 				</tr>
 			</thead>
 			<th:block th:each="wallet : ${listMerchantWallets}">
@@ -39,6 +41,13 @@
 					<td><a
 						th:href="@{/wallet/{id}/deleted/transactionrecords(id=${wallet.walletId})}"
 						class="btn btn-info">Deleted Transactions</a></td>
+					<td sec:authorize="hasRole('ADMIN')"><a
+						th:href="@{/merchant/wallet/{id}(id=${wallet.walletId})}"><i
+							class="fas fa-pencil-alt" style="color: blue;"></i></a></td>
+					<td th:if="${wallet.isDeleted == false}" class="text-success fw-bold">
+						Active: <span th:text="${#temporals.format(wallet.dateTimeofCreation, 'dd-MM-yyyy HH:mm')}"></span></td>
+					<td th:if="${wallet.isDeleted == true}" class="text-danger fw-bold">
+						Inactive: <span th:text="${#temporals.format(wallet.dateTimeofDeletion, 'dd-MM-yyyy HH:mm')}"></span></td>
 				</tr>
 		</table>
 		<div class="text-center" th:if="${listMerchantWallets.size() == 0}">No

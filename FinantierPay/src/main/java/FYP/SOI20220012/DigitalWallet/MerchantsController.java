@@ -13,6 +13,7 @@
 */
 package FYP.SOI20220012.DigitalWallet;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -42,6 +44,9 @@ public class MerchantsController {
 	
 	@Autowired
 	private NotificationsService notificationsService;
+	
+	@Autowired
+	private NotificationsRepository notificationsRepository;
 	
 	@GetMapping("/merchants")
 	public String ViewMerchant(Model model, @Param("keyword") String keyword) {
@@ -146,6 +151,51 @@ public class MerchantsController {
 		model.addAttribute("unread", unread);
 		
 		return "view_merchant_wallets";
+	}
+	
+	@GetMapping("/merchant/wallet/{id}")
+	public String viewWalletAmount(@PathVariable("id") Integer id, Model model) {
+		Wallet wallet = walletRepository.getById(id);
+		model.addAttribute("wallet", wallet);
+
+		return "merchant_wallet_amount";
+
+	}
+
+	@GetMapping("/merchant/wallet/edit/{id}")
+	public String updateWalletAmount(@PathVariable("id") Integer id, Model model) {
+		Wallet wallet = walletRepository.getById(id);
+		model.addAttribute("wallet", wallet);
+
+		return "edit_merchant_wallet_amount";
+
+	}
+
+	@PostMapping("/merchant/wallet/edit/{id}")
+	public String saveWalletAmount(@PathVariable("id") Integer id, @RequestParam("totalAmt") double updatedWalletAmount,
+			RedirectAttributes RedirectAttributes) {
+
+		Wallet wallet = walletRepository.getById(id);
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		double oldWalletAmount = wallet.getTotalAmount();
+		wallet.setTotalAmount(updatedWalletAmount);
+
+		if (updatedWalletAmount != oldWalletAmount) {
+			Notifications notifications = new Notifications();
+			notifications.setAccount(wallet.getAccount());
+			notifications.setDateTime(currentDateTime);
+			notifications.setTitle("Successfully Updated Wallet Amount!");
+			notifications.setMessage("Your wallet amount for wallet ID: " + id + " has been changed.");
+			notificationsRepository.save(notifications);
+
+			RedirectAttributes.addFlashAttribute("success", "Wallet ID: " + id
+					+ " successfully updated wallet amount from $" + oldWalletAmount + " to $" + updatedWalletAmount);
+		}
+		if (updatedWalletAmount == oldWalletAmount) {
+			RedirectAttributes.addFlashAttribute("warning", "No update was made.");
+		}
+
+		return "redirect:/merchant/wallet/{id}";
 	}
 	
 	@GetMapping("/guidelines")
