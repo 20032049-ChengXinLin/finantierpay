@@ -208,10 +208,10 @@ public class AccountController {
 			Notifications notifications = new Notifications();
 			notifications.setAccount(account);
 			notifications.setDateTime(currentDateTime);
-			notifications.setTitle("Created Wallet ID Success!");
+			notifications.setTitle("Welcome to FinantierPay!");
 
 			notifications.setMessage(
-					"You have successfully created your wallet. Your wallet ID is " + wallet.getWalletId() + ".");
+					"You can now receive payment from your Ecommerce Websites. Your wallet ID is " + wallet.getWalletId() + ".");
 
 			notificationsRepository.save(notifications);
 		}
