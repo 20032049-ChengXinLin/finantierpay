@@ -111,8 +111,7 @@
 								th:if="${archive != ''}" type="hidden" class="form-control"
 								name="archive" id="archive" th:value="${archive}" />
 						</div>
-						<button type="button"
-							class="btn btn-primary">
+						<button type="button" class="btn btn-primary">
 							<i class="fas fa-search"></i>
 						</button>
 					</div>
@@ -163,8 +162,12 @@
 						th:text="${'-' + #numbers.formatCurrency(transaction.amount) }"></td>
 					<td class="text-center"
 						th:if="${transaction.voucher_value == 0 And wallet.account.role == 'ROLE_USER'}">-</td>
-					<td class="text-center" th:if="${transaction.voucher_value != 0}"
-						th:text="${transaction.voucher_value}"></td>
+					<td class="text-center"
+						th:if="${transaction.voucher_value != 0 And transaction.voucher_value < 1 And wallet.account.role == 'ROLE_USER'}"
+						th:text="${#numbers.formatPercent(transaction.voucher_value,1,2)}"></td>
+					<td class="text-center"
+						th:if="${transaction.voucher_value != 0 And transaction.voucher_value >= 1 And wallet.account.role == 'ROLE_USER'}"
+						th:text="${#numbers.formatCurrency(transaction.voucher_value)}"></td>
 					<td th:text="${transaction.activity}"></td>
 					<td class="text-center" th:if="${transaction.points_earned != 0}"
 						th:text="${#numbers.formatDecimal(transaction.points_earned,1,2)}"></td>

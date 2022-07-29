@@ -173,8 +173,12 @@
 						th:if="${transaction.activity=='Sent'  OR transaction.activity=='Withdraw'}"
 						th:text="${'-' + #numbers.formatCurrency(transaction.amount)}"></td>
 					<td class="text-center" th:if="${transaction.voucher_value == 0}">-</td>
-					<td class="text-center" th:if="${transaction.voucher_value != 0}"
-						th:text="${transaction.voucher_value}"></td>
+					<td class="text-center"
+						th:if="${transaction.voucher_value != 0 And transaction.voucher_value < 1}"
+						th:text="${#numbers.formatPercent(transaction.voucher_value,1,2)}"></td>
+					<td class="text-center"
+						th:if="${transaction.voucher_value != 0 And transaction.voucher_value >= 1}"
+						th:text="${#numbers.formatCurrency(transaction.voucher_value)}"></td>
 					<td th:text="${transaction.activity}"></td>
 					<td class="text-center" th:if="${transaction.points_earned == 0}">-</td>
 					<td class="text-center" th:if="${transaction.points_earned != 0}"
