@@ -127,7 +127,7 @@
 					<td th:text="${serviceRequest.description}"></td>
 					<td th:if="${serviceRequest.status == 'Solved'}" class="text-success fw-bold" th:text="${serviceRequest.status}"></td>
 					<td th:if="${serviceRequest.status == 'In progress'}" class="text-danger fw-bold" th:text="${serviceRequest.status}"></td>
-					<td sec:authorize="hasRole('ADMIN')"><a
+					<td sec:authorize="hasRole('ADMIN')"><a th:if="${serviceRequest.status == 'In progress'}"
 						th:href="@{/help/edit/{id}(id=${serviceRequest.serviceRequestId})}"><i
 							class="fas fa-pencil-alt" style="color: blue;"></i></a></td>
 				</tr>
