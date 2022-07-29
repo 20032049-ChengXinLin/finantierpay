@@ -20,9 +20,9 @@
 					<h3 class="text-center">Failed to Send Money</h3>
 				</div>
 				<div class="card-footer text-center">
-					<h5 class="text-success fw-bold">Sorry! You have failed to sent the money to</h5>
+					<h5 class="text-danger fw-bold">Sorry! You have failed to sent the money to</h5>
 					<h5 class="fw-bold">
-						<span class="text-success">USERNAME:</span> <span class="text-warning"
+						<span class="text-danger">USERNAME:</span> <span class="text-warning"
 							th:text="${#strings.toUpperCase(ToWallet.account.username)}"></span>
 					</h5>
 					<h5>Reason: You have reached the limit of sending out the money per day.</h5>

@@ -186,37 +186,47 @@ public class UsersController {
 			RedirectAttributes redirectAttributes) {
 		Voucher voucher = voucherRepository.getById(id);
 		LocalDateTime currentDateTime = LocalDateTime.now();
-		if (!voucher.getStatus().equals(Voucher.getStatus())) {
-			if (Voucher.getStatus().equals("Expired")) {
-				Notifications notifications = new Notifications();
-				notifications.setAccount(voucher.getAccount());
-				notifications.setDateTime(currentDateTime);
-				notifications.setTitle("Sorry! Your voucher have expired :(");
+		if (voucher.getExpiryDate().equals(Voucher.getExpiryDate())
+				&& voucher.getStoreName().equals(Voucher.getStoreName())
+				&& voucher.getVoucher_value() == Voucher.getVoucher_value()
+				&& voucher.getStatus().equals(Voucher.getStatus())
+				&& voucher.getArchive().equals(Voucher.getArchive())) {
+			redirectAttributes.addFlashAttribute("warning", "No changes was made");
+		} else {
+	
+			if (!voucher.getStatus().equals(Voucher.getStatus())) {
+				if (Voucher.getStatus().equals("Expired")) {
+					Notifications notifications = new Notifications();
+					notifications.setAccount(voucher.getAccount());
+					notifications.setDateTime(currentDateTime);
 
-				if (Voucher.getVoucher_value() < 1) {
-					double value = Voucher.getVoucher_value() * 100;
-					notifications
-							.setMessage("Sorry! Your " + value + "% voucher for " + Voucher.getStoreName().toUpperCase()
-									+ " has expired as of " + currentDateTime.toLocalDate());
+					notifications.setTitle("Sorry! Your voucher have expired :(");
 
-				} else if (Voucher.getVoucher_value() >= 1) {
-					notifications.setMessage("Sorry! Your $" + Voucher.getVoucher_value() + " voucher for "
-							+ Voucher.getStoreName().toUpperCase() + " has expired as of "
-							+ currentDateTime.toLocalDate());
+					if (Voucher.getVoucher_value() < 1) {
+						double value = Voucher.getVoucher_value() * 100;
+						notifications.setMessage(
+								"Sorry! Your " + value + "% voucher for " + Voucher.getStoreName().toUpperCase()
+										+ " has expired as of " + currentDateTime.toLocalDate());
+
+					} else if (Voucher.getVoucher_value() >= 1) {
+						notifications.setMessage("Sorry! Your $" + Voucher.getVoucher_value() + " voucher for "
+								+ Voucher.getStoreName().toUpperCase() + " has expired as of "
+								+ currentDateTime.toLocalDate());
+					}
+					notificationsRepository.save(notifications);
 				}
-				notificationsRepository.save(notifications);
+				
 			}
+			voucher.setExpiryDate(Voucher.getExpiryDate());
+			voucher.setStoreName(Voucher.getStoreName());
+			voucher.setVoucher_value(Voucher.getVoucher_value());
+			voucher.setStatus(Voucher.getStatus());
+			voucher.setArchive(Voucher.getArchive());
+			voucher.setAccount(voucher.getAccount());
+			voucherRepository.save(voucher);
+
+			redirectAttributes.addFlashAttribute("success", "Voucher ID: " + id + " successfully updated.");
 		}
-		voucher.setExpiryDate(Voucher.getExpiryDate());
-		voucher.setStoreName(Voucher.getStoreName());
-		voucher.setVoucher_value(Voucher.getVoucher_value());
-		voucher.setStatus(Voucher.getStatus());
-		voucher.setArchive(Voucher.getArchive());
-		voucher.setAccount(voucher.getAccount());
-		voucherRepository.save(voucher);
-
-		redirectAttributes.addFlashAttribute("success", "Voucher ID: " + id + " successfully updated.");
-
 		return "redirect:/user/voucher/" + voucher.getAccount().getAccountId();
 	}
 
@@ -293,27 +303,33 @@ public class UsersController {
 			RedirectAttributes redirectAttributes) {
 		PointsHistory pointsHistory = pointsHistoryRepository.getById(id);
 		LocalDateTime currentDateTime = LocalDateTime.now();
-		if (!pointsHistory.getStatus().equals(PointsHistory.getStatus())) {
-			if (PointsHistory.getStatus().equals("Expired")) {
-				Notifications notifications = new Notifications();
-				notifications.setAccount(pointsHistory.getPointsEarned().getAccount());
-				notifications.setDateTime(currentDateTime);
-				notifications.setTitle("Your Points Have Expired :(");
+		if (pointsHistory.getTotalPoints() == PointsHistory.getTotalPoints()
+				&& pointsHistory.getStatus().equals(PointsHistory.getStatus())
+				&& pointsHistory.getArchive().equals(PointsHistory.getArchive())) {
 
-				notifications.setMessage("Sorry! Your Points of " + pointsHistory.getTotalPoints()
-						+ " has expired as of " + currentDateTime.toLocalDate() + ".");
+			redirectAttributes.addFlashAttribute("warning", "No changes was made");
+		} else {
+			if (!pointsHistory.getStatus().equals(PointsHistory.getStatus())) {
+				if (PointsHistory.getStatus().equals("Expired")) {
+					Notifications notifications = new Notifications();
+					notifications.setAccount(pointsHistory.getPointsEarned().getAccount());
+					notifications.setDateTime(currentDateTime);
+					notifications.setTitle("Your Points Have Expired :(");
 
-				notificationsRepository.save(notifications);
+					notifications.setMessage("Sorry! Your Points of " + pointsHistory.getTotalPoints()
+							+ " has expired as of " + currentDateTime.toLocalDate() + ".");
+
+					notificationsRepository.save(notifications);
+				}
 			}
+			pointsHistory.setTotalPoints(PointsHistory.getTotalPoints());
+			pointsHistory.setStatus(PointsHistory.getStatus());
+			pointsHistory.setArchive(PointsHistory.getArchive());
+			pointsHistory.setPointsEarned(pointsHistory.getPointsEarned());
+			pointsHistoryRepository.save(pointsHistory);
+
+			redirectAttributes.addFlashAttribute("success", "pointsHistory ID: " + id + " successfully updated.");
 		}
-		pointsHistory.setTotalPoints(PointsHistory.getTotalPoints());
-		pointsHistory.setStatus(PointsHistory.getStatus());
-		pointsHistory.setArchive(PointsHistory.getArchive());
-		pointsHistory.setPointsEarned(pointsHistory.getPointsEarned());
-		pointsHistoryRepository.save(pointsHistory);
-
-		redirectAttributes.addFlashAttribute("success", "pointsHistory ID: " + id + " successfully updated.");
-
 		return "redirect:/user/pointhistory/" + pointsHistory.getPointsEarned().getAccount().getAccountId();
 	}
 
@@ -362,36 +378,36 @@ public class UsersController {
 
 		String phone = "";
 		String postal = "";
-		if (account.getCountry().getCountryId() == 1) {
+		if (Account.getCountry().getCountryId() == 1) {
 			String regexPhone = "^$|^[689]\\d{7}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{6}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
-		} else if (account.getCountry().getCountryId() == 2) {
+		} else if (Account.getCountry().getCountryId() == 2) {
 			String regexPhone = "^(\\+?6?01)[02-46-9][-][0-9]{7}$|^(\\+?6?01)[1][-][0-9]{8}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{5}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
-		} else if (account.getCountry().getCountryId() == 3) {
+		} else if (Account.getCountry().getCountryId() == 3) {
 			String regexPhone = "^(08)(\\d{3,4}-?){2}\\d{2,3}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{5}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
@@ -405,29 +421,57 @@ public class UsersController {
 			model.addAttribute("Account", Account);
 			return "edit_user_membership";
 		} else {
-			account.setFirst_name(Account.getFirst_name());
-			account.setLast_name(Account.getLast_name());
-			account.setCountry(Account.getCountry());
-			account.setDate_of_birth(Account.getDate_of_birth());
-			account.setAddress(Account.getAddress());
-			account.setPostal_code(Account.getPostal_code());
-			account.setPhone(Account.getPhone());
-			account.setMembership_levels(Account.getMembership_levels());
-			account.setEmail(Account.getEmail());
-			if (Account.getMembership_levels().equalsIgnoreCase("ROOKIE")) {
-				account.setCashback_voucher(0.03);
-			} else if (Account.getMembership_levels().equalsIgnoreCase("BRONZE")) {
-				account.setCashback_voucher(0.05);
-			} else if (Account.getMembership_levels().equalsIgnoreCase("SILVER")) {
-				account.setCashback_voucher(0.10);
-			} else if (Account.getMembership_levels().equalsIgnoreCase("GOLD")) {
-				account.setCashback_voucher(0.15);
+			if (account.getFirst_name().equals(Account.getFirst_name())
+					&& account.getLast_name().equals(Account.getLast_name())
+					&& account.getCountry().equals(Account.getCountry())
+					&& account.getDate_of_birth().equals(Account.getDate_of_birth())
+					&& account.getAddress().equals(Account.getAddress())
+					&& account.getPostal_code().equals(account.getPostal_code())
+					&& account.getPhone().equals(Account.getPhone())
+					&& account.getMembership_levels().equals(Account.getMembership_levels())
+					&& account.getEmail().equals(Account.getEmail())
+					&& account.getTotal_points() == Account.getTotal_points()
+					&& account.getBalance_points() == Account.getBalance_points()) {
+				redirectAttributes.addFlashAttribute("warning", "No changes was made");
+			} else {
+				account.setFirst_name(Account.getFirst_name());
+				account.setLast_name(Account.getLast_name());
+				account.setCountry(Account.getCountry());
+				account.setDate_of_birth(Account.getDate_of_birth());
+				account.setAddress(Account.getAddress());
+				account.setPostal_code(Account.getPostal_code());
+				account.setPhone(Account.getPhone());
+				account.setMembership_levels(Account.getMembership_levels());
+				account.setEmail(Account.getEmail());
+				account.setBalance_points(Account.getBalance_points());
+				account.setTotal_points(Account.getTotal_points());
+				if (Account.getMembership_levels().equalsIgnoreCase("ROOKIE")) {
+					account.setCashback_voucher(0.03);
+				} else if (Account.getMembership_levels().equalsIgnoreCase("BRONZE")) {
+					account.setCashback_voucher(0.05);
+				} else if (Account.getMembership_levels().equalsIgnoreCase("SILVER")) {
+					account.setCashback_voucher(0.10);
+				} else if (Account.getMembership_levels().equalsIgnoreCase("GOLD")) {
+					account.setCashback_voucher(0.15);
+				}
+				account.setTotal_points(Account.getTotal_points());
+				account.setBalance_points(Account.getBalance_points());
+				accountRepository.save(account);
+
+				LocalDateTime currentDateTime = LocalDateTime.now();
+				Notifications notifications = new Notifications();
+				notifications.setAccount(account);
+				notifications.setDateTime(currentDateTime);
+				notifications.setTitle("Your account information has been updated.");
+
+				notifications.setMessage(
+						"Your account information has been updated. You can now view the updated information on account pages. Thank You!");
+
+				notificationsRepository.save(notifications);
+				redirectAttributes.addFlashAttribute("editSuccess", "Account ID: " + id + " successfully updated.");
 			}
-			account.setTotal_points(Account.getTotal_points());
-			account.setBalance_points(Account.getBalance_points());
-			accountRepository.save(account);
 		}
-		redirectAttributes.addFlashAttribute("editSuccess", "Account ID: " + id + " successfully updated.");
+		
 
 		return "redirect:/user/account";
 	}

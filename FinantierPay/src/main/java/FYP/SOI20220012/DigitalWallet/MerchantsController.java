@@ -83,36 +83,36 @@ public class MerchantsController {
 
 		String phone = "";
 		String postal = "";
-		if (account.getCountry().getCountryId() == 1) {
+		if (Account.getCountry().getCountryId() == 1) {
 			String regexPhone = "^$|^[689]\\d{7}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{6}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
-		} else if (account.getCountry().getCountryId() == 2) {
+		} else if (Account.getCountry().getCountryId() == 2) {
 			String regexPhone = "^(\\+?6?01)[02-46-9][-][0-9]{7}$|^(\\+?6?01)[1][-][0-9]{8}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{5}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
-		} else if (account.getCountry().getCountryId() == 3) {
+		} else if (Account.getCountry().getCountryId() == 3) {
 			String regexPhone = "^(08)(\\d{3,4}-?){2}\\d{2,3}$";
-			boolean patternPhone = account.getPhone().matches(regexPhone);
+			boolean patternPhone = Account.getPhone().matches(regexPhone);
 			if (patternPhone == false) {
 				phone = "Mobile Number Wrong Format!";
 			}
 			String regexPostal = "^$|^\\d{5}$";
-			boolean patternPostal = account.getPostal_code().matches(regexPostal);
+			boolean patternPostal = Account.getPostal_code().matches(regexPostal);
 			if (patternPostal == false) {
 				postal = "Postal Code Wrong Format!";
 			}
@@ -126,22 +126,46 @@ public class MerchantsController {
 			model.addAttribute("Account", Account);
 			return "edit_merchant";
 		} else {
-			account.setFirst_name(Account.getFirst_name());
-			account.setLast_name(Account.getLast_name());
-			account.setCountry(Account.getCountry());
-			account.setDate_of_birth(Account.getDate_of_birth());
-			account.setAddress(Account.getAddress());
-			account.setPostal_code(Account.getPostal_code());
-			account.setPhone(Account.getPhone());
-			account.setStoreName(Account.getStoreName());
-			account.setEmail(Account.getEmail());
-			accountRepository.save(account);
+			if (account.getFirst_name().equals(Account.getFirst_name())
+					&& account.getLast_name().equals(Account.getLast_name())
+					&& account.getCountry().equals(Account.getCountry())
+					&& account.getDate_of_birth().equals(Account.getDate_of_birth())
+					&& account.getAddress().equals(Account.getAddress())
+					&& account.getPostal_code().equals(account.getPostal_code())
+					&& account.getPhone().equals(Account.getPhone())
+					&& account.getStoreName().equals(Account.getStoreName())
+					&& account.getEmail().equals(Account.getEmail())) {
+				redirectAttributes.addFlashAttribute("warning", "No changes was made");
+			} else {
+				account.setFirst_name(Account.getFirst_name());
+				account.setLast_name(Account.getLast_name());
+				account.setCountry(Account.getCountry());
+				account.setDate_of_birth(Account.getDate_of_birth());
+				account.setAddress(Account.getAddress());
+				account.setPostal_code(Account.getPostal_code());
+				account.setPhone(Account.getPhone());
+				account.setStoreName(Account.getStoreName());
+				account.setEmail(Account.getEmail());
+				accountRepository.save(account);
+
+				LocalDateTime currentDateTime = LocalDateTime.now();
+				Notifications notifications = new Notifications();
+				notifications.setAccount(account);
+				notifications.setDateTime(currentDateTime);
+				notifications.setTitle("Your account information has been updated.");
+
+				notifications.setMessage("Your account information has been updated. You can now view the updated information on account pages. Thank You!");
+
+				notificationsRepository.save(notifications);
+				
+				redirectAttributes.addFlashAttribute("editSuccess", "Account ID: " + id + " successfully updated.");
+			}
+
 		}
-		redirectAttributes.addFlashAttribute("editSuccess", "Account ID: " + id + " successfully updated.");
 
 		return "redirect:/merchants";
 	}
-	
+
 	
 	@GetMapping("/merchant/{id}/wallets")
 	public String viewUserWallets(@PathVariable("id") Integer id, Model model) {

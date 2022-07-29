@@ -19,6 +19,8 @@
 		<hr>
 		<div th:if="${success}" th:text="${success}"
 			class="alert alert-success"></div>
+		<div th:if="${warning}" th:text="${warning}"
+			class="alert alert-warning"></div>
 		<div class="row mb-3">
 			<div class="col-md-9">
 				<form th:action="@{/user/voucher/{id}(id=${accountId})}">

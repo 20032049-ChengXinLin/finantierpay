@@ -163,9 +163,14 @@ public class ServiceRequestController {
 	public String saveHelp(@PathVariable("id") int id, @RequestParam("status") String status,
 			RedirectAttributes redirectAttributes) {
 		ServiceRequest serviceRequest = serviceRequestRepository.getById(id);
-		serviceRequest.setStatus(status);
-		serviceRequestRepository.save(serviceRequest);
-		redirectAttributes.addFlashAttribute("Success", "Service Request Id: " + id + " successfully updated.");
+		if (serviceRequest.getStatus().equals(status)) {
+			redirectAttributes.addFlashAttribute("Warning", "No Change was made.");
+		} else {
+			serviceRequest.setStatus(status);
+			serviceRequestRepository.save(serviceRequest);
+			redirectAttributes.addFlashAttribute("Success", "Service Request Id: " + id + " successfully updated.");
+		}
+		
 		return "redirect:/help";
 	}
 

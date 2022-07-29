@@ -42,9 +42,9 @@
 					<form th:action="@{/user/account}">
 						<div class="input-group">
 							<div class="form-outline">
-								<input type="text" class="form-control" placeholder="Search Username"
-									name="keyword" id="keyword" th:value="${keyword}"
-									onchange="this.form.submit()" required />
+								<input type="text" class="form-control"
+									placeholder="Search Username" name="keyword" id="keyword"
+									th:value="${keyword}" onchange="this.form.submit()" required />
 							</div>
 							<button th:if="${keyword == ''}" type="button"
 								class="btn btn-primary">
@@ -65,6 +65,8 @@
 		</script>
 		<div th:if="${editSuccess}" th:text="${editSuccess}"
 			class="alert alert-success"></div>
+		<div th:if="${warning}" th:text="${warning}"
+			class="alert alert-warning"></div>
 		<table class="table bordered table-hover bg-white">
 			<thead class="table-info">
 				<tr>
@@ -86,7 +88,7 @@
 				<tr>
 
 					<td th:text="${user.first_name + ' ' + user.last_name}"></td>
-				
+
 					<td th:text="${user.username}"></td>
 					<td th:text="${user.email}"></td>
 					<td th:text="${user.date_of_birth}"></td>

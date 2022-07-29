@@ -16,7 +16,10 @@
 	<div class="container">
 		<h3 class="text-center">View Service Requests</h3>
 		<hr>
-		<div th:if="${Success}" class="alert alert-success" th:text="${Success}"></div>
+		<div th:if="${Success}" class="alert alert-success"
+			th:text="${Success}"></div>
+		<div th:if="${Warning}" class="alert alert-warning"
+			th:text="${Warning}"></div>
 		<div class="row mb-3">
 			<div class="col-md-9">
 				<form th:action="@{/help}">
@@ -52,7 +55,7 @@
 						<div class="col-md-5">
 							<div class="row">
 								<div class="col-md-6">
-								<select class="form-control" name="status"
+									<select class="form-control" name="status"
 										onchange="this.form.submit()" required>
 										<option th:if="${status != 'null'}" th:value="${status}"
 											th:text="${status}"></option>
@@ -60,7 +63,8 @@
 											Status</option>
 										<option th:if="${status != 'null'}" value="">Search
 											Status</option>
-										<option value="In progress" th:if="${status != 'In progress'}">In Progress</option>
+										<option value="In progress" th:if="${status != 'In progress'}">In
+											Progress</option>
 										<option value="Solved" th:if="${status != 'Solved'}">Solved</option>
 									</select>
 								</div>
@@ -96,9 +100,8 @@
 			</div>
 		</div>
 		<div class="text-end mb-2">
-			<a type="button" class="btn btn-danger"
-				th:href="@{/help}"> Clear All
-			</a>
+			<a type="button" class="btn btn-danger" th:href="@{/help}"> Clear
+				All </a>
 		</div>
 		<script type="text/javascript" th:inline="javascript">
 			function checkStartMonth(fieldStartMonth) {
@@ -120,20 +123,25 @@
 			</thead>
 			<th:block th:each="serviceRequest : ${serviceRequestList}">
 				<tr>
-					<td th:text="${#temporals.format(serviceRequest.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
+					<td
+						th:text="${#temporals.format(serviceRequest.dateTime, 'dd-MM-yyyy HH:mm')}"></td>
 					<td th:text="${serviceRequest.serviceRequestId}"></td>
 					<td th:text="${serviceRequest.account.accountId}"></td>
 					<td th:text="${serviceRequest.title}"></td>
 					<td th:text="${serviceRequest.description}"></td>
-					<td th:if="${serviceRequest.status == 'Solved'}" class="text-success fw-bold" th:text="${serviceRequest.status}"></td>
-					<td th:if="${serviceRequest.status == 'In progress'}" class="text-danger fw-bold" th:text="${serviceRequest.status}"></td>
-					<td sec:authorize="hasRole('ADMIN')"><a th:if="${serviceRequest.status == 'In progress'}"
+					<td th:if="${serviceRequest.status == 'Solved'}"
+						class="text-success fw-bold" th:text="${serviceRequest.status}"></td>
+					<td th:if="${serviceRequest.status == 'In progress'}"
+						class="text-danger fw-bold" th:text="${serviceRequest.status}"></td>
+					<td sec:authorize="hasRole('ADMIN')"><a
+						th:if="${serviceRequest.status == 'In progress'}"
 						th:href="@{/help/edit/{id}(id=${serviceRequest.serviceRequestId})}"><i
 							class="fas fa-pencil-alt" style="color: blue;"></i></a></td>
 				</tr>
 		</table>
 
-		<h5 class="text-center mb-3" th:if="${serviceRequestList.size() == 0}">No Service Request Found</h5>
+		<h5 class="text-center mb-3" th:if="${serviceRequestList.size() == 0}">No
+			Service Request Found</h5>
 
 		<form th:action="@{/help}">
 			<input th:if="${keyword!=null}" type="hidden" class="form-control"

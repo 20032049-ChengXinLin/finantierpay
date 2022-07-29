@@ -41,6 +41,8 @@
 		</script>
 		<div th:if="${editSuccess}" th:text="${editSuccess}"
 			class="alert alert-success"></div>
+		<div th:if="${warning}" th:text="${warning}"
+			class="alert alert-warning"></div>
 		<table class="table bordered table-hover bg-white">
 			<thead class="table-info">
 				<tr>
@@ -86,8 +88,8 @@
 	<div class="text-center" th:if="${listMerchants.size() == 0}">No
 		Account type for Merchant is Found</div>
 
-	
-		<div th:replace="fragments/FinantierPay_footer"></div>
+
+	<div th:replace="fragments/FinantierPay_footer"></div>
 
 </body>
 </html>

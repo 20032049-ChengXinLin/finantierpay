@@ -57,6 +57,10 @@ public class TransactionController {
 
 	@Autowired
 	private NotificationsService notificationsService;
+	
+	@Autowired
+	private NotificationsRepository notificationsRepository;
+	
 
 	@GetMapping("/transactionrecords")
 	public String viewAllTransactionRecords(Model model,
@@ -319,9 +323,64 @@ public class TransactionController {
 	@PostMapping("/transactionrecords/edit/{id}")
 	public String saveTransactionRecords(@PathVariable("id") String id, Transaction Transaction,
 			RedirectAttributes redirectAttributes) {
+		Transaction transaction = transactionRepository.getById(id);
+		if (transaction.getPointsExpiryDate() != null) {
+			if (transaction.getAmount() == Transaction.getAmount()
+					&& transaction.getActivity().equals(Transaction.getActivity())
+					&& transaction.getVoucher_value() == Transaction.getVoucher_value()
+					&& transaction.getPoints_earned() == Transaction.getPoints_earned()
+					&& transaction.getPointsExpiryDate().equals(Transaction.getPointsExpiryDate())
+					&& transaction.getStatus().equals(Transaction.getStatus())
+					&& transaction.getArchive().equals(Transaction.getArchive())
+					&& transaction.getDescription().equals(Transaction.getDescription())) {
+				redirectAttributes.addFlashAttribute("Warning", "No changes was made");
+			} else {
+				transactionRepository.save(Transaction);
+				LocalDateTime currentDateTime = LocalDateTime.now();
+				Notifications notifications = new Notifications();
+				notifications.setAccount(transaction.getWallet().getAccount());
+				notifications.setDateTime(currentDateTime);
+				notifications.setTitle("Changes Was Made in Your Transaction History!");
+				if (Transaction.getArchive().equals("Yes")) {
+					notifications.setMessage("Your Transaction History for Transaction ID: "
+							+ transaction.getTransactionId() + " has been changed. You will not be able to view them anymore");
+				} else if (Transaction.getArchive().equals("No")) {
+					notifications.setMessage("Your Transaction History for Transaction ID: "
+							+ transaction.getTransactionId() + " has been changed.");
+				}
 
-		transactionRepository.save(Transaction);
-		redirectAttributes.addFlashAttribute("success", "Transaction ID: " + id + " successfully updated.");
+				notificationsRepository.save(notifications);
+
+				redirectAttributes.addFlashAttribute("success", "Transaction ID: " + id + " is successfully updated.");
+			}
+		} else if (transaction.getPointsExpiryDate() == null) {
+			if (transaction.getAmount() == Transaction.getAmount()
+					&& transaction.getActivity().equals(Transaction.getActivity())
+					&& transaction.getVoucher_value() == Transaction.getVoucher_value()
+					&& transaction.getPoints_earned() == Transaction.getPoints_earned()
+					&& transaction.getStatus().equals(Transaction.getStatus())
+					&& transaction.getArchive().equals(Transaction.getArchive())
+					&& transaction.getDescription().equals(Transaction.getDescription())) {
+				redirectAttributes.addFlashAttribute("Warning", "No changes was made");
+			} else {
+				transactionRepository.save(Transaction);
+				LocalDateTime currentDateTime = LocalDateTime.now();
+				Notifications notifications = new Notifications();
+				notifications.setAccount(transaction.getWallet().getAccount());
+				notifications.setDateTime(currentDateTime);
+				notifications.setTitle("Changes Was Made in Your Transaction History!");
+				if (Transaction.getArchive().equals("Yes")) {
+					notifications.setMessage("Your Transaction History for Transaction ID: "
+							+ transaction.getTransactionId() + " has been changed. You will not be able to view them anymore");
+				} else if (Transaction.getArchive().equals("No")) {
+					notifications.setMessage("Your Transaction History for Transaction ID: "
+							+ transaction.getTransactionId() + " has been changed.");
+				}
+
+				notificationsRepository.save(notifications);
+				redirectAttributes.addFlashAttribute("success", "Transaction ID: " + Transaction.getTransactionId() + " is successfully updated.");
+			}
+		}
 
 		return "redirect:/transactionrecords";
 	}

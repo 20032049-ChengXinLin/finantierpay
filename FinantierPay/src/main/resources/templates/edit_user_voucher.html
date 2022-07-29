@@ -49,7 +49,7 @@
 						Value: </label>
 					<div class="col-md">
 						<input id="voucher_value" type="number" class="form-control"
-							th:field="*{voucher_value}" required />
+							th:field="*{voucher_value}" required step="0.01" min="0.01"/>
 						<div class="invalid-feedback">Please enter a valid voucher
 							value</div>
 					</div>
