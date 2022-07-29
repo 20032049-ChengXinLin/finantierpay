@@ -77,10 +77,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 						WALLET ID: <span th:text="${UserWalletId}"></span>
 					</h5>
 					<h5 th:if="${voucherId != 0}">
-						VOUCHER VALUE:  <span th:if="${voucher.voucher_value < 1}"
+						VOUCHER VALUE: <span th:if="${voucher.voucher_value < 1}"
 							th:text="${#numbers.formatPercent(voucher.voucher_value,1,0)}"></span>
-							<span th:if="${voucher.voucher_value >= 1}"
-							th:text="${#numbers.formatPercent(voucher.voucher_value,1,0)}"></span>
+						<span th:if="${voucher.voucher_value >= 1}"
+							th:text="${#numbers.formatCurrency(voucher.voucher_value)}"></span>
 					</h5>
 					<hr>
 					<div class="row">
