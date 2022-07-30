@@ -67,7 +67,8 @@
 											Activity</option>
 										<option value="Sent" th:if="${activity != 'Sent'}">Sent</option>
 										<option value="Received" th:if="${activity != 'Received'}">Received</option>
-										<option value="Deposit" th:if="${activity != 'Deposit'}">Deposit</option>
+										<option value="Deposit" th:if="${activity != 'Deposit' And wallet.account.role == 'ROLE_USER'}">Deposit</option>
+										<option value="Withdraw" th:if="${activity != 'Withdraw'}">Withdraw</option>
 									</select>
 								</div>
 								<div class="col-md-6">
@@ -191,8 +192,9 @@
 
 		<form th:action="@{/wallet/{id}/transactionrecords(id=${walletId})}">
 			<!-- hidden -->
-			<input th:if="${keyword != ''}" type="hidden" class="form-control"
-				name="keyword" id="keyword" th:value="${keyword}" /> <input
+			<input th:if="${keyword != ''}" type="hidden"
+				class="form-control" name="keyword" id="keyword"
+				th:value="${keyword}" /> <input
 				th:if="${startMonthYear != ''}" type="hidden" class="form-control"
 				name="startMonthYear" id="startMonthYear"
 				th:value="${startMonthYear}" /> <input
