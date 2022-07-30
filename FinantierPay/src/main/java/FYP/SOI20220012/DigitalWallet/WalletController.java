@@ -673,7 +673,7 @@ public class WalletController {
 
 		// Calculate Total Amount of Transaction in a day based on current DateTime
 		List<Transaction> transaction = transactionRepository
-				.findByWallet_WalletIdAndIsDeletedOrderByDateTimeDesc(walletId, false);
+				.findByWallet_WalletIdAndIsDeletedOrderByDateTimeDesc(id, false);
 		double total = 0;
 		LocalDate currentdate = LocalDate.now();
 		for (int i = 0; i < transaction.size(); i++) {
