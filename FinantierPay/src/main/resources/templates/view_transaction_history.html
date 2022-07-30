@@ -14,7 +14,8 @@
 <body>
 	<div th:replace="fragments/FinantierPay_header"></div>
 	<div class="container">
-		<h3 class="text-center">View Transaction History</h3>
+		<h3 class="text-center" sec:authorize="hasRole('MERCHANT')">View Transaction History</h3>
+		<h3 class="text-center" sec:authorize="hasRole('USER')">View All Transactions History</h3>
 		<hr>
 		<div class="row mb-3">
 			<div class="col-md-9">
