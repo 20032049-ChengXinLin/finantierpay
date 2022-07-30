@@ -24,11 +24,10 @@
 						<h5 class="text-center text-danger">Sorry. You are unable to
 							send money.</h5>
 						<p class="text-center">
-							The account that you are sending to does not have any wallet
-							ID. Please let <b class="text-danger">him/her</b> know that they
-							need to <b class="text-danger">create</b> a <b
-								class="text-danger">wallet ID</b> in order for you to send
-							money to them.
+							The account that you are sending to does not have any wallet ID.
+							Please let <b class="text-danger">him/her</b> know that they need
+							to <b class="text-danger">create</b> a <b class="text-danger">wallet
+								ID</b> in order for you to send money to them.
 						</p>
 						<h6 class="text-center text-primary">
 							<b>Thank You!</b>
@@ -48,13 +47,15 @@
 									<label for="wallet_id" class="h5 form-label col-md-5 fw-bold">Enter
 										Amount:</label>
 									<div class="col-md-6">
-										<input th:if="${totalAmt == 0}" class="form-control"
+										<input th:if="${totalAmt <= 0}" class="form-control"
 											id="totalAmt" name="totalAmt" type="number" value="0.00"
 											oninput="this.form.submit()" min=0.01 step="0.01" required>
-										<input th:if="${totalAmt != 0}" class="form-control"
+										<input th:if="${totalAmt > 0}" class="form-control"
 											id="totalAmt" name="totalAmt" type="number"
 											th:value="${totalAmt}" oninput="this.form.submit()" min=0.01
 											step="0.01" required>
+										<div th:if="${errorAmt}" th:text="${errorAmt}"
+											class="text-danger text-start"></div>
 									</div>
 								</div>
 							</div>
@@ -87,10 +88,10 @@
 
 							<div class="text-end">
 								<button type="submit" class="btn btn-info disabled"
-									th:if="${totalAmt ==0}"
+									th:if="${totalAmt <= 0}"
 									onclick="if (!confirm('Are you sure you want to continue?')) { return false }">Next</button>
 								<button type="submit" class="btn btn-info"
-									th:if="${totalAmt !=0}"
+									th:if="${totalAmt > 0}"
 									onclick="if (!confirm('Are you sure you want to continue?')) { return false }">Next</button>
 								<a th:href="@{/}" class="btn btn-danger">Cancel</a>
 							</div>

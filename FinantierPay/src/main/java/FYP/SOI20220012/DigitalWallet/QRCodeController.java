@@ -64,8 +64,13 @@ public class QRCodeController {
 
 			List<Wallet> listWallets = walletRepository.findByAccount_AccountIdAndIsDeleted(id, false);
 			if (listWallets.size() != 0) {
+				String errorAmt = "";
+				if (amount < 0) {
+					errorAmt = "Amount must not be a negative amount.";
+				}
 				Wallet Wallet = walletRepository.findByWalletIdAndAccount_AccountIdAndIsDeleted(listWallets.get(0).getWalletId(),
 						id, false);
+				model.addAttribute("errorAmt", errorAmt);
 				model.addAttribute("Wallet", Wallet);
 				model.addAttribute("WalletFound", "Wallet Found");
 				model.addAttribute("totalAmt", amount);

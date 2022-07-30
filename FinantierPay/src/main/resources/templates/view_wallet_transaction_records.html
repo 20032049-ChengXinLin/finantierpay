@@ -190,11 +190,21 @@
 			Transaction Records Found</h5>
 
 		<form th:action="@{/wallet/{id}/transactionrecords(id=${walletId})}">
-			<input th:if="${keyword!=null}" type="hidden" class="form-control"
-				placeholder="Search" name="keyword" id="keyword"
-				th:value="${keyword}" /> <input th:if="${selectMonth !=null}"
-				type="hidden" class="form-control" name="month" id="month"
-				th:value="${selectMonth}" />
+			<!-- hidden -->
+			<input th:if="${keyword != ''}" type="hidden" class="form-control"
+				name="keyword" id="keyword" th:value="${keyword}" /> <input
+				th:if="${startMonthYear != ''}" type="hidden" class="form-control"
+				name="startMonthYear" id="startMonthYear"
+				th:value="${startMonthYear}" /> <input
+				th:if="${endMonthYear != ''}" type="hidden" class="form-control"
+				name="endMonthYear" id="endMonthYear" th:value="${endMonthYear}" />
+
+			<input th:if="${status != ''}" type="hidden" class="form-control"
+				name="status" id="status" th:value="${status}" /> <input
+				th:if="${activity != ''}" type="hidden" class="form-control"
+				name="activity" id="activity" th:value="${activity}" /> <input
+				th:if="${archive != ''}" type="hidden" class="form-control"
+				name="archive" id="archive" th:value="${archive}" />
 			<div class="card mb-3">
 				<div class="card-footer">
 					<div class="row">
