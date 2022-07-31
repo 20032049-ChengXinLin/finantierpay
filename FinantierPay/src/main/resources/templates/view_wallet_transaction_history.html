@@ -177,7 +177,7 @@
 				</tr>
 		</table>
 		<h5 class="text-center mb-3" th:if="${transactionlist.size() == 0}">No
-			Transaction Records Found</h5>
+			Transaction History Found</h5>
 
 		<form th:action="@{/wallet/{id}/transactionhistory(id=${walletId})}">
 			<!-- hidden -->
@@ -204,7 +204,7 @@
 									<option th:value="${10}" th:if="${page != 10}">10</option>
 									<option th:value="${50}" th:if="${page != 50}">50</option>
 									<option th:value="${100}" th:if="${page != 100}">100</option></select> <span
-									th:text="${pageNum + ' of ' + totalPage + ' Transaction Records'}"></span>
+									th:text="${pageNum + ' of ' + totalPage + ' Transactions History'}"></span>
 							</h5>
 						</div>
 						<div class="mt-2 col-md-6">

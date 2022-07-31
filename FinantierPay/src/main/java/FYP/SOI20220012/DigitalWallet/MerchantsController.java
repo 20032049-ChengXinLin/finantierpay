@@ -131,7 +131,7 @@ public class MerchantsController {
 					&& account.getCountry().equals(Account.getCountry())
 					&& account.getDate_of_birth().equals(Account.getDate_of_birth())
 					&& account.getAddress().equals(Account.getAddress())
-					&& account.getPostal_code().equals(account.getPostal_code())
+					&& account.getPostal_code().equals(Account.getPostal_code())
 					&& account.getPhone().equals(Account.getPhone())
 					&& account.getStoreName().equals(Account.getStoreName())
 					&& account.getEmail().equals(Account.getEmail())) {

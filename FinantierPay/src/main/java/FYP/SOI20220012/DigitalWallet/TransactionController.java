@@ -43,6 +43,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author 20032049
  *
  */
+/**
+*
+* I declare that this code was written by me, 20032049.
+* I will not copy or allow others to copy my code.
+* I understand that copying code is considered as plagiarism.
+*
+* Student Name: Cheng Xin Lin (20032049), Koh Siew Gek (20008303), Chen Wan Ting (20009334)
+* Team ID: SOI-2022-0012
+* Team Project ID: SOI-2022-2210-0049
+* Project: [IP] Digital Wallet
+* Date created: 2022-May-29 10:36:07 am
+*
+*/
 @Controller
 public class TransactionController {
 
@@ -60,7 +73,6 @@ public class TransactionController {
 	
 	@Autowired
 	private NotificationsRepository notificationsRepository;
-	
 
 	@GetMapping("/transactionrecords")
 	public String viewAllTransactionRecords(Model model,
@@ -97,7 +109,7 @@ public class TransactionController {
 		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
 		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
 		System.out.println(startdateTime);
-		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 0, 0, 0);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(),  23, 59, 59);
 		System.out.println(enddateTime);
 
 		if (activity.equals("null") && status.equals("null") && keyword.equals("") && archive.equals("null")) {
@@ -245,7 +257,7 @@ public class TransactionController {
 		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
 		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
 		System.out.println(startdateTime);
-		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 0, 0, 0);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 23, 59, 59);
 		System.out.println(enddateTime);
 
 		if (activity.equals("null") && status.equals("null") && keyword.equals("")) {
@@ -428,7 +440,7 @@ public class TransactionController {
 		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
 		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
 		System.out.println(startdateTime);
-		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 0, 0, 0);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(),  23, 59, 59);
 		System.out.println(enddateTime);
 
 		if (activity.equals("null") && status.equals("null") && keyword.equals("")) {
@@ -532,7 +544,7 @@ public class TransactionController {
 		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
 		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
 		System.out.println(startdateTime);
-		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 0, 0, 0);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(),  23, 59, 59);
 		System.out.println(enddateTime);
 
 		if (activity.equals("null") && status.equals("null") && keyword.equals("") && archive.equals("null")) {
@@ -686,7 +698,7 @@ public class TransactionController {
 		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
 		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
 		System.out.println(startdateTime);
-		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 0, 0, 0);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(), 23, 59, 59);
 		System.out.println(enddateTime);
 
 		if (activity.equals("null") && status.equals("null") && keyword.equals("") && archive.equals("null")) {
@@ -818,9 +830,9 @@ public class TransactionController {
 		List<Transaction> listTransaction = transactionRepository.findAll();
 		System.out.println(listTransaction.size());
 		TransactionExcelExporter excelExporter = new TransactionExcelExporter(listTransaction);
-		
+
 		excelExporter.export(response);
-		
+
 		return "export_success";
 	}
 

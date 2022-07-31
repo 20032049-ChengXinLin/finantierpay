@@ -426,7 +426,7 @@ public class UsersController {
 					&& account.getCountry().equals(Account.getCountry())
 					&& account.getDate_of_birth().equals(Account.getDate_of_birth())
 					&& account.getAddress().equals(Account.getAddress())
-					&& account.getPostal_code().equals(account.getPostal_code())
+					&& account.getPostal_code().equals(Account.getPostal_code())
 					&& account.getPhone().equals(Account.getPhone())
 					&& account.getMembership_levels().equals(Account.getMembership_levels())
 					&& account.getEmail().equals(Account.getEmail())

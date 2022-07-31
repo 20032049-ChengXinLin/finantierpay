@@ -14,8 +14,10 @@
 <body>
 	<div th:replace="fragments/FinantierPay_header"></div>
 	<div class="container">
-		<h3 class="text-center" sec:authorize="hasRole('MERCHANT')">View Transaction History</h3>
-		<h3 class="text-center" sec:authorize="hasRole('USER')">View All Transactions History</h3>
+		<h3 class="text-center" sec:authorize="hasRole('MERCHANT')">View
+			Transaction History</h3>
+		<h3 class="text-center" sec:authorize="hasRole('USER')">View All
+			Transactions History</h3>
 		<hr>
 		<div class="row mb-3">
 			<div class="col-md-9">
@@ -182,11 +184,13 @@
 		</table>
 
 		<h5 class="text-center mb-3" th:if="${transactionlist.size() == 0}">No
-			Transaction Records Found</h5>
+			Transaction History Found</h5>
 
 		<form th:action="@{/transactionhistory}">
-			<input th:if="${startMonthYear != ''}" type="hidden"
-				class="form-control" name="startMonthYear" id="startMonthYear"
+			<input th:if="${keyword != ''}" type="hidden" class="form-control"
+				name="keyword" id="keyword" th:value="${keyword}" /> <input
+				th:if="${startMonthYear != ''}" type="hidden" class="form-control"
+				name="startMonthYear" id="startMonthYear"
 				th:value="${startMonthYear}" /> <input
 				th:if="${endMonthYear != ''}" type="hidden" class="form-control"
 				name="endMonthYear" id="endMonthYear" th:value="${endMonthYear}" />
@@ -206,7 +210,7 @@
 									<option th:value="${10}" th:if="${page != 10}">10</option>
 									<option th:value="${50}" th:if="${page != 50}">50</option>
 									<option th:value="${100}" th:if="${page != 100}">100</option></select> <span
-									th:text="${pageNum + ' of ' + totalPage + ' Transaction Records'}"></span>
+									th:text="${pageNum + ' of ' + totalPage + ' Transactions History'}"></span>
 							</h5>
 						</div>
 						<div class="mt-2 col-md-6">
