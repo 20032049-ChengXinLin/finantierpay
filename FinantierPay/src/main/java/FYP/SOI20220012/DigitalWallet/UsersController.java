@@ -113,51 +113,88 @@ public class UsersController {
 
 		LocalDate currentDate = LocalDate.now();
 
-		Voucher firstVoucher = voucherRepository.findTopByAndAccount_AccountIdOrderByVoucherIdAsc(id);
+		Voucher firstVoucher = voucherRepository.findTopByAndAccount_AccountIdOrderByExpiryDateAsc(id);
 
+		Voucher lastVoucher = voucherRepository.findTopByAndAccount_AccountIdOrderByExpiryDateDesc(id);
 		if (firstVoucher != null) {
 			LocalDate firstvoucherExpirydate = firstVoucher.getExpiryDate();
 			DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
 			String startMonth = firstvoucherExpirydate.format(dateformatter);
-			String endMonth = currentDate.format(dateformatter);
+			if (startMonthYear.equals("null") && endMonthYear.equals("null")) {
+				startMonthYear = startMonth;
+			} else if (startMonthYear.equals("null") && !endMonthYear.equals("null")) {
+				startMonthYear = startMonth;
+			}
+		} else {
+			DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
+			String startMonth = currentDate.format(dateformatter);
+			startMonthYear = startMonth;
+		}
+		
+		if (lastVoucher != null) {
+			LocalDate lastvoucherExpirydate = lastVoucher.getExpiryDate();
+			DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
+			String startMonth = lastvoucherExpirydate.format(dateformatter);
+			String endMonth = lastvoucherExpirydate.format(dateformatter);
 			if (startMonthYear.equals("null") && endMonthYear.equals("null")) {
 				startMonthYear = startMonth;
 				endMonthYear = endMonth;
+				System.out.println(endMonthYear);
 			} else if (startMonthYear.equals("null") && !endMonthYear.equals("null")) {
 				startMonthYear = startMonth;
 			} else if (!startMonthYear.equals("null") && endMonthYear.equals("null")) {
 				endMonthYear = endMonth;
 			}
+		} else {
+			DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
+			String lastMonth = currentDate.format(dateformatter);
+			endMonthYear = lastMonth;
 		}
-
-		Pageable pageable = PageRequest.of(pageNum - 1, page, Sort.by("voucherId").descending());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate start = LocalDate.parse(startMonthYear + "-01", formatter);
+		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
+		LocalDate startdate = LocalDate.of(start.getYear(), start.getMonthValue(), 1);
+		System.out.println(startdate);
+		LocalDate enddate = LocalDate.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth());
+		System.out.println(enddate);
+		
+		Pageable pageable = PageRequest.of(pageNum - 1, page, Sort.by("expiryDate").descending());
 		Page<Voucher> voucher = null;
 		if (archive.equals("null") && status.equals("null") && keyword.equals("")) {
-			voucher = voucherRepository.findByAccount_AccountId(id, pageable);
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountId(startdate,
+					enddate, id, pageable);
 
 		} else if (!archive.equals("null") && status.equals("null") && keyword.equals("")) {
 
-			voucher = voucherRepository.findByAccount_AccountIdAndArchive(id, archive, pageable);
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndArchive(startdate,
+					enddate, id, archive, pageable);
 
 		} else if (archive.equals("null") && !status.equals("null") && keyword.equalsIgnoreCase("")) {
-			voucher = voucherRepository.findByAccount_AccountIdAndStatus(id, status, pageable);
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndStatus(startdate,
+					enddate, id, status, pageable);
 
 		} else if (archive.equals("null") && status.equals("null") && !keyword.equalsIgnoreCase("")) {
-			voucher = voucherRepository.findByAccount_AccountIdAndStoreNameLike(id, "%" + keyword + "%", pageable);
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndStoreNameLike(startdate,
+					enddate, id, "%" + keyword + "%", pageable);
 
 		} else if (!archive.equals("null") && !status.equals("null") && keyword.equalsIgnoreCase("")) {
-			voucher = voucherRepository.findByAccount_AccountIdAndArchiveAndStatus(id, archive, status, pageable);
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStatus(startdate,
+					enddate, id, archive, status, pageable);
 
 		} else if (!archive.equals("null") && status.equals("null") && !keyword.equalsIgnoreCase("")) {
-			voucher = voucherRepository.findByAccount_AccountIdAndArchiveAndStoreNameLike(id, archive,
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStoreNameLike(startdate,
+					enddate, id, archive,
 					"%" + keyword + "%", pageable);
 
 		} else if (!archive.equals("null") && !status.equals("null") && !keyword.equalsIgnoreCase("")) {
-			voucher = voucherRepository.findByAccount_AccountIdAndArchiveAndStatusAndStoreNameLike(id, archive, status,
+			voucher = voucherRepository.findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStatusAndStoreNameLike(startdate,
+					enddate, id, archive, status,
 					"%" + keyword + "%", pageable);
 		}
 
 		List<Voucher> voucherList = voucher.getContent();
+		System.out.println(voucherList.size());
 		model.addAttribute("voucherList", voucherList);
 		model.addAttribute("accountId", id);
 		model.addAttribute("totalPage", voucher.getTotalPages());
@@ -256,23 +293,37 @@ public class UsersController {
 			} else if (!startMonthYear.equals("null") && endMonthYear.equals("null")) {
 				endMonthYear = endMonth;
 			}
+		} else {
+			DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern("yyy-MM", Locale.ENGLISH);
+			String startMonth = currentDate.format(dateformatter);
+			startMonthYear = startMonth;
+			String endMonth = currentDate.format(dateformatter);
+			endMonthYear = endMonth;
 		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate start = LocalDate.parse(startMonthYear + "-01", formatter);
+		LocalDate end = LocalDate.parse(endMonthYear + "-01", formatter);
+		LocalDateTime startdateTime = LocalDateTime.of(start.getYear(), start.getMonthValue(), 1, 0, 0, 0);
+		System.out.println(startdateTime);
+		LocalDateTime enddateTime = LocalDateTime.of(end.getYear(), end.getMonthValue(), end.lengthOfMonth(),  23, 59, 59);
+		System.out.println(enddateTime);
 		Pageable pageable = PageRequest.of(pageNum - 1, page, Sort.by("pointsHistoryId").descending());
+		
 		Page<PointsHistory> pointsHistory = null;
 		if (archive.equals("null") && status.equals("null")) {
-			pointsHistory = pointsHistoryRepository.findByPointsEarned_Account_AccountIdOrderByDateTimeDesc(id,
+			pointsHistory = pointsHistoryRepository.findByDateTimeBetweenAndPointsEarned_Account_AccountIdOrderByDateTimeDesc(startdateTime, enddateTime,id,
 					pageable);
 
 		} else if (!archive.equals("null") && status.equals("null")) {
 
-			pointsHistory = pointsHistoryRepository.findByPointsEarned_Account_AccountIdAndArchive(id, archive,
+			pointsHistory = pointsHistoryRepository.findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndArchive(startdateTime, enddateTime,id, archive,
 					pageable);
 
 		} else if (archive.equals("null") && !status.equals("null")) {
-			pointsHistory = pointsHistoryRepository.findByPointsEarned_Account_AccountIdAndStatus(id, status, pageable);
+			pointsHistory = pointsHistoryRepository.findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndStatus(startdateTime, enddateTime,id, status, pageable);
 
 		} else if (!archive.equals("null") && !status.equals("null")) {
-			pointsHistory = pointsHistoryRepository.findByPointsEarned_Account_AccountIdAndArchiveAndStatus(id, archive,
+			pointsHistory = pointsHistoryRepository.findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndArchiveAndStatus(startdateTime, enddateTime,id, archive,
 					status, pageable);
 		}
 		List<PointsHistory> pointsHistoryList = pointsHistory.getContent();

@@ -131,7 +131,7 @@
 		</table>
 
 		<h5 class="text-center mb-3" th:if="${pointsHistoryList.size() == 0}">No
-			Voucher Found</h5>
+			Past Points History Found</h5>
 		<form th:action="@{/user/pointhistory/{id}(id=${accountId})}">
 			<input th:if="${startMonthYear != ''}" type="hidden"
 				class="form-control" name="startMonthYear" id="startMonthYear"

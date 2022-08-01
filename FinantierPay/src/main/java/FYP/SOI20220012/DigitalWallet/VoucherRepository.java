@@ -14,6 +14,7 @@
 package FYP.SOI20220012.DigitalWallet;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -31,22 +32,33 @@ public interface VoucherRepository extends JpaRepository<Voucher, Integer> {
 	public List<Voucher> findByAccount_AccountId(int accountid);
 	
 
-	public Page<Voucher> findByAccount_AccountIdAndArchive(int accountid, String archive, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndArchive(LocalDate startdate,
+			LocalDate enddate, int accountid, String archive, Pageable pageable);
 
 	public List<Voucher> findByExpiryDate(LocalDate expirydate);
 	
-	public Page<Voucher> findByAccount_AccountId(int accountid, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountId(LocalDate startdate,
+			LocalDate enddate,int accountid, Pageable pageable);
 	
-	public Voucher findTopByAndAccount_AccountIdOrderByVoucherIdAsc(int accountid);
+	public Voucher findTopByAndAccount_AccountIdOrderByExpiryDateAsc(int accountid);
 	
-	public Page<Voucher> findByAccount_AccountIdAndStatus(int accountid, String status,Pageable pageable);
+	public Voucher findTopByAndAccount_AccountIdOrderByExpiryDateDesc(int accountid);
 	
-	public Page<Voucher> findByAccount_AccountIdAndArchiveAndStatus(int accountid, String archive, String status, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndStatus(LocalDate startdate,
+			LocalDate enddate,int accountid, String status,Pageable pageable);
 	
-	public Page<Voucher> findByAccount_AccountIdAndStoreNameLike(int accountid, String storeName, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStatus(LocalDate startdate,
+			LocalDate enddate,int accountid, String archive, String status, Pageable pageable);
+	
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndStoreNameLike(LocalDate startdate,
+			LocalDate enddate,int accountid, String storeName, Pageable pageable);
 
-	public Page<Voucher> findByAccount_AccountIdAndArchiveAndStoreNameLike(int accountid, String archive, String storeName, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStoreNameLike(LocalDate startdate,
+			LocalDate enddate,int accountid, String archive, String storeName, Pageable pageable);
 
-	public Page<Voucher> findByAccount_AccountIdAndArchiveAndStatusAndStoreNameLike(int accountid, String archive, String status, String storeName, Pageable pageable);
+	public Page<Voucher> findByExpiryDateBetweenAndAccount_AccountIdAndArchiveAndStatusAndStoreNameLike(LocalDate startdate,
+			LocalDate enddate,int accountid, String archive, String status, String storeName, Pageable pageable);
+
+	public Page<Voucher> findByAccount_AccountIdAndArchive(int loggedInAccountId, String archive, Pageable pageable);
 
 }

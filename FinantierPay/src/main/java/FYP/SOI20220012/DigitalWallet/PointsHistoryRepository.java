@@ -13,6 +13,7 @@
 */
 package FYP.SOI20220012.DigitalWallet;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -25,15 +26,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface PointsHistoryRepository extends JpaRepository<PointsHistory, Integer>{
 
-	public Page<PointsHistory> findByPointsEarned_Account_AccountIdAndArchiveOrderByDateTimeDesc(int AccountId, String archive, Pageable pageable);
+	public Page<PointsHistory> findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndArchiveOrderByDateTimeDesc(LocalDateTime startdate,
+			LocalDateTime enddate, int AccountId, String archive, Pageable pageable);
 
-	public Page<PointsHistory> findByPointsEarned_Account_AccountIdOrderByDateTimeDesc(int AccountId, Pageable pageable);
+	public Page<PointsHistory> findByDateTimeBetweenAndPointsEarned_Account_AccountIdOrderByDateTimeDesc(LocalDateTime startdate,
+			LocalDateTime enddate, int AccountId, Pageable pageable);
 
 	public PointsHistory findTopByAndPointsEarned_Account_AccountIdOrderByPointsEarnedAsc(int accountid);
 	
-	public Page<PointsHistory> findByPointsEarned_Account_AccountIdAndArchive(int accountid, String archive,Pageable pageable);
+	public Page<PointsHistory> findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndArchive(LocalDateTime startdate,
+			LocalDateTime enddate, int accountid, String archive,Pageable pageable);
 	
-	public Page<PointsHistory> findByPointsEarned_Account_AccountIdAndStatus(int accountid, String status,Pageable pageable);
+	public Page<PointsHistory> findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndStatus(LocalDateTime startdate,
+			LocalDateTime enddate, int accountid, String status,Pageable pageable);
 	
-	public Page<PointsHistory> findByPointsEarned_Account_AccountIdAndArchiveAndStatus(int accountid, String archive, String status, Pageable pageable);
+	public Page<PointsHistory> findByDateTimeBetweenAndPointsEarned_Account_AccountIdAndArchiveAndStatus(LocalDateTime startdate,
+			LocalDateTime enddate, int accountid, String archive, String status, Pageable pageable);
+
+	public Page<PointsHistory> findByPointsEarned_Account_AccountIdAndArchiveOrderByDateTimeDesc(int loggedInAccountId,
+			String archive, Pageable pageable);
 }
